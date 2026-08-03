@@ -3,63 +3,48 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SeedLot;
 use Illuminate\Http\Request;
 
 class SeedLotController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $lots = SeedLot::with('seed')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(15);
+        return view('admin.seed-lots.index', compact('lots'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.seed-lots.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return redirect()->route('admin.seed-lots.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(SeedLot $seedLot)
     {
-        //
+        $seedLot->load(['seed', 'productionProcesses', 'labTests', 'stockTransactions']);
+        return view('admin.seed-lots.show', compact('seedLot'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(SeedLot $seedLot)
     {
-        //
+        return view('admin.seed-lots.edit', compact('seedLot'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, SeedLot $seedLot)
     {
-        //
+        return redirect()->route('admin.seed-lots.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(SeedLot $seedLot)
     {
-        //
+        $seedLot->delete();
+        return redirect()->route('admin.seed-lots.index')->with('success', 'Lot benih berhasil dihapus.');
     }
 }

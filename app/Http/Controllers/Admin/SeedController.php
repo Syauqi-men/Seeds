@@ -3,63 +3,47 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Seed;
 use Illuminate\Http\Request;
 
 class SeedController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $seeds = Seed::withCount('seedLots')->orderBy('category')->orderBy('var_name')->paginate(15);
+        return view('admin.seeds.index', compact('seeds'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.seeds.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Handled by Livewire SeedForm component
+        return redirect()->route('admin.seeds.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Seed $seed)
     {
-        //
+        $seed->load(['seedLots' => fn($q) => $q->latest()->with('labTests')]);
+        return view('admin.seeds.show', compact('seed'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Seed $seed)
     {
-        //
+        return view('admin.seeds.edit', compact('seed'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Seed $seed)
     {
-        //
+        return redirect()->route('admin.seeds.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Seed $seed)
     {
-        //
+        $seed->delete();
+        return redirect()->route('admin.seeds.index')->with('success', 'Varietas benih berhasil dihapus.');
     }
 }

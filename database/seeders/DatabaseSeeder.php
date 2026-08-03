@@ -2,24 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
+     * Urutan penting: Admin → Seeds → SeedLots → Processes → LabTests → Transactions
+     * StockTransactionSeeder & ProductionProcessSeeder akan memicu SeedLotObserver
+     * untuk menghitung raw_stock dan clean_stock secara otomatis.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            AdminSeeder::class,
+            SeedSeeder::class,
+            SeedLotSeeder::class,
+            ProductionProcessSeeder::class,
+            LabTestSeeder::class,
+            StockTransactionSeeder::class,
         ]);
     }
 }

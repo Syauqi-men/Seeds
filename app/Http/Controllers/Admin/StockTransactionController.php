@@ -3,63 +3,69 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SeedLot;
+use App\Models\StockTransaction;
 use Illuminate\Http\Request;
 
 class StockTransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $transactions = StockTransaction::with('seedLot.seed')->latest()->paginate(15);
+        return view('admin.stock-transactions.index', compact('transactions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $lots = SeedLot::with('seed')->get();
+        return view('admin.stock-transactions.create', compact('lots'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'seed_lot_id'      => 'required|exists:seed_lots,id',
+            'transaction_type' => 'required|in:IN,OUT,ADJUSTMENT',
+            'quantity'         => 'required|numeric',
+            'reference_no'     => 'nullable|string|max:100',
+            'notes'            => 'nullable|string|max:500',
+            'transacted_at'    => 'nullable|date',
+        ]);
+
+        StockTransaction::create($data);
+        return redirect()->route('admin.stock-transactions.index')->with('success', 'Transaksi stok berhasil dicatat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(StockTransaction $stockTransaction)
     {
-        //
+        $stockTransaction->load('seedLot.seed');
+        return view('admin.stock-transactions.show', compact('stockTransaction'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(StockTransaction $stockTransaction)
     {
-        //
+        $lots = SeedLot::with('seed')->get();
+        return view('admin.stock-transactions.edit', compact('stockTransaction', 'lots'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, StockTransaction $stockTransaction)
     {
-        //
+        $data = $request->validate([
+            'seed_lot_id'      => 'required|exists:seed_lots,id',
+            'transaction_type' => 'required|in:IN,OUT,ADJUSTMENT',
+            'quantity'         => 'required|numeric',
+            'reference_no'     => 'nullable|string|max:100',
+            'notes'            => 'nullable|string|max:500',
+            'transacted_at'    => 'nullable|date',
+        ]);
+
+        $stockTransaction->update($data);
+        return redirect()->route('admin.stock-transactions.index')->with('success', 'Transaksi stok berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(StockTransaction $stockTransaction)
     {
-        //
+        $stockTransaction->delete();
+        return redirect()->route('admin.stock-transactions.index')->with('success', 'Transaksi stok berhasil dihapus.');
     }
 }
