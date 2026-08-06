@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\ActivityLogController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\LabTestController;
-use App\Http\Controllers\Admin\ProductionProcessController;
-use App\Http\Controllers\Admin\SeedController;
-use App\Http\Controllers\Admin\SeedLotController;
-use App\Http\Controllers\Admin\StockTransactionController;
+use App\Http\Controllers\Admin\{ActivityLogController, 
+            DashboardController, LabTestController, 
+            ProductionProcessController, SeedController, 
+            SeedLotController, StockTransactionController};
 use App\Http\Controllers\LandingController;
+
 use Illuminate\Support\Facades\Route;
+
 
 // Landing Page  
 Route::get('/', [LandingController::class, 'index'])->name('home');

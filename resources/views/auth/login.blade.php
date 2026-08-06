@@ -283,7 +283,7 @@
                 @endif
             </div>
             <h1 class="auth-title">BRMP Aneka Kacang</h1>
-            <p class="auth-subtitle">Sistem Informasi Manajemen Stok Benih<br>Balai Riset dan Mekanisasi Pertanian</p>
+            <p class="auth-subtitle">Sistem Informasi Manajemen Stok Benih<br>Balai Riset dan Modernisasi Pertanian</p>
         </div>
 
         <div class="auth-divider"><span>Login Administrator</span></div>

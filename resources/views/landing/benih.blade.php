@@ -17,7 +17,7 @@
 </div>
 
 {{-- Aktivitas Terbaru --}}
-@if($recentActivities->isNotEmpty())
+{{-- @if($recentActivities->isNotEmpty())
 <div class="board mt-lg">
     <div class="board-body">
         <h2 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-primary-800)">
@@ -37,5 +37,5 @@
         </div>
     </div>
 </div>
-@endif
+@endif --}}
 @endsection

@@ -3,11 +3,6 @@
 namespace App\Observers;
 
 use App\Models\ProductionProcess;
-
-/**
- * Memicu recalculate clean_stock di SeedLot setiap kali
- * ada perubahan pada ProductionProcess.
- */
 class ProductionProcessObserver
 {
     public function created(ProductionProcess $process): void
