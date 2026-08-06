@@ -94,12 +94,6 @@ npm install
 cp .env.example .env
 
 # Configure database in .env
-DB_CONNECTION=pgsql
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=brmp_seed
-DB_USERNAME=your_db_user
-DB_PASSWORD=your_db_password
 
 # Set admin credentials in .env (used by AdminSeeder)
 ADMIN_EMAIL=admin@brmp.go.id
