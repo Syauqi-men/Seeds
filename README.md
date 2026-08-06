@@ -138,16 +138,6 @@ Password: (value of ADMIN_EMAIL / ADMIN_PASSWORD in .env)
 
 > **Important:** Change `ADMIN_PASSWORD` in `.env` before deploying to any public or production environment, then re-run `php artisan db:seed --class=AdminSeeder --force`.
 
-## Logo
-
-Place the BRMP logo file at:
-```
-public/images/logo-brmp.png
-```
-If the file is absent, a fallback SVG icon will be displayed automatically in the navbar.
-
----
-
 ## License
 
 This project was developed as part of an internship at **BRMP Aneka Kacang**. All rights reserved by the respective institution.
