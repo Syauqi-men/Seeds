@@ -81,8 +81,8 @@ seeds (varieties) ─┬─▶ seed_lots ─┬─▶ production_processes
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/brmp-aneka-kacang.git
-cd brmp-aneka-kacang
+git clone https://github.com/Syauqi-men/Seeds.git
+cd Seeds
 
 # Install PHP dependencies
 composer install
@@ -137,35 +137,6 @@ Password: (value of ADMIN_EMAIL / ADMIN_PASSWORD in .env)
 ```
 
 > **Important:** Change `ADMIN_PASSWORD` in `.env` before deploying to any public or production environment, then re-run `php artisan db:seed --class=AdminSeeder --force`.
-
----
-
-## Seeded Test Data
-
-The database seeder populates the following sample data for development and testing:
-
-| Entity | Count |
-|--------|-------|
-| Admin users | 1 |
-| Seed varieties | 12 (4 Kedelai, 4 Kacang Tanah, 4 Kacang Hijau) |
-| Seed lots | 37 (includes 13 lots for Anjasmoro to test pagination) |
-| Production processes | ~80 records |
-| Lab test results | ~55 records |
-| Stock transactions | ~150 records |
-
----
-
-## Enum Reference
-
-| Enum | Values |
-|------|--------|
-| `SeedCategory` | `Kedelai`, `Kacang Tanah`, `Kacang Hijau` |
-| `VarClass` | `NS` (Nucleus Seed), `BS` (Breeder Seed), `FS` (Foundation Seed), `SS` (Stock Seed) |
-| `LotStatus` | `Raw`, `Processing`, `Quarantine`, `Ready`, `Depleted` |
-| `TransactionType` | `IN`, `OUT`, `ADJUSTMENT` |
-| `TestResult` | `PASSED`, `FAILED` |
-
----
 
 ## Logo
 
