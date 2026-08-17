@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Proses Produksi</h1>
-        <p class="page-subtitle">Catat proses pembersihan dan pengolahan benih</p>
+        <p class="page-subtitle">Data proses sortasi & grading benih (entri terakhir per lot)</p>
     </div>
     <a href="{{ route('admin.production-processes.create') }}" class="btn btn-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -15,7 +15,13 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Lot</th><th>Input (kg)</th><th>Output (kg)</th><th>Susut (kg)</th><th>KA Akhir</th><th>Tanggal Proses</th>
+                <th>Lot</th>
+                <th>Jenis Proses</th>
+                <th>Pekerja</th>
+                <th>Input (kg)</th>
+                <th>Output (kg)</th>
+                <th>Susut (kg)</th>
+                <th>Tanggal Proses</th>
                 <th style="text-align:right">Aksi</th>
             </tr>
         </thead>
@@ -26,10 +32,24 @@
                     <div style="font-weight:600">{{ $proc->seedLot->lot_number }}</div>
                     <div class="text-small text-muted">{{ $proc->seedLot->seed->var_name }}</div>
                 </td>
+                <td>
+                    <span class="badge {{ $proc->process_type->badgeClass() }}">
+                        {{ $proc->process_type->label() }}
+                    </span>
+                </td>
+                <td>
+                    @if($proc->worker)
+                        <div style="font-weight:500">{{ $proc->worker->name }}</div>
+                        @if($proc->worker->code)
+                        <div class="text-small text-muted">{{ $proc->worker->code }}</div>
+                        @endif
+                    @else
+                        <span class="text-muted">—</span>
+                    @endif
+                </td>
                 <td>{{ number_format($proc->input_quantity, 2) }}</td>
                 <td>{{ number_format($proc->output_quantity, 2) }}</td>
                 <td>{{ number_format($proc->shrinkage_quantity, 2) }}</td>
-                <td>{{ $proc->moisture_end ?? '-' }}%</td>
                 <td class="text-small text-muted">{{ $proc->processed_at?->translatedFormat('d M Y') ?? '-' }}</td>
                 <td style="text-align:right">
                     <div style="display:flex;gap:4px;justify-content:flex-end" x-data="{ del: false }">
@@ -56,7 +76,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="7" class="text-center text-muted" style="padding:var(--space-xl)">Belum ada proses produksi.</td></tr>
+            <tr><td colspan="8" class="text-center text-muted" style="padding:var(--space-xl)">Belum ada proses produksi.</td></tr>
             @endforelse
         </tbody>
     </table>

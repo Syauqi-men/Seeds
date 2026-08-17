@@ -37,7 +37,7 @@
                 <td><span class="badge badge-{{ strtolower($lot->status->value) }}">{{ $lot->status->label() }}</span></td>
                 <td>{{ number_format($lot->raw_stock, 2) }} kg</td>
                 <td>{{ number_format($lot->clean_stock, 2) }} kg</td>
-                <td class="text-muted text-small">{{ $lot->updated_at->translatedFormat('d M Y, H:i') }}</td>
+                <td class="text-muted text-small">{{ $lot->updated_at->translatedFormat('d M Y') }}</td>
                 <td style="text-align:right">
                     <div style="display:flex;gap:4px;justify-content:flex-end" x-data="{ showDelete: false }">
                         <a href="{{ route('admin.seed-lots.show', $lot) }}" class="btn btn-ghost btn-sm" title="Detail">

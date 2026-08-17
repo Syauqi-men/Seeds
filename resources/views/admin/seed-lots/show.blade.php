@@ -62,16 +62,37 @@
         <a href="{{ route('admin.production-processes.create') }}" class="btn btn-secondary btn-sm">+ Tambah Proses</a>
     </div>
     <table class="data-table">
-        <thead><tr><th>Input</th><th>Output</th><th>Susut</th><th>Limbah</th><th>KA Awal</th><th>KA Akhir</th><th>Tanggal</th></tr></thead>
+        <thead><tr>
+            <th>Jenis Proses</th>
+            <th>Pekerja</th>
+            <th>Input (kg)</th>
+            <th>Output (kg)</th>
+            <th>Susut (kg)</th>
+            <th>Limbah (kg)</th>
+            <th>Tanggal</th>
+        </tr></thead>
         <tbody>
             @forelse($seedLot->productionProcesses as $proc)
             <tr>
+                <td>
+                    <span class="badge {{ $proc->process_type->badgeClass() }}">
+                        {{ $proc->process_type->label() }}
+                    </span>
+                </td>
+                <td>
+                    @if($proc->worker)
+                        <div style="font-weight:500">{{ $proc->worker->name }}</div>
+                        @if($proc->worker->code)
+                        <div class="text-small text-muted">{{ $proc->worker->code }}</div>
+                        @endif
+                    @else
+                        <span class="text-muted">—</span>
+                    @endif
+                </td>
                 <td>{{ number_format($proc->input_quantity, 2) }} kg</td>
                 <td>{{ number_format($proc->output_quantity, 2) }} kg</td>
                 <td>{{ number_format($proc->shrinkage_quantity, 2) }} kg</td>
                 <td>{{ number_format($proc->waste_quantity, 2) }} kg</td>
-                <td>{{ $proc->moisture_start ?? '-' }}%</td>
-                <td>{{ $proc->moisture_end ?? '-' }}%</td>
                 <td class="text-small text-muted">{{ $proc->processed_at?->translatedFormat('d M Y') ?? '-' }}</td>
             </tr>
             @empty

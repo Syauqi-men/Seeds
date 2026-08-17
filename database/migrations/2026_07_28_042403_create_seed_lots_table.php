@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('origin_moisture', 5, 2)->nullable();
             $table->decimal('arrival_weight', 10, 2)->nullable();
             $table->decimal('arrival_moisture', 5, 2)->nullable();
-            // Managed exclusively by SeedLotObserver — NOT mass-assignable from forms
             $table->decimal('raw_stock', 10, 2)->default(0);
             $table->decimal('clean_stock', 10, 2)->default(0);
             $table->enum('status', ['Raw', 'Processing', 'Quarantine', 'Ready', 'Depleted'])->default('Raw');

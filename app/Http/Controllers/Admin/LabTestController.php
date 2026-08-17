@@ -30,6 +30,20 @@ class LabTestController extends Controller
             'test_result'     => 'required|in:PASSED,FAILED',
             'tested_at'       => 'nullable|date',
             'notes'           => 'nullable|string|max:500',
+        ], [
+            'seed_lot_id.required'     => 'Lot benih wajib dipilih.',
+            'seed_lot_id.exists'       => 'Lot benih yang dipilih tidak ditemukan.',
+            'germination_rate.required'=> 'Daya kecambah wajib diisi.',
+            'germination_rate.numeric' => 'Daya kecambah harus berupa angka.',
+            'germination_rate.min'     => 'Daya kecambah minimal 0%.',
+            'germination_rate.max'     => 'Daya kecambah maksimal 100%.',
+            'moisture_content.numeric' => 'Kadar air harus berupa angka.',
+            'moisture_content.min'     => 'Kadar air minimal 0%.',
+            'moisture_content.max'     => 'Kadar air maksimal 100%.',
+            'test_result.required'     => 'Hasil uji wajib dipilih.',
+            'test_result.in'           => 'Hasil uji tidak valid, pilih PASSED atau FAILED.',
+            'tested_at.date'           => 'Tanggal uji tidak valid.',
+            'notes.max'                => 'Catatan maksimal 500 karakter.',
         ]);
 
         LabTest::create($data);
@@ -57,6 +71,20 @@ class LabTestController extends Controller
             'test_result'     => 'required|in:PASSED,FAILED',
             'tested_at'       => 'nullable|date',
             'notes'           => 'nullable|string|max:500',
+        ], [
+            'seed_lot_id.required'     => 'Lot benih wajib dipilih.',
+            'seed_lot_id.exists'       => 'Lot benih yang dipilih tidak ditemukan.',
+            'germination_rate.required'=> 'Daya kecambah wajib diisi.',
+            'germination_rate.numeric' => 'Daya kecambah harus berupa angka.',
+            'germination_rate.min'     => 'Daya kecambah minimal 0%.',
+            'germination_rate.max'     => 'Daya kecambah maksimal 100%.',
+            'moisture_content.numeric' => 'Kadar air harus berupa angka.',
+            'moisture_content.min'     => 'Kadar air minimal 0%.',
+            'moisture_content.max'     => 'Kadar air maksimal 100%.',
+            'test_result.required'     => 'Hasil uji wajib dipilih.',
+            'test_result.in'           => 'Hasil uji tidak valid, pilih PASSED atau FAILED.',
+            'tested_at.date'           => 'Tanggal uji tidak valid.',
+            'notes.max'                => 'Catatan maksimal 500 karakter.',
         ]);
 
         $labTest->update($data);

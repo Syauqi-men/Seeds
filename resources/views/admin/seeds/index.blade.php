@@ -39,7 +39,7 @@
                 </td>
                 <td><span class="badge badge-raw">{{ $seed->var_class->value }}</span></td>
                 <td>{{ $seed->seed_lots_count }}</td>
-                <td class="text-muted text-small">{{ $seed->updated_at->translatedFormat('d M Y, H:i') }}</td>
+                <td class="text-muted text-small">{{ $seed->updated_at->translatedFormat('d M Y') }}</td>
                 <td style="text-align:right">
                     <div style="display:flex;gap:4px;justify-content:flex-end" x-data="{ showDelete: false }">
                         <a href="{{ route('admin.seeds.edit', $seed) }}" class="btn btn-ghost btn-sm">

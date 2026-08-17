@@ -27,7 +27,9 @@
                 <select name="transaction_type" class="form-control">
                     <option value="IN"         {{ $stockTransaction->transaction_type->value === 'IN' ? 'selected' : '' }}>Masuk (IN)</option>
                     <option value="OUT"        {{ $stockTransaction->transaction_type->value === 'OUT' ? 'selected' : '' }}>Keluar (OUT)</option>
-                    <option value="ADJUSTMENT" {{ $stockTransaction->transaction_type->value === 'ADJUSTMENT' ? 'selected' : '' }}>Penyesuaian (ADJUSTMENT)</option>
+                    <option value="ADJUSTMENT" {{ $stockTransaction->transaction_type->value === 'ADJUSTMENT' ? 'selected' : '' }}>Penyesuaian</option>
+                    <option value="GRADING"    {{ $stockTransaction->transaction_type->value === 'GRADING' ? 'selected' : '' }}>Grading</option>
+                    <option value="SORTING"    {{ $stockTransaction->transaction_type->value === 'SORTING' ? 'selected' : '' }}>Sortasi (Sorting)</option>
                 </select>
             </div>
         </div>

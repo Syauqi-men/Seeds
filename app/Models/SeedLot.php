@@ -22,16 +22,18 @@ class SeedLot extends Model
         'origin_moisture',
         'arrival_weight',
         'arrival_moisture',
+        'location',
+        'lot_code_prefix',
         'status',
         // NOTE: raw_stock and clean_stock are intentionally excluded —
         //       they are managed exclusively by SeedLotObserver.
     ];
 
     protected $casts = [
-        'status'       => LotStatus::class,
-        'harvest_date' => 'date',
-        'raw_stock'    => 'decimal:2',
-        'clean_stock'  => 'decimal:2',
+        'status'          => LotStatus::class,
+        'harvest_date'    => 'date',
+        'raw_stock'       => 'decimal:2',
+        'clean_stock'     => 'decimal:2',
     ];
 
     // ─── Relations ────────────────────────────────────────────────────────

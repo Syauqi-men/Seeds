@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProcessType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,28 +15,34 @@ class ProductionProcess extends Model
 
     protected $fillable = [
         'seed_lot_id',
+        'process_type',
+        'worker_id',
         'input_quantity',
         'output_quantity',
         'shrinkage_quantity',
         'waste_quantity',
-        'moisture_start',
-        'moisture_end',
         'processed_at',
         'notes',
     ];
 
     protected $casts = [
-        'processed_at'      => 'datetime',
-        'input_quantity'    => 'decimal:2',
-        'output_quantity'   => 'decimal:2',
-        'shrinkage_quantity'=> 'decimal:2',
-        'waste_quantity'    => 'decimal:2',
+        'process_type'       => ProcessType::class,
+        'processed_at'       => 'datetime',
+        'input_quantity'     => 'decimal:2',
+        'output_quantity'    => 'decimal:2',
+        'shrinkage_quantity' => 'decimal:2',
+        'waste_quantity'     => 'decimal:2',
     ];
 
     // ─── Relations ────────────────────────────────────────────────────────
     public function seedLot(): BelongsTo
     {
         return $this->belongsTo(SeedLot::class);
+    }
+
+    public function worker(): BelongsTo
+    {
+        return $this->belongsTo(Worker::class);
     }
 
     // ─── Activity Log ─────────────────────────────────────────────────────

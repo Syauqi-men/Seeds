@@ -28,7 +28,7 @@ class SeedLotController extends Controller
 
     public function show(SeedLot $seedLot)
     {
-        $seedLot->load(['seed', 'productionProcesses', 'labTests', 'stockTransactions']);
+        $seedLot->load(['seed', 'productionProcesses.worker', 'labTests', 'stockTransactions']);
         return view('admin.seed-lots.show', compact('seedLot'));
     }
 

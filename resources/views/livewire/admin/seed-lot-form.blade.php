@@ -21,16 +21,38 @@
         </div>
     </div>
 
+    {{-- Lokasi & Kode Prefix --}}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md)">
+        <div class="form-group">
+            <label class="form-label" for="location">Lokasi</label>
+            <select id="location" wire:model.live="location" class="form-control">
+                <option value="">-- Pilih Lokasi --</option>
+                @foreach($locationOptions as $alias => $label)
+                <option value="{{ $alias }}">{{ $label }}</option>
+                @endforeach
+            </select>
+            <span class="form-hint">Alias lokasi untuk format nomor lot</span>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="lot_code_prefix">Kode Prefix Lot</label>
+            <input type="text" id="lot_code_prefix" wire:model.live="lot_code_prefix"
+                class="form-control" placeholder="KD-DP-NS" maxlength="20">
+            <span class="form-hint">Kode program/instansi, dapat diubah sesuai kebutuhan</span>
+        </div>
+    </div>
+
     <div class="form-group">
         <label class="form-label required" for="lot_number">Nomor Lot</label>
         <div style="display:flex;gap:var(--space-sm);align-items:center">
-            <input type="text" id="lot_number" wire:model="lot_number" class="form-control @error('lot_number') is-invalid @enderror" placeholder="Contoh: LOT-KDL-2025-001">
+            <input type="text" id="lot_number" wire:model="lot_number"
+                class="form-control @error('lot_number') is-invalid @enderror"
+                placeholder="Contoh: 001-KD-DP-NS-KP-26">
             <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:var(--color-text-muted);white-space:nowrap">
                 <input type="checkbox" wire:model.live="autoLotNumber"> Auto
             </label>
         </div>
         @error('lot_number') <span class="form-error">{{ $message }}</span> @enderror
-        <span class="form-hint">Format: LOT-{KTG}-{TAHUN}-{NO}. Centang "Auto" untuk generate otomatis.</span>
+        <span class="form-hint">Format: NNN-[KODE PREFIX]-[ALIAS LOKASI]-[TH]. Centang "Auto" untuk generate otomatis.</span>
     </div>
 
     <div class="form-group">

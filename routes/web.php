@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\{ActivityLogController, 
+use App\Http\Controllers\Admin\{ ActivityLogController, 
             DashboardController, LabTestController, 
             ProductionProcessController, SeedController, 
-            SeedLotController, StockTransactionController};
+            SeedLotController, StockTransactionController,
+            WorkerController };
 use App\Http\Controllers\LandingController;
 
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'verified'])
         Route::resource('production-processes', ProductionProcessController::class);
         Route::resource('lab-tests', LabTestController::class);
         Route::resource('stock-transactions', StockTransactionController::class);
+        Route::resource('workers', WorkerController::class)->except(['show']);
 
         Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
     });

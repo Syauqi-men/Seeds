@@ -27,7 +27,7 @@
                     <div class="text-small text-muted">{{ $tx->seedLot->seed->var_name }}</div>
                 </td>
                 <td>
-                    <span class="badge {{ $tx->transaction_type->value === 'IN' ? 'badge-ready' : ($tx->transaction_type->value === 'OUT' ? 'badge-depleted' : 'badge-processing') }}">
+                    <span class="badge {{ $tx->transaction_type->badgeClass() }}">
                         {{ $tx->transaction_type->label() }}
                     </span>
                 </td>

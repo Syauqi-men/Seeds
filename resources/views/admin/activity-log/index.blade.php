@@ -52,7 +52,7 @@
                     <span class="text-small text-muted">-</span>
                     @endif
                 </td>
-                <td class="text-small text-muted">{{ $activity->created_at->translatedFormat('d M Y, H:i:s') }}</td>
+                <td class="text-small text-muted">{{ $activity->created_at->translatedFormat('d M Y') }}</td>
             </tr>
             @empty
             <tr><td colspan="5" class="text-center text-muted" style="padding:var(--space-xl)">Belum ada log aktivitas.</td></tr>

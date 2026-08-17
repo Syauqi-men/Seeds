@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Enums\LotStatus;
-use App\Enums\SeedCategory;
 use App\Models\Seed;
 use App\Models\SeedLot;
 use Livewire\Component;
@@ -11,15 +10,26 @@ use Livewire\Component;
 class SeedLotForm extends Component
 {
     public ?SeedLot $seedLot = null;
-    public string $seed_id = '';
-    public string $lot_number = '';
-    public ?string $harvest_date = null;
-    public ?string $origin_weight = null;
+    public string $seed_id          = '';
+    public string $lot_number       = '';
+    public ?string $harvest_date    = null;
+    public ?string $origin_weight   = null;
     public ?string $origin_moisture = null;
-    public ?string $arrival_weight = null;
-    public ?string $arrival_moisture = null;
-    public string $status = 'Raw';
-    public bool $autoLotNumber = true;
+    public ?string $arrival_weight  = null;
+    public ?string $arrival_moisture= null;
+    public string $location         = '';
+    public string $lot_code_prefix  = 'KD-DP-NS';
+    public string $status           = 'Raw';
+    public bool $autoLotNumber      = true;
+
+    // Alias lokasi yang tersedia
+    public array $locationOptions = [
+        'KP' => 'KP — Kendalpayak',
+        'JG' => 'JG — Jambegede',
+        'NG' => 'NG — Ngale',
+        'MN' => 'MN — Muneng',
+        'GT' => 'GT — Genteng',
+    ];
 
     protected function rules(): array
     {
@@ -35,7 +45,33 @@ class SeedLotForm extends Component
             'origin_moisture'  => 'nullable|numeric|min:0|max:100',
             'arrival_weight'   => 'nullable|numeric|min:0',
             'arrival_moisture' => 'nullable|numeric|min:0|max:100',
+            'location'         => 'nullable|string|max:10',
+            'lot_code_prefix'  => 'nullable|string|max:20',
             'status'           => 'required|in:Raw,Processing,Quarantine,Ready,Depleted',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'seed_id.required'          => 'Varietas benih wajib dipilih.',
+            'seed_id.exists'            => 'Varietas benih yang dipilih tidak ditemukan.',
+            'lot_number.required'       => 'Nomor lot wajib diisi.',
+            'lot_number.max'            => 'Nomor lot maksimal 50 karakter.',
+            'lot_number.unique'         => 'Nomor lot ini sudah digunakan, gunakan nomor yang berbeda.',
+            'harvest_date.date'         => 'Tanggal panen tidak valid.',
+            'origin_weight.numeric'     => 'Berat asal harus berupa angka.',
+            'origin_weight.min'         => 'Berat asal tidak boleh negatif.',
+            'origin_moisture.numeric'   => 'Kadar air asal harus berupa angka.',
+            'origin_moisture.min'       => 'Kadar air asal minimal 0%.',
+            'origin_moisture.max'       => 'Kadar air asal maksimal 100%.',
+            'arrival_weight.numeric'    => 'Berat tiba harus berupa angka.',
+            'arrival_weight.min'        => 'Berat tiba tidak boleh negatif.',
+            'arrival_moisture.numeric'  => 'Kadar air tiba harus berupa angka.',
+            'arrival_moisture.min'      => 'Kadar air tiba minimal 0%.',
+            'arrival_moisture.max'      => 'Kadar air tiba maksimal 100%.',
+            'status.required'           => 'Status lot wajib dipilih.',
+            'status.in'                 => 'Status lot tidak valid.',
         ];
     }
 
@@ -50,6 +86,8 @@ class SeedLotForm extends Component
             $this->origin_moisture  = $seedLot->origin_moisture;
             $this->arrival_weight   = $seedLot->arrival_weight;
             $this->arrival_moisture = $seedLot->arrival_moisture;
+            $this->location         = $seedLot->location ?? '';
+            $this->lot_code_prefix  = $seedLot->lot_code_prefix ?? 'KD-DP-NS';
             $this->status           = $seedLot->status->value;
             $this->autoLotNumber    = false;
         } else {
@@ -59,27 +97,32 @@ class SeedLotForm extends Component
 
     public function updatedSeedId(): void
     {
-        if ($this->autoLotNumber) {
-            $this->generateLotNumber();
-        }
+        if ($this->autoLotNumber) $this->generateLotNumber();
     }
 
+    public function updatedLocation(): void
+    {
+        if ($this->autoLotNumber) $this->generateLotNumber();
+    }
+
+    public function updatedLotCodePrefix(): void
+    {
+        if ($this->autoLotNumber) $this->generateLotNumber();
+    }
+
+    /**
+     * Format: NNN-[LOT_CODE_PREFIX]-[ALIAS]-[YY]
+     * Contoh: 001-KD-DP-NS-KP-26
+     */
     public function generateLotNumber(): void
     {
-        if (!$this->seed_id) {
-            $this->lot_number = '';
-            return;
-        }
-        $seed = Seed::find($this->seed_id);
-        if (!$seed) return;
+        $prefix = trim($this->lot_code_prefix) ?: 'KD-DP-NS';
+        $alias  = $this->location ?: 'XX';
+        $year2  = now()->format('y'); // 2-digit year
 
-        $abbr  = $seed->category->abbr();
-        $year  = now()->format('Y');
-        $count = SeedLot::whereHas('seed', fn($q) => $q->where('category', $seed->category->value))
-            ->whereYear('created_at', $year)
-            ->count() + 1;
+        $count = SeedLot::whereYear('created_at', now()->year)->count() + 1;
 
-        $this->lot_number = sprintf('LOT-%s-%s-%03d', $abbr, $year, $count);
+        $this->lot_number = sprintf('%03d-%s-%s-%s', $count, $prefix, $alias, $year2);
     }
 
     public function save(): void
