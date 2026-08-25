@@ -19,7 +19,12 @@ class LandingController extends Controller
         // Eager load dengan limit 10 per seed, anti N+1 (PRD §4.1)
         $seeds = Seed::with(['seedLots' => function ($query) {
             $query->orderBy('updated_at', 'desc');
-        }])->orderBy('category')->orderBy('var_name')->get();
+        }, 'category'])
+            ->join('seed_categories', 'seeds.category_id', '=', 'seed_categories.id')
+            ->orderBy('seed_categories.name')
+            ->orderBy('seeds.var_name')
+            ->select('seeds.*')
+            ->get();
 
         // Aktivitas terbaru dari log publik (PRD §0.7)
         $recentActivities = Activity::where('log_name', '!=', 'system')

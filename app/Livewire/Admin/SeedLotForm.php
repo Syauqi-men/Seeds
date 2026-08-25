@@ -2,25 +2,30 @@
 
 namespace App\Livewire\Admin;
 
-use App\Enums\LotStatus;
 use App\Models\Seed;
 use App\Models\SeedLot;
 use Livewire\Component;
 
+/**
+ * SeedLotForm — Livewire component untuk Tambah/Edit Lot Benih.
+ *
+ * Perubahan:
+ *   - Status dihapus dari form (default 'Raw' saat create, tidak diubah via form)
+ *   - lot_code_prefix dihapus dari form (kolom masih ada di DB, tersimpan tapi tidak di-input)
+ *   - Format nomor lot baru: NNN-[ALIAS]-[YY] (contoh: 001-KP-26)
+ */
 class SeedLotForm extends Component
 {
-    public ?SeedLot $seedLot = null;
-    public string $seed_id          = '';
-    public string $lot_number       = '';
-    public ?string $harvest_date    = null;
-    public ?string $origin_weight   = null;
-    public ?string $origin_moisture = null;
-    public ?string $arrival_weight  = null;
-    public ?string $arrival_moisture= null;
-    public string $location         = '';
-    public string $lot_code_prefix  = 'KD-DP-NS';
-    public string $status           = 'Raw';
-    public bool $autoLotNumber      = true;
+    public ?SeedLot $seedLot     = null;
+    public string $seed_id       = '';
+    public string $lot_number    = '';
+    public ?string $harvest_date = null;
+    public ?string $origin_weight    = null;
+    public ?string $origin_moisture  = null;
+    public ?string $arrival_weight   = null;
+    public ?string $arrival_moisture = null;
+    public string $location          = '';
+    public bool $autoLotNumber       = true;
 
     // Alias lokasi yang tersedia
     public array $locationOptions = [
@@ -46,8 +51,6 @@ class SeedLotForm extends Component
             'arrival_weight'   => 'nullable|numeric|min:0',
             'arrival_moisture' => 'nullable|numeric|min:0|max:100',
             'location'         => 'nullable|string|max:10',
-            'lot_code_prefix'  => 'nullable|string|max:20',
-            'status'           => 'required|in:Raw,Processing,Quarantine,Ready,Depleted',
         ];
     }
 
@@ -70,26 +73,22 @@ class SeedLotForm extends Component
             'arrival_moisture.numeric'  => 'Kadar air tiba harus berupa angka.',
             'arrival_moisture.min'      => 'Kadar air tiba minimal 0%.',
             'arrival_moisture.max'      => 'Kadar air tiba maksimal 100%.',
-            'status.required'           => 'Status lot wajib dipilih.',
-            'status.in'                 => 'Status lot tidak valid.',
         ];
     }
 
     public function mount(?SeedLot $seedLot = null): void
     {
         if ($seedLot && $seedLot->exists) {
-            $this->seedLot          = $seedLot;
-            $this->seed_id          = (string) $seedLot->seed_id;
-            $this->lot_number       = $seedLot->lot_number;
-            $this->harvest_date     = $seedLot->harvest_date?->format('Y-m-d');
-            $this->origin_weight    = $seedLot->origin_weight;
-            $this->origin_moisture  = $seedLot->origin_moisture;
-            $this->arrival_weight   = $seedLot->arrival_weight;
-            $this->arrival_moisture = $seedLot->arrival_moisture;
-            $this->location         = $seedLot->location ?? '';
-            $this->lot_code_prefix  = $seedLot->lot_code_prefix ?? 'KD-DP-NS';
-            $this->status           = $seedLot->status->value;
-            $this->autoLotNumber    = false;
+            $this->seedLot         = $seedLot;
+            $this->seed_id         = (string) $seedLot->seed_id;
+            $this->lot_number      = $seedLot->lot_number;
+            $this->harvest_date    = $seedLot->harvest_date?->format('Y-m-d');
+            $this->origin_weight   = $seedLot->origin_weight;
+            $this->origin_moisture = $seedLot->origin_moisture;
+            $this->arrival_weight  = $seedLot->arrival_weight;
+            $this->arrival_moisture= $seedLot->arrival_moisture;
+            $this->location        = $seedLot->location ?? '';
+            $this->autoLotNumber   = false;
         } else {
             $this->generateLotNumber();
         }
@@ -105,29 +104,50 @@ class SeedLotForm extends Component
         if ($this->autoLotNumber) $this->generateLotNumber();
     }
 
-    public function updatedLotCodePrefix(): void
-    {
-        if ($this->autoLotNumber) $this->generateLotNumber();
-    }
-
     /**
-     * Format: NNN-[LOT_CODE_PREFIX]-[ALIAS]-[YY]
-     * Contoh: 001-KD-DP-NS-KP-26
+     * Format nomor lot: NNN-[ABBR]-XX-[KELAS]-[ALIAS]-[TH]
+     * Contoh: 001-KDL-XX-NS-KP-26
+     *
+     *   NNN   = nomor urut 3 digit (hanya menghitung lot format baru tahun ini)
+     *   ABBR  = singkatan kategori dari seed_categories.abbr (mis. KDL)
+     *   XX    = kode tanaman (diabstraksikan, akan dikustomisasi nanti)
+     *   KELAS = var_class dari varietas yang dipilih (NS/BS/FS/SS)
+     *   ALIAS = alias lokasi dari dropdown (KP/JG/NG/MN/GT)
+     *   TH    = 2 digit tahun (mis. 26)
      */
     public function generateLotNumber(): void
     {
-        $prefix = trim($this->lot_code_prefix) ?: 'KD-DP-NS';
         $alias  = $this->location ?: 'XX';
-        $year2  = now()->format('y'); // 2-digit year
+        $year2  = now()->format('y');
+        $abbr   = 'XX';   // default kategori belum dipilih
+        $kelas  = 'XX';   // default kelas belum dipilih
 
-        $count = SeedLot::whereYear('created_at', now()->year)->count() + 1;
+        // Ambil abbr kategori dan kelas dari varietas yang dipilih
+        if ($this->seed_id) {
+            $seed = \App\Models\Seed::with('category')->find($this->seed_id);
+            if ($seed) {
+                $abbr  = strtoupper($seed->category?->abbr ?? 'XX');
+                $kelas = $seed->var_class->value;
+            }
+        }
 
-        $this->lot_number = sprintf('%03d-%s-%s-%s', $count, $prefix, $alias, $year2);
+        // Counter: hanya lot yang sudah pakai format baru (mengandung pola NNN-XXX-XX-XX-XX-YY)
+        // Identifikasi format baru dengan regex: dimulai angka 3 digit lalu tanda hubung
+        $count = SeedLot::whereYear('created_at', now()->year)
+            ->where('lot_number', '~', '^\d{3}-')  // PostgreSQL regex: mulai 3 digit - 
+            ->count() + 1;
+
+        $this->lot_number = sprintf('%03d-%s-XX-%s-%s-%s', $count, $abbr, $kelas, $alias, $year2);
     }
 
     public function save(): void
     {
         $data = $this->validate();
+
+        // Status default 'Raw' saat create — tidak diinput via form
+        if (!$this->seedLot || !$this->seedLot->exists) {
+            $data['status'] = 'Raw';
+        }
 
         if ($this->seedLot && $this->seedLot->exists) {
             $this->seedLot->update($data);
@@ -143,8 +163,7 @@ class SeedLotForm extends Component
     public function render()
     {
         return view('livewire.admin.seed-lot-form', [
-            'seeds'    => Seed::orderBy('category')->orderBy('var_name')->get(),
-            'statuses' => LotStatus::cases(),
+            'seeds' => Seed::with('category')->orderBy('var_name')->get(),
         ]);
     }
 }

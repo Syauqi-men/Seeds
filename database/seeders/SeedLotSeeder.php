@@ -8,134 +8,126 @@ use App\Models\SeedLot;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
+/**
+ * Format nomor lot baru: NNN-[ABBR KATEGORI]-XX-[KELAS]-[ALIAS LOKASI]-[TH]
+ * Contoh: 001-KDL-XX-BS-KP-26
+ *
+ *   NNN   = nomor urut 3 digit (global, tidak per kategori)
+ *   ABBR  = singkatan kategori (KDL / KTH / KHJ)
+ *   XX    = kode tanaman (abstrak, belum dikustomisasi)
+ *   KELAS = var_class dari varietas (NS/BS/FS/SS)
+ *   ALIAS = alias lokasi (KP/JG/NG/MN/GT)
+ *   TH    = 2 digit tahun (25 = 2025, 26 = 2026)
+ */
 class SeedLotSeeder extends Seeder
 {
     public function run(): void
     {
-        $seeds = Seed::all()->keyBy('var_name');
+        $seeds = Seed::with('category')->get()->keyBy('var_name');
+        $counter = 1; // nomor urut global
 
-        $lots = [];
+        $lotsData = [
+            // ─── Anjasmoro (Kedelai BS) — 13 lot ────────────────────────────
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 180, 'status' => LotStatus::Ready],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 160, 'status' => LotStatus::Ready],
+            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 140, 'status' => LotStatus::Ready],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Processing],
+            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Processing],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Processing],
+            ['var' => 'Anjasmoro', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Quarantine],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Quarantine],
+            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 50,  'status' => LotStatus::Raw],
+            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 40,  'status' => LotStatus::Raw],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 30,  'status' => LotStatus::Depleted],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 15,  'status' => LotStatus::Raw],
 
-        // ─── Anjasmoro: 13 lot (lebih dari 10 untuk uji pagination PRD §0.9) ───────
-        for ($i = 1; $i <= 13; $i++) {
-            $status = match(true) {
-                $i <= 3  => LotStatus::Ready,
-                $i <= 6  => LotStatus::Processing,
-                $i <= 8  => LotStatus::Quarantine,
-                $i <= 11 => LotStatus::Raw,
-                default  => LotStatus::Depleted,
-            };
-            $lots[] = [
-                'seed_id'     => $seeds['Anjasmoro']->id,
-                'lot_number'  => sprintf('LOT-KDL-2025-%03d', $i),
-                'harvest_date'=> Carbon::now()->subDays(rand(30, 180))->format('Y-m-d'),
-                'origin_weight'   => rand(500, 2000) + 0.50,
-                'origin_moisture' => rand(12, 18) + 0.5,
-                'arrival_weight'  => rand(490, 1990) + 0.20,
-                'arrival_moisture'=> rand(11, 17) + 0.3,
-                'status'     => $status->value,
-            ];
-        }
+            // ─── Grobogan (Kedelai FS) — 5 lot ──────────────────────────────
+            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 200, 'status' => LotStatus::Ready],
+            ['var' => 'Grobogan', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 160, 'status' => LotStatus::Ready],
+            ['var' => 'Grobogan', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Raw],
+            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Depleted],
+            ['var' => 'Grobogan', 'alias' => 'MN', 'year' => 26, 'harvest_offset' => 20,  'status' => LotStatus::Raw],
 
-        // ─── Grobogan: 5 lot ────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 5; $i++) {
-            $lots[] = [
-                'seed_id'      => $seeds['Grobogan']->id,
-                'lot_number'   => sprintf('LOT-KDL-2025-%03d', 20 + $i),
-                'harvest_date' => Carbon::now()->subDays(rand(60, 200))->format('Y-m-d'),
-                'origin_weight'=> rand(300, 1500) + 0.00,
-                'status'       => collect([LotStatus::Ready, LotStatus::Raw, LotStatus::Depleted])->random()->value,
-            ];
-        }
+            // ─── Dena 1 (Kedelai SS) — 3 lot ────────────────────────────────
+            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Processing],
+            ['var' => 'Dena 1', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Processing],
+            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10,  'status' => LotStatus::Raw],
 
-        // ─── Dena 1: 3 lot ──────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 3; $i++) {
-            $lots[] = [
-                'seed_id'    => $seeds['Dena 1']->id,
-                'lot_number' => sprintf('LOT-KDL-2025-%03d', 30 + $i),
-                'status'     => LotStatus::Processing->value,
-            ];
-        }
+            // ─── Wilis (Kedelai NS) — 2 lot ──────────────────────────────────
+            ['var' => 'Wilis', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 150, 'status' => LotStatus::Ready],
+            ['var' => 'Wilis', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
 
-        // ─── Wilis: 2 lot ───────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 2; $i++) {
-            $lots[] = [
-                'seed_id'    => $seeds['Wilis']->id,
-                'lot_number' => sprintf('LOT-KDL-2025-%03d', 40 + $i),
-                'status'     => LotStatus::Ready->value,
-            ];
-        }
+            // ─── Hypoma 1 (Kacang Tanah BS) — 4 lot ─────────────────────────
+            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Ready],
+            ['var' => 'Hypoma 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Processing],
+            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
+            ['var' => 'Hypoma 1', 'alias' => 'JG', 'year' => 26, 'harvest_offset' => 15,  'status' => LotStatus::Raw],
 
-        // ─── Kacang Tanah: Hypoma 1 (4 lot) ─────────────────────────────────────────
-        for ($i = 1; $i <= 4; $i++) {
-            $lots[] = [
-                'seed_id'      => $seeds['Hypoma 1']->id,
-                'lot_number'   => sprintf('LOT-KTH-2025-%03d', $i),
-                'harvest_date' => Carbon::now()->subDays(rand(30, 120))->format('Y-m-d'),
-                'origin_weight'=> rand(400, 1200) + 0.50,
-                'status'       => collect([LotStatus::Ready, LotStatus::Processing, LotStatus::Raw])->random()->value,
-            ];
-        }
+            // ─── Hypoma 2 (Kacang Tanah FS) — 3 lot ─────────────────────────
+            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 110, 'status' => LotStatus::Ready],
+            ['var' => 'Hypoma 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Ready],
+            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 20,  'status' => LotStatus::Raw],
 
-        // ─── Hypoma 2: 3 lot ────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 3; $i++) {
-            $lots[] = [
-                'seed_id'    => $seeds['Hypoma 2']->id,
-                'lot_number' => sprintf('LOT-KTH-2025-%03d', 10 + $i),
-                'status'     => LotStatus::Ready->value,
-            ];
-        }
+            // ─── Bima (Kacang Tanah SS) — 2 lot ─────────────────────────────
+            ['var' => 'Bima', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Quarantine],
+            ['var' => 'Bima', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Quarantine],
 
-        // ─── Bima: 2 lot ────────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 2; $i++) {
-            $lots[] = [
-                'seed_id'    => $seeds['Bima']->id,
-                'lot_number' => sprintf('LOT-KTH-2025-%03d', 20 + $i),
-                'status'     => LotStatus::Quarantine->value,
-            ];
-        }
+            // ─── Kancil (Kacang Tanah FS) — 2 lot ───────────────────────────
+            ['var' => 'Kancil', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 150, 'status' => LotStatus::Depleted],
+            ['var' => 'Kancil', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
 
-        // ─── Kancil: 2 lot ──────────────────────────────────────────────────────────
-        $lots[] = [
-            'seed_id'    => $seeds['Kancil']->id,
-            'lot_number' => 'LOT-KTH-2025-030',
-            'status'     => LotStatus::Depleted->value,
-        ];
-        $lots[] = [
-            'seed_id'    => $seeds['Kancil']->id,
-            'lot_number' => 'LOT-KTH-2025-031',
-            'status'     => LotStatus::Raw->value,
+            // ─── Vima 1 (Kacang Hijau BS) — 4 lot ───────────────────────────
+            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
+            ['var' => 'Vima 1', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Processing],
+            ['var' => 'Vima 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 50,  'status' => LotStatus::Ready],
+            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10,  'status' => LotStatus::Raw],
+
+            // ─── Vima 2 (Kacang Hijau FS) — 3 lot ───────────────────────────
+            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Ready],
+            ['var' => 'Vima 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Ready],
+            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 12,  'status' => LotStatus::Raw],
+
+            // ─── Murai (Kacang Hijau SS) — 2 lot ────────────────────────────
+            ['var' => 'Murai', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Raw],
+            ['var' => 'Murai', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Processing],
+
+            // ─── Kutilang (Kacang Hijau NS) — 2 lot ─────────────────────────
+            ['var' => 'Kutilang', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 200, 'status' => LotStatus::Depleted],
+            ['var' => 'Kutilang', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
         ];
 
-        // ─── Kacang Hijau: Vima 1 (4 lot) ───────────────────────────────────────────
-        for ($i = 1; $i <= 4; $i++) {
-            $lots[] = [
-                'seed_id'      => $seeds['Vima 1']->id,
-                'lot_number'   => sprintf('LOT-KHJ-2025-%03d', $i),
-                'harvest_date' => Carbon::now()->subDays(rand(20, 90))->format('Y-m-d'),
-                'status'       => collect([LotStatus::Ready, LotStatus::Processing])->random()->value,
-            ];
-        }
+        foreach ($lotsData as $item) {
+            $seed = $seeds[$item['var']] ?? null;
+            if (!$seed) continue;
 
-        // ─── Vima 2: 3 lot ──────────────────────────────────────────────────────────
-        for ($i = 1; $i <= 3; $i++) {
-            $lots[] = [
-                'seed_id'    => $seeds['Vima 2']->id,
-                'lot_number' => sprintf('LOT-KHJ-2025-%03d', 10 + $i),
-                'status'     => LotStatus::Ready->value,
-            ];
-        }
+            $abbr  = strtoupper($seed->category?->abbr ?? 'XX');
+            $kelas = $seed->var_class->value;
+            $alias = $item['alias'];
+            $year2 = str_pad($item['year'], 2, '0', STR_PAD_LEFT);
 
-        // ─── Murai: 2 lot, Kutilang: 2 lot ──────────────────────────────────────────
-        $lots[] = ['seed_id' => $seeds['Murai']->id,   'lot_number' => 'LOT-KHJ-2025-020', 'status' => LotStatus::Raw->value];
-        $lots[] = ['seed_id' => $seeds['Murai']->id,   'lot_number' => 'LOT-KHJ-2025-021', 'status' => LotStatus::Processing->value];
-        $lots[] = ['seed_id' => $seeds['Kutilang']->id,'lot_number' => 'LOT-KHJ-2025-030', 'status' => LotStatus::Depleted->value];
-        $lots[] = ['seed_id' => $seeds['Kutilang']->id,'lot_number' => 'LOT-KHJ-2025-031', 'status' => LotStatus::Ready->value];
+            $lotNumber = sprintf('%03d-%s-XX-%s-%s-%s', $counter++, $abbr, $kelas, $alias, $year2);
 
-        foreach ($lots as $lotData) {
+            $createdAt = Carbon::createFromFormat('y', $item['year'])->startOfYear()
+                ->addDays(rand(1, 300));
+
             SeedLot::updateOrCreate(
-                ['lot_number' => $lotData['lot_number']],
-                $lotData
+                ['lot_number' => $lotNumber],
+                [
+                    'seed_id'      => $seed->id,
+                    'lot_number'   => $lotNumber,
+                    'location'     => $alias,
+                    'harvest_date' => $item['harvest_offset']
+                        ? Carbon::now()->subDays($item['harvest_offset'])->format('Y-m-d')
+                        : null,
+                    'origin_weight'    => rand(300, 2000) + 0.50,
+                    'origin_moisture'  => rand(12, 18) + 0.5,
+                    'arrival_weight'   => rand(290, 1990) + 0.20,
+                    'arrival_moisture' => rand(11, 17) + 0.3,
+                    'status'       => $item['status']->value,
+                    'created_at'   => $createdAt,
+                    'updated_at'   => $createdAt,
+                ]
             );
         }
     }

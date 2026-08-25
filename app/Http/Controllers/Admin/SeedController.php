@@ -10,7 +10,12 @@ class SeedController extends Controller
 {
     public function index()
     {
-        $seeds = Seed::withCount('seedLots')->orderBy('category')->orderBy('var_name')->paginate(15);
+        $seeds = Seed::withCount('seedLots')
+            ->join('seed_categories', 'seeds.category_id', '=', 'seed_categories.id')
+            ->orderBy('seed_categories.name')
+            ->orderBy('seeds.var_name')
+            ->select('seeds.*')
+            ->paginate(15);
         return view('admin.seeds.index', compact('seeds'));
     }
 

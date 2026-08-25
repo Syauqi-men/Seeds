@@ -226,12 +226,18 @@
                 valid = false;
             }
 
-            // Cek toleransi output
-            if (inputQty && outputQty && inputQty.value && outputQty.value) {
-                const inp = parseFloat(inputQty.value);
-                const out = parseFloat(outputQty.value);
-                if (out > inp * 1.05) {
-                    showError(outputQty, `Baris #${rowNum}: Output melebihi input lebih dari toleransi 5%.`);
+            // Validasi balance: Input = Output + Susut + Limbah
+            const shrinkageEl = row.querySelector('input[name*="[shrinkage_quantity]"]');
+            const wasteEl     = row.querySelector('input[name*="[waste_quantity]"]');
+            if (inputQty && outputQty && inputQty.value && outputQty.value !== '') {
+                const inp      = parseFloat(inputQty.value) || 0;
+                const out      = parseFloat(outputQty.value) || 0;
+                const shrink   = parseFloat(shrinkageEl?.value) || 0;
+                const waste    = parseFloat(wasteEl?.value) || 0;
+                const balance  = out + shrink + waste;
+                if (Math.abs(balance - inp) > 0.01) {
+                    const msg = `Baris #${rowNum}: Output (${out}) + Susut (${shrink}) + Limbah (${waste}) = ${balance.toFixed(2)} kg, harus sama dengan Input (${inp} kg).`;
+                    showError(outputQty, msg);
                     valid = false;
                 }
             }

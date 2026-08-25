@@ -7,14 +7,14 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md)">
         <div class="form-group">
-            <label class="form-label required" for="category">Kategori</label>
-            <select id="category" wire:model="category" class="form-control @error('category') is-invalid @enderror">
+            <label class="form-label required" for="category_id">Kategori</label>
+            <select id="category_id" wire:model="category_id" class="form-control @error('category_id') is-invalid @enderror">
                 <option value="">-- Pilih Kategori --</option>
                 @foreach($categories as $cat)
-                <option value="{{ $cat->value }}">{{ $cat->label() }}</option>
+                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                 @endforeach
             </select>
-            @error('category') <span class="form-error">{{ $message }}</span> @enderror
+            @error('category_id') <span class="form-error">{{ $message }}</span> @enderror
         </div>
 
         <div class="form-group">

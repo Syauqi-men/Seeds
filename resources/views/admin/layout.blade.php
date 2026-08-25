@@ -43,7 +43,10 @@
                     Dashboard
                 </a>
 
-                <div class="sidebar-section">Data Dasar</div>
+                
+                
+
+                <div class="sidebar-section">Master Data</div>
                 <a href="{{ route('admin.seeds.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seeds*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -56,21 +59,20 @@
                     </svg>
                     Varietas Benih
                 </a>
-
-                {{-- <a href="{{ route('admin.categories.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-
+                
+                <a href="{{ route('admin.seed-categories.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.seed-categories*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
-                        <path
-                            d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3H5a2 2 0 0 0-2 2v4.59A2 2 0 0 0 3.59 11l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.59Z" />
-                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                        <path d="M3 3h18v4H3z" />
+                        <path d="M3 10h18v4H3z" />
+                        <path d="M3 17h18v4H3z" />
                     </svg>
-                    Kategori
-                </a> --}}
+                    Kategori Benih
+                </a>
 
-                <a href="{{ route('admin.workers.index') }}"
+                 <a href="{{ route('admin.workers.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.workers*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -83,7 +85,7 @@
                     Data Pekerja
                 </a>
 
-                <div class="sidebar-section">Data Lot</div>
+                <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="{{ route('admin.seed-lots.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seed-lots*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -95,7 +97,6 @@
                     Lot Benih
                 </a>
 
-                <div class="sidebar-section">Proses</div>
                 <a href="{{ route('admin.production-processes.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.production-processes*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -120,7 +121,7 @@
                     Uji Lab
                 </a>
 
-                <div class="sidebar-section">Stok</div>
+                <div class="sidebar-section">Persediaan</div>
                 <a href="{{ route('admin.stock-transactions.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.stock-transactions*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -134,7 +135,7 @@
                     Transaksi Stok
                 </a>
 
-                <div class="sidebar-section">Log</div>
+                <div class="sidebar-section">Sistem</div>
                 <a href="{{ route('admin.activity-log.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.activity-log*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"

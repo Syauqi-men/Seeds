@@ -35,7 +35,7 @@
                     @endif
                 </td>
                 <td>
-                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category->value)) }}">{{ $seed->category->label() }}</span>
+                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category?->name ?? 'lain')) }}">{{ $seed->category?->name ?? '—' }}</span>
                 </td>
                 <td><span class="badge badge-raw">{{ $seed->var_class->value }}</span></td>
                 <td>{{ $seed->seed_lots_count }}</td>

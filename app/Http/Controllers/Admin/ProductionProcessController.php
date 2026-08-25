@@ -37,7 +37,6 @@ class ProductionProcessController extends Controller
 
     public function store(Request $request)
     {
-        // Support multi-row: rows[] array
         $request->validate([
             'rows'                       => 'required|array|min:1',
             'rows.*.seed_lot_id'         => 'required|exists:seed_lots,id',
@@ -70,27 +69,41 @@ class ProductionProcessController extends Controller
             'rows.*.notes.max'                    => 'Catatan maksimal 500 karakter.',
         ]);
 
-        foreach ($request->rows as $row) {
-            // Validasi toleransi output per baris
-            $tolerance = $row['input_quantity'] * 1.05;
-            if ($row['output_quantity'] > $tolerance) {
+        // Validasi balance per baris: Input = Output + Susut + Limbah
+        foreach ($request->rows as $i => $row) {
+            $input     = (float) $row['input_quantity'];
+            $output    = (float) $row['output_quantity'];
+            $shrinkage = (float) ($row['shrinkage_quantity'] ?? 0);
+            $waste     = (float) ($row['waste_quantity'] ?? 0);
+            $balance   = $output + $shrinkage + $waste;
+
+            if (abs($balance - $input) > 0.01) {
+                $rowNum = $i + 1;
                 return back()
-                    ->withErrors(['rows' => 'Salah satu baris: output melebihi input melebihi toleransi 5%.'])
+                    ->withErrors([
+                        "rows.{$i}.output_quantity" =>
+                            "Baris #{$rowNum}: Total output ({$output}) + susut ({$shrinkage}) + limbah ({$waste}) = " .
+                            number_format($balance, 2) . " kg, harus sama dengan input ({$input} kg).",
+                    ])
                     ->withInput();
             }
-
-            ProductionProcess::create([
-                'seed_lot_id'        => $row['seed_lot_id'],
-                'process_type'       => $row['process_type'],
-                'worker_id'          => $row['worker_id'] ?: null,
-                'input_quantity'     => $row['input_quantity'],
-                'output_quantity'    => $row['output_quantity'],
-                'shrinkage_quantity' => $row['shrinkage_quantity'] ?? 0,
-                'waste_quantity'     => $row['waste_quantity'] ?? 0,
-                'processed_at'       => $row['processed_at'] ?: null,
-                'notes'              => $row['notes'] ?? null,
-            ]);
         }
+
+        DB::transaction(function () use ($request) {
+            foreach ($request->rows as $row) {
+                ProductionProcess::create([
+                    'seed_lot_id'        => $row['seed_lot_id'],
+                    'process_type'       => $row['process_type'],
+                    'worker_id'          => $row['worker_id'] ?: null,
+                    'input_quantity'     => $row['input_quantity'],
+                    'output_quantity'    => $row['output_quantity'],
+                    'shrinkage_quantity' => $row['shrinkage_quantity'] ?? 0,
+                    'waste_quantity'     => $row['waste_quantity'] ?? 0,
+                    'processed_at'       => $row['processed_at'] ?: null,
+                    'notes'              => $row['notes'] ?? null,
+                ]);
+            }
+        });
 
         return redirect()->route('admin.production-processes.index')
                          ->with('success', count($request->rows) . ' proses produksi berhasil dicatat.');
@@ -142,10 +155,20 @@ class ProductionProcessController extends Controller
             'notes.max'                   => 'Catatan maksimal 500 karakter.',
         ]);
 
-        $tolerance = $data['input_quantity'] * 1.05;
-        if ($data['output_quantity'] > $tolerance) {
+        // Validate
+        $input     = (float) $data['input_quantity'];
+        $output    = (float) $data['output_quantity'];
+        $shrinkage = (float) ($data['shrinkage_quantity'] ?? 0);
+        $waste     = (float) ($data['waste_quantity'] ?? 0);
+        $balance   = $output + $shrinkage + $waste;
+
+        if (abs($balance - $input) > 0.01) {
             return back()
-                ->withErrors(['output_quantity' => 'Output melebihi input melebihi toleransi 5%.'])
+                ->withErrors([
+                    'output_quantity' =>
+                        "Total output ({$output}) + susut ({$shrinkage}) + limbah ({$waste}) = " .
+                        number_format($balance, 2) . " kg, harus sama dengan input ({$input} kg).",
+                ])
                 ->withInput();
         }
 

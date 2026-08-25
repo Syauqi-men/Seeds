@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\SeedCategory;
 use App\Enums\VarClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -17,16 +17,21 @@ class Seed extends Model
     protected $fillable = [
         'var_name',
         'var_class',
-        'category',
+        'category_id',   // FK ke seed_categories (menggantikan ENUM category)
         'description',
     ];
 
     protected $casts = [
         'var_class' => VarClass::class,
-        'category'  => SeedCategory::class,
+        // category tidak di-cast lagi — akses lewat relasi $seed->category
     ];
 
     // ─── Relations ────────────────────────────────────────────────────────
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(SeedCategory::class, 'category_id');
+    }
+
     public function seedLots(): HasMany
     {
         return $this->hasMany(SeedLot::class);

@@ -12,12 +12,12 @@ return new class extends Migration
             $table->id();
             $table->string('var_name');
             $table->enum('var_class', ['NS', 'BS', 'FS', 'SS']);
-            $table->enum('category', ['Kedelai', 'Kacang Tanah', 'Kacang Hijau']);
+            $table->foreignId('category_id')->constrained('seed_categories')->cascadeOnDelete();
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['var_name', 'category']);
-            $table->index('category');
+            $table->unique(['var_name', 'category_id'], 'seeds_var_name_category_id_unique');
+            $table->index('category_id', 'seeds_category_id_index');
             $table->index('var_class');
         });
     }

@@ -17,8 +17,16 @@ return new class extends Migration
             $table->decimal('origin_moisture', 5, 2)->nullable();
             $table->decimal('arrival_weight', 10, 2)->nullable();
             $table->decimal('arrival_moisture', 5, 2)->nullable();
-            $table->decimal('raw_stock', 10, 2)->default(0);
-            $table->decimal('clean_stock', 10, 2)->default(0);
+            $table->string('location', 10)->nullable()
+                  ->comment('Alias lokasi: KP, JG, NG, MN, GT');
+            $table->string('lot_code_prefix', 20)->default('KD-DP-NS')
+                  ->comment('Kode prefix lot (tersimpan di DB, tidak ditampilkan di form)');
+            $table->decimal('raw_stock', 10, 2)->default(0)
+                  ->comment('Stok mentah dari transaksi stok (IN - OUT ± ADJ)');
+            $table->decimal('clean_stock', 10, 2)->default(0)
+                  ->comment('Stok bersih dari output proses Sorting');
+            $table->decimal('graded_stock', 10, 2)->default(0)
+                  ->comment('Stok grading dari output proses Grading');
             $table->enum('status', ['Raw', 'Processing', 'Quarantine', 'Ready', 'Depleted'])->default('Raw');
             $table->timestamps();
 

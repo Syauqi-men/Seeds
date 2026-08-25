@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\{ ActivityLogController, 
-            DashboardController, LabTestController, 
-            ProductionProcessController, SeedController, 
-            SeedLotController, StockTransactionController,
-            WorkerController };
+use App\Http\Controllers\Admin\{ ActivityLogController,
+            DashboardController, LabTestController,
+            ProductionProcessController, SeedCategoryController,
+            SeedController, SeedLotController,
+            StockTransactionController, WorkerController };
 use App\Http\Controllers\LandingController;
 
 use Illuminate\Support\Facades\Route;
@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+        // Data Dasar
+        Route::resource('seed-categories', SeedCategoryController::class)->except(['show']);
         Route::resource('seeds', SeedController::class);
         Route::resource('seed-lots', SeedLotController::class);
         Route::resource('production-processes', ProductionProcessController::class);

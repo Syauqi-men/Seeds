@@ -25,8 +25,7 @@ class SeedLot extends Model
         'location',
         'lot_code_prefix',
         'status',
-        // NOTE: raw_stock and clean_stock are intentionally excluded —
-        //       they are managed exclusively by SeedLotObserver.
+        // NOTE: raw_stock, clean_stock, graded_stock dikelola eksklusif oleh SeedLotObserver.
     ];
 
     protected $casts = [
@@ -34,6 +33,7 @@ class SeedLot extends Model
         'harvest_date'    => 'date',
         'raw_stock'       => 'decimal:2',
         'clean_stock'     => 'decimal:2',
+        'graded_stock'    => 'decimal:2',
     ];
 
     // ─── Relations ────────────────────────────────────────────────────────

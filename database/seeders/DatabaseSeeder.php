@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
+            SeedCategorySeeder::class,   // Harus sebelum SeedSeeder
             SeedSeeder::class,
             SeedLotSeeder::class,
             ProductionProcessSeeder::class,

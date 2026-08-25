@@ -32,7 +32,7 @@
                 <td><span style="font-weight:600">{{ $lot->lot_number }}</span></td>
                 <td>
                     <div>{{ $lot->seed->var_name }}</div>
-                    <div class="text-small text-muted">{{ $lot->seed->category->label() }} &bull; {{ $lot->seed->var_class->value }}</div>
+                    <div class="text-small text-muted">{{ $lot->seed->category?->name ?? '—' }} &bull; {{ $lot->seed->var_class->value }}</div>
                 </td>
                 <td><span class="badge badge-{{ strtolower($lot->status->value) }}">{{ $lot->status->label() }}</span></td>
                 <td>{{ number_format($lot->raw_stock, 2) }} kg</td>

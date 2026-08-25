@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\LotStatus;
-use App\Enums\SeedCategory;
+use App\Models\SeedCategory;
 use App\Models\SeedLot;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,8 +12,8 @@ class LotBenihList extends Component
 {
     use WithPagination;
 
-    public string $search = '';
-    public string $filterStatus = '';
+    public string $search         = '';
+    public string $filterStatus   = '';
     public string $filterCategory = '';
 
     protected $queryString = ['search', 'filterStatus', 'filterCategory'];
@@ -24,29 +24,30 @@ class LotBenihList extends Component
 
     public function render()
     {
-        $query = SeedLot::with('seed')
+        $query = SeedLot::with('seed.category')
             ->join('seeds', 'seed_lots.seed_id', '=', 'seeds.id')
             ->select('seed_lots.*');
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('seed_lots.lot_number', 'ilike', '%' . $this->search . '%')
-                  ->orWhere('seeds.var_name', 'ilike', '%' . $this->search . '%');
+                $q->where('seed_lots.lot_number', 'like', '%' . $this->search . '%')
+                  ->orWhere('seeds.var_name', 'like', '%' . $this->search . '%');
             });
         }
         if ($this->filterStatus) {
             $query->where('seed_lots.status', $this->filterStatus);
         }
         if ($this->filterCategory) {
-            $query->where('seeds.category', $this->filterCategory);
+            // Filter berdasarkan category_id di tabel seeds
+            $query->where('seeds.category_id', $this->filterCategory);
         }
 
-        $lots = $query->orderBy('seeds.category')->orderBy('seed_lots.updated_at', 'desc')->paginate(20);
+        $lots = $query->orderBy('seed_lots.updated_at', 'desc')->paginate(20);
 
         return view('livewire.lot-benih-list', [
             'lots'       => $lots,
             'statuses'   => LotStatus::cases(),
-            'categories' => SeedCategory::cases(),
+            'categories' => SeedCategory::orderBy('name')->get(),
         ]);
     }
 }

@@ -11,7 +11,7 @@
         <select wire:model.live="filterCategory" class="filter-select" id="filter-category">
             <option value="">Semua Kategori</option>
             @foreach($categories as $cat)
-            <option value="{{ $cat->value }}">{{ $cat->label() }}</option>
+            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
             @endforeach
         </select>
         <select wire:model.live="filterVarClass" class="filter-select" id="filter-varclass">
@@ -29,8 +29,8 @@
             <div class="seed-group-header">
                 <div>
                     <span class="seed-group-title">{{ $seed->var_name }}</span>
-                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category->value)) }}" style="margin-left:8px">
-                        {{ $seed->category->label() }}
+                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category?->name ?? 'lain')) }}" style="margin-left:8px">
+                        {{ $seed->category?->name ?? '—' }}
                     </span>
                     <span class="badge badge-raw" style="margin-left:4px">{{ $seed->var_class->value }}</span>
                 </div>

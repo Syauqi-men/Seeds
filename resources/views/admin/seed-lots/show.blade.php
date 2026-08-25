@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">{{ $seedLot->lot_number }}</h1>
-        <p class="page-subtitle">{{ $seedLot->seed->var_name }} &bull; {{ $seedLot->seed->category->label() }} &bull; {{ $seedLot->seed->var_class->value }}</p>
+        <p class="page-subtitle">{{ $seedLot->seed->var_name }} &bull; {{ $seedLot->seed->category?->name ?? '—' }} &bull; {{ $seedLot->seed->var_class->value }}</p>
     </div>
     <div style="display:flex;gap:var(--space-sm)">
         <a href="{{ route('admin.seed-lots.edit', $seedLot) }}" class="btn btn-secondary">Edit</a>

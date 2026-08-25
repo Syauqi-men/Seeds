@@ -11,7 +11,7 @@
         <select wire:model.live="filterCategory" class="filter-select" id="lot-filter-category">
             <option value="">Semua Kategori</option>
             @foreach($categories as $cat)
-            <option value="{{ $cat->value }}">{{ $cat->label() }}</option>
+            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
             @endforeach
         </select>
         <select wire:model.live="filterStatus" class="filter-select" id="lot-filter-status">
@@ -28,7 +28,7 @@
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-md)">
                 <div>
                     <div class="card-title">{{ $lot->lot_number }}</div>
-                    <div class="card-subtitle">{{ $lot->seed->var_name }} &bull; {{ $lot->seed->category->label() }} &bull; {{ $lot->seed->var_class->value }}</div>
+                    <div class="card-subtitle">{{ $lot->seed->var_name }} &bull; {{ $lot->seed->category?->name ?? '—' }} &bull; {{ $lot->seed->var_class->value }}</div>
                 </div>
                 <span class="badge badge-{{ strtolower($lot->status->value) }}">{{ $lot->status->label() }}</span>
             </div>
