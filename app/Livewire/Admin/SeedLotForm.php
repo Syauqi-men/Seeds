@@ -144,17 +144,31 @@ class SeedLotForm extends Component
     {
         $data = $this->validate();
 
-        // Status default 'Raw' saat create — tidak diinput via form
-        if (!$this->seedLot || !$this->seedLot->exists) {
-            $data['status'] = 'Raw';
-        }
-
         if ($this->seedLot && $this->seedLot->exists) {
+            // ── Update lot yang sudah ada ────────────────────────────────
+            $arrivalChanged = (float) ($this->seedLot->arrival_weight ?? 0)
+                           !== (float) ($data['arrival_weight'] ?? 0);
+
             $this->seedLot->update($data);
+
+            // Jika arrival_weight berubah, recalculate stok (raw_stock berdasarkan arrival)
+            if ($arrivalChanged) {
+                \App\Observers\SeedLotObserver::recalculate($this->seedLot->fresh());
+            }
+
             session()->flash('success', 'Lot benih berhasil diperbarui.');
         } else {
+            // ── Buat lot baru ────────────────────────────────────────────
+            // raw_stock awal = arrival_weight (berat benih saat tiba)
+            // Graded & clean dimulai dari 0, akan bertambah saat proses produksi
+            $data['status']      = 'Raw';
+            $data['raw_stock']   = (float) ($data['arrival_weight'] ?? 0);
+            $data['graded_stock'] = 0;
+            $data['clean_stock']  = 0;
+
             SeedLot::create($data);
-            session()->flash('success', 'Lot benih berhasil ditambahkan.');
+            session()->flash('success', 'Lot benih berhasil ditambahkan. Stok mentah diset ke ' .
+                number_format($data['raw_stock'], 2) . ' kg sesuai berat tiba.');
         }
 
         $this->redirect(route('admin.seed-lots.index'), navigate: true);

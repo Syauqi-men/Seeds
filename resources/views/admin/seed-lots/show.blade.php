@@ -91,7 +91,7 @@
                 </td>
                 <td>{{ number_format($proc->input_quantity, 2) }} kg</td>
                 <td>{{ number_format($proc->output_quantity, 2) }} kg</td>
-                <td>{{ number_format($proc->shrinkage_quantity, 2) }} kg</td>
+                <td>{{ number_format($proc->sortir_quantity, 2) }} kg</td>
                 <td>{{ number_format($proc->waste_quantity, 2) }} kg</td>
                 <td class="text-small text-muted">{{ $proc->processed_at?->translatedFormat('d M Y') ?? '-' }}</td>
             </tr>

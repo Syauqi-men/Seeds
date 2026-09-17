@@ -3,12 +3,11 @@
 use App\Http\Controllers\Admin\{ ActivityLogController,
             DashboardController, LabTestController,
             ProductionProcessController, SeedCategoryController,
-            SeedController, SeedLotController,
+            SeedController, SeedLotController, SeedMutationController,
             StockTransactionController, WorkerController };
 use App\Http\Controllers\LandingController;
 
 use Illuminate\Support\Facades\Route;
-
 
 // Landing Page  
 Route::get('/', [LandingController::class, 'index'])->name('home');
@@ -29,6 +28,7 @@ Route::middleware(['auth', 'verified'])
         Route::resource('seed-categories', SeedCategoryController::class)->except(['show']);
         Route::resource('seeds', SeedController::class);
         Route::resource('seed-lots', SeedLotController::class);
+        Route::resource('seed-mutations', SeedMutationController::class)->only(['index','create','store','destroy']);
         Route::resource('production-processes', ProductionProcessController::class);
         Route::resource('lab-tests', LabTestController::class);
         Route::resource('stock-transactions', StockTransactionController::class);

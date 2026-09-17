@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('stock_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seed_lot_id')->constrained('seed_lots')->cascadeOnDelete();
-            $table->enum('transaction_type', ['IN', 'OUT', 'ADJUSTMENT']); // PRD §5.3
+            $table->enum('transaction_type', ['IN', 'OUT', 'ADJUSTMENT']); 
             $table->decimal('quantity', 10, 2);
             $table->string('reference_no')->nullable();
             $table->text('notes')->nullable();

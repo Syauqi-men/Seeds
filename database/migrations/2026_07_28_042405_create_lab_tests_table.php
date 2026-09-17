@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('lab_tests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seed_lot_id')->constrained('seed_lots')->cascadeOnDelete();
-            $table->decimal('germination_rate', 5, 2); // validated 0–100 at app layer
+            $table->decimal('germination_rate', 5, 2); 
             $table->decimal('moisture_content', 5, 2)->nullable();
-            $table->enum('test_result', ['PASSED', 'FAILED']); // manual admin input
+            $table->enum('test_result', ['PASSED', 'FAILED']); 
             $table->date('tested_at')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

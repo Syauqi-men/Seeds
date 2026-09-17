@@ -63,9 +63,9 @@
                 @error('output_quantity') <span class="form-error">{{ $message }}</span> @enderror
             </div>
             <div class="form-group">
-                <label class="form-label">Susut (kg)</label>
-                <input type="number" name="shrinkage_quantity" step="0.01"
-                    value="{{ old('shrinkage_quantity', $productionProcess->shrinkage_quantity) }}"
+                <label class="form-label">Sortir (kg)</label>
+                <input type="number" name="sortir_quantity" step="0.01"
+                    value="{{ old('sortir_quantity', $productionProcess->sortir_quantity) }}"
                     class="form-control">
             </div>
             <div class="form-group">

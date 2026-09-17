@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LabTest;
 use App\Models\SeedLot;
+use App\Models\SeedMutation;
 use Illuminate\Http\Request;
 
 class LabTestController extends Controller
@@ -17,7 +18,12 @@ class LabTestController extends Controller
 
     public function create()
     {
-        $lots = SeedLot::with('seed')->get();
+        // Hanya tampilkan lot yang sudah pernah dimutasi minimal 1x
+        $mutatedLotIds = SeedMutation::distinct()->pluck('seed_lot_id');
+        $lots = SeedLot::with('seed')
+            ->whereIn('id', $mutatedLotIds)
+            ->orderBy('lot_number')
+            ->get();
         return view('admin.lab-tests.create', compact('lots'));
     }
 
@@ -58,7 +64,11 @@ class LabTestController extends Controller
 
     public function edit(LabTest $labTest)
     {
-        $lots = SeedLot::with('seed')->get();
+        $mutatedLotIds = SeedMutation::distinct()->pluck('seed_lot_id');
+        $lots = SeedLot::with('seed')
+            ->whereIn('id', $mutatedLotIds)
+            ->orderBy('lot_number')
+            ->get();
         return view('admin.lab-tests.edit', compact('labTest', 'lots'));
     }
 

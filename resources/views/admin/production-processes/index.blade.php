@@ -49,7 +49,7 @@
                 </td>
                 <td>{{ number_format($proc->input_quantity, 2) }}</td>
                 <td>{{ number_format($proc->output_quantity, 2) }}</td>
-                <td>{{ number_format($proc->shrinkage_quantity, 2) }}</td>
+                <td>{{ number_format($proc->sortir_quantity, 2) }}</td>
                 <td class="text-small text-muted">{{ $proc->processed_at?->translatedFormat('d M Y') ?? '-' }}</td>
                 <td style="text-align:right">
                     <div style="display:flex;gap:4px;justify-content:flex-end" x-data="{ del: false }">

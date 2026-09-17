@@ -13,26 +13,34 @@ return new class extends Migration
             $table->foreignId('seed_lot_id')
                   ->constrained('seed_lots')
                   ->cascadeOnDelete();
+                  
             $table->string('process_type', 20)
                   ->default('Sorting')
                   ->comment('Sorting atau Grading');
+
             $table->foreignId('worker_id')
                   ->nullable()
                   ->constrained('workers')
                   ->nullOnDelete();
+
             $table->decimal('input_quantity', 10, 2)
                   ->comment('Jumlah benih masuk proses (kg)');
+
             $table->decimal('output_quantity', 10, 2)
                   ->comment('Jumlah benih keluar/hasil proses (kg)');
-            $table->decimal('shrinkage_quantity', 10, 2)
+
+            $table->decimal('sortir_quantity', 10, 2)
                   ->default(0)
-                  ->comment('Susut berat selama proses (kg)');
+                  ->comment('Jumlah benih tersortir selama proses (kg)');
+
             $table->decimal('waste_quantity', 10, 2)
                   ->default(0)
                   ->comment('Limbah/reject dari proses (kg)');
+
             $table->date('processed_at')
                   ->nullable()
                   ->comment('Tanggal pelaksanaan proses');
+
             $table->text('notes')->nullable();
             $table->timestamps();
 

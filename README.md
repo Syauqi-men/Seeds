@@ -57,9 +57,9 @@ seeds (varieties) ─┬─▶ seed_lots ─┬─▶ production_processes
                    │               └─▶ stock_transactions
                    │
                    └── Lot Number Format: LOT-{ABBR}-{YEAR}-{000}
-                         e.g. LOT-KDL-2025-001 (Kedelai)
-                              LOT-KTH-2025-001 (Kacang Tanah)
-                              LOT-KHJ-2025-001 (Kacang Hijau)
+                         e.g. LOT-KD-2025-001 (Kedelai)
+                              LOT-KT-2025-001 (Kacang Tanah)
+                              LOT-KH-2025-001 (Kacang Hijau)
 ```
 
 **Stock Observer Pattern:**  

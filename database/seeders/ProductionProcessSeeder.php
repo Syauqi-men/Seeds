@@ -33,7 +33,7 @@ class ProductionProcessSeeder extends Seeder
                     'worker_id'          => null, // tidak diwajibkan
                     'input_quantity'     => round($input, 2),
                     'output_quantity'    => round($output, 2),
-                    'shrinkage_quantity' => round($shrinkage, 2),
+                    'sortir_quantity'    => round($shrinkage, 2),
                     'waste_quantity'     => round($waste, 2),
                     'processed_at'       => Carbon::now()->subDays(rand(1, 60))->format('Y-m-d'),
                     'notes'              => $i === 0 ? 'Sortasi awal' : 'Grading batch ' . ($i + 1),

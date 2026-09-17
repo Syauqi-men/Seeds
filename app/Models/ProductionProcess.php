@@ -19,19 +19,19 @@ class ProductionProcess extends Model
         'worker_id',
         'input_quantity',
         'output_quantity',
-        'shrinkage_quantity',
+        'sortir_quantity',   
         'waste_quantity',
         'processed_at',
         'notes',
     ];
 
     protected $casts = [
-        'process_type'       => ProcessType::class,
-        'processed_at'       => 'datetime',
-        'input_quantity'     => 'decimal:2',
-        'output_quantity'    => 'decimal:2',
-        'shrinkage_quantity' => 'decimal:2',
-        'waste_quantity'     => 'decimal:2',
+        'process_type'    => ProcessType::class,
+        'processed_at'    => 'datetime',
+        'input_quantity'  => 'decimal:2',
+        'output_quantity' => 'decimal:2',
+        'sortir_quantity' => 'decimal:2',
+        'waste_quantity'  => 'decimal:2',
     ];
 
     // ─── Relations ────────────────────────────────────────────────────────

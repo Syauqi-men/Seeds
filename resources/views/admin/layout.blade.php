@@ -43,23 +43,8 @@
                     Dashboard
                 </a>
 
-                
-                
 
                 <div class="sidebar-section">Master Data</div>
-                <a href="{{ route('admin.seeds.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.seeds*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 8c0 0-2 2-2 4s2 4 2 4" />
-                        <path d="M12 8c0 0 2 2 2 4s-2 4-2 4" />
-                        <path d="M8 12h8" />
-                    </svg>
-                    Varietas Benih
-                </a>
-                
                 <a href="{{ route('admin.seed-categories.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seed-categories*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -72,7 +57,21 @@
                     Kategori Benih
                 </a>
 
-                 <a href="{{ route('admin.workers.index') }}"
+                <a href="{{ route('admin.seeds.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.seeds*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 8c0 0-2 2-2 4s2 4 2 4" />
+                        <path d="M12 8c0 0 2 2 2 4s-2 4-2 4" />
+                        <path d="M8 12h8" />
+                    </svg>
+                    Varietas Benih
+                </a>
+
+
+                <a href="{{ route('admin.workers.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.workers*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -85,6 +84,7 @@
                     Data Pekerja
                 </a>
 
+                
                 <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="{{ route('admin.seed-lots.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seed-lots*') ? 'active' : '' }}">
@@ -110,16 +110,30 @@
                     Proses Produksi
                 </a>
 
-                <a href="{{ route('admin.lab-tests.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.lab-tests*') ? 'active' : '' }}">
+                <a href="{{ route('admin.seed-mutations.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.seed-mutations*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path
                             d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4m0 0H5a2 2 0 0 0-2-2v0" />
                     </svg>
+                    Mutasi Benih
+                </a>
+
+
+                <a href="{{ route('admin.lab-tests.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.lab-tests\\*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 3h6v6l4 10a2 2 0 0 1-1.9 2.7H6.9A2 2 0 0 1 5 19L9 9V3z" />
+                        <line x1="9" y1="3" x2="15" y2="3" />
+                        <line x1="7.5" y1="14" x2="16.5" y2="14" />
+                    </svg>
                     Uji Lab
                 </a>
+
 
                 <div class="sidebar-section">Persediaan</div>
                 <a href="{{ route('admin.stock-transactions.index') }}"

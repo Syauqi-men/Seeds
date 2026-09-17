@@ -332,7 +332,7 @@
             </div>
 
             <div class="form-row">
-                <label class="remember-label">
+                <label class="r emember-label">
                     <input type="checkbox" name="remember" id="remember_me">
                     Ingat saya
                 </label>

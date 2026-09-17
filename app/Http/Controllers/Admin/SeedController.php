@@ -24,7 +24,7 @@ class SeedController extends Controller
         return view('admin.seeds.create');
     }
 
-    public function store(Request $request)
+    public function store()
     {
         // Handled by Livewire SeedForm component
         return redirect()->route('admin.seeds.index');

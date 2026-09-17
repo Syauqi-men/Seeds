@@ -25,7 +25,9 @@ class SeedLot extends Model
         'location',
         'lot_code_prefix',
         'status',
-        // NOTE: raw_stock, clean_stock, graded_stock dikelola eksklusif oleh SeedLotObserver.
+        'raw_stock',
+        'clean_stock',
+        'graded_stock',
     ];
 
     protected $casts = [
