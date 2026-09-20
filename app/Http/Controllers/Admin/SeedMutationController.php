@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SeedLot;
 use App\Models\SeedMutation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SeedMutationController extends Controller
 {
@@ -49,14 +50,16 @@ class SeedMutationController extends Controller
             ])->withInput();
         }
 
-        // Save mutation
-        SeedMutation::create([
-            'seed_lot_id' => $lot->id,
-            'mutated_at'  => $request->mutated_at ?: now()->toDateString(),
-            'notes'       => $request->notes,
-        ]);
 
-        $lot->decrement('clean_stock', 2);
+        DB::transaction(function () use ($lot, $request) {
+            SeedMutation::create([
+                'seed_lot_id' => $lot->id,
+                'mutated_at'  => $request->mutated_at ?: now()->toDateString(),
+                'notes'       => $request->notes,
+            ]);
+
+            $lot->decrement('clean_stock', 2);
+        });
 
         return redirect()
             ->route('admin.seed-mutations.index')
@@ -65,7 +68,7 @@ class SeedMutationController extends Controller
 
     public function destroy(SeedMutation $seedMutation)
     {
-        // Delete note only 
+        // Delete note only
         $lotNumber = $seedMutation->seedLot->lot_number ?? '-';
         $seedMutation->delete();
 

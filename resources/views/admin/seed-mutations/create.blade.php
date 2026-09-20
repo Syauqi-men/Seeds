@@ -37,7 +37,7 @@
                 </div>
             @else
                 <select name="seed_lot_id" class="form-control @error('seed_lot_id') is-invalid @enderror">
-                    <op value="">-- Pilih Lot Benih --</op  tion>
+                    <option value="">-- Pilih Lot Benih --</option>
                     @foreach($lots as $lot)
                     <option value="{{ $lot->id }}" {{ old('seed_lot_id') == $lot->id ? 'selected' : '' }}>
                         {{ $lot->lot_number }} — {{ $lot->seed->var_name }}
