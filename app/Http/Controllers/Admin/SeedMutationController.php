@@ -68,7 +68,7 @@ class SeedMutationController extends Controller
 
     public function destroy(SeedMutation $seedMutation)
     {
-        // Delete note only
+        $seedMutation->loadMissing('seedLot');
         $lotNumber = $seedMutation->seedLot->lot_number ?? '-';
         $seedMutation->delete();
 

@@ -44,7 +44,8 @@
                     Dashboard
                 </a>
 
-
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'Administrator')): ?>
                 <div class="sidebar-section">Master Data</div>
                 <a href="<?php echo e(route('admin.seed-categories.index')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.seed-categories*') ? 'active' : ''); ?>">
@@ -58,6 +59,23 @@
                     Kategori Benih
                 </a>
 
+                <a href="<?php echo e(route('admin.workers.index')); ?>"
+                    class="sidebar-link <?php echo e(request()->routeIs('admin.workers*') ? 'active' : ''); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Data Pekerja
+                </a>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'Administrator|Petugas Benih')): ?>
+                <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="<?php echo e(route('admin.seeds.index')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.seeds*') ? 'active' : ''); ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -71,22 +89,6 @@
                     Varietas Benih
                 </a>
 
-
-                <a href="<?php echo e(route('admin.workers.index')); ?>"
-                    class="sidebar-link <?php echo e(request()->routeIs('admin.workers*') ? 'active' : ''); ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    Data Pekerja
-                </a>
-
-                
-                <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="<?php echo e(route('admin.seed-lots.index')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.seed-lots*') ? 'active' : ''); ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -122,9 +124,8 @@
                     Mutasi Benih
                 </a>
 
-
                 <a href="<?php echo e(route('admin.lab-tests.index')); ?>"
-                    class="sidebar-link <?php echo e(request()->routeIs('admin.lab-tests\\*') ? 'active' : ''); ?>">
+                    class="sidebar-link <?php echo e(request()->routeIs('admin.lab-tests*') ? 'active' : ''); ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -134,8 +135,10 @@
                     </svg>
                     Uji Lab
                 </a>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'Administrator|Order Processor')): ?>
                 <div class="sidebar-section">Persediaan</div>
                 <a href="<?php echo e(route('admin.stock-transactions.index')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.stock-transactions*') ? 'active' : ''); ?>">
@@ -149,7 +152,24 @@
                     </svg>
                     Transaksi Stok
                 </a>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'Administrator|Order Processor|Petugas Benih')): ?>
+                <a href="<?php echo e(route('admin.orders.index')); ?>"
+                    class="sidebar-link <?php echo e(request()->routeIs('admin.orders*') ? 'active' : ''); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    Pesanan
+                </a>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                
                 <div class="sidebar-section">Sistem</div>
                 <a href="<?php echo e(route('admin.activity-log.index')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.activity-log*') ? 'active' : ''); ?>">
@@ -164,6 +184,23 @@
                     </svg>
                     Log Aktivitas
                 </a>
+
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'Administrator')): ?>
+                <a href="<?php echo e(route('admin.users.index')); ?>"
+                    class="sidebar-link <?php echo e(request()->routeIs('admin.users*') ? 'active' : ''); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        <line x1="19" y1="8" x2="23" y2="8"/>
+                        <line x1="21" y1="6" x2="21" y2="10"/>
+                    </svg>
+                    Manajemen Pengguna
+                </a>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
             </nav>
 
             <div class="sidebar-footer">
@@ -188,7 +225,18 @@
                     <span style="font-weight:600;color:var(--color-text)"><?php echo $__env->yieldContent('title', 'Dashboard'); ?></span>
                 </div>
                 <div style="display:flex;align-items:center;gap:var(--space-md)">
-                    <span style="font-size:0.85rem;color:var(--color-text-muted)"><?php echo e(Auth::user()->name); ?></span>
+                    
+                    <div style="display:flex;align-items:center;gap:6px">
+                        <span style="font-size:0.85rem;color:var(--color-text-muted)"><?php echo e(Auth::user()->name); ?></span>
+                        <?php $roleName = Auth::user()->roles->first()?->name; ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($roleName): ?>
+                            <span class="badge <?php echo e($roleName === 'Administrator' ? 'badge-ready' : ($roleName === 'Petugas Benih' ? 'badge-processing' : 'badge-quarantine')); ?>"
+                                style="font-size:0.7rem">
+                                <?php echo e($roleName); ?>
+
+                            </span>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    </div>
                     <form method="POST" action="<?php echo e(route('logout')); ?>">
                         <?php echo csrf_field(); ?>
                         <button type="submit" class="btn btn-ghost btn-sm">

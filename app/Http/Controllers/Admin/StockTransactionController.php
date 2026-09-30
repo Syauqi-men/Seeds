@@ -23,7 +23,6 @@ class StockTransactionController extends Controller
 
     public function store(Request $request)
     {
-        // Support multi-row: rows[] array
         $request->validate([
             'rows'                    => 'required|array|min:1',
             'rows.*.seed_lot_id'      => 'required|exists:seed_lots,id',

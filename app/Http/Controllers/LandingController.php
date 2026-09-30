@@ -16,7 +16,7 @@ class LandingController extends Controller
 
     public function benih()
     {
-        // Eager load dengan limit 10 per seed, anti N+1 (PRD §4.1)
+        // Eager load limit 10 per seed
         $seeds = Seed::with(['seedLots' => function ($query) {
             $query->orderBy('updated_at', 'desc');
         }, 'category'])
@@ -26,7 +26,6 @@ class LandingController extends Controller
             ->select('seeds.*')
             ->get();
 
-        // Aktivitas terbaru dari log publik (PRD §0.7)
         $recentActivities = Activity::where('log_name', '!=', 'system')
             ->latest()
             ->take(5)

@@ -14,23 +14,23 @@ class ProductionProcessSeeder extends Seeder
     {
         $lots = SeedLot::all();
 
+        // Make production process per seed lot
         foreach ($lots as $lot) {
-            // Buat 2-3 proses produksi per lot
             $numProcesses = rand(2, 3);
             for ($i = 0; $i < $numProcesses; $i++) {
                 $input     = rand(100, 500) + rand(0, 99) / 100;
-                $output    = $input * (rand(85, 98) / 100); // 85-98% recovery rate
+                $output    = $input * (rand(85, 98) / 100); 
                 $shrinkage = $input * (rand(1, 8) / 100);
                 $waste     = $input - $output - $shrinkage;
                 if ($waste < 0) $waste = 0;
 
-                // Pilih jenis proses bergantian: Sorting untuk proses pertama, Grading berikutnya
+                // Choose process type 
                 $type = $i === 0 ? ProcessType::Sorting : ProcessType::Grading;
 
                 ProductionProcess::create([
                     'seed_lot_id'        => $lot->id,
                     'process_type'       => $type->value,
-                    'worker_id'          => null, // tidak diwajibkan
+                    'worker_id'          => null, 
                     'input_quantity'     => round($input, 2),
                     'output_quantity'    => round($output, 2),
                     'sortir_quantity'    => round($shrinkage, 2),

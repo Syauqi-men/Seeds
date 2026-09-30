@@ -14,12 +14,11 @@ class LabTestSeeder extends Seeder
     {
         $lots = SeedLot::all();
 
+        // Lab test per seed lot
         foreach ($lots as $lot) {
-            // 1-2 uji lab per lot
             $numTests = rand(1, 2);
             for ($i = 0; $i < $numTests; $i++) {
                 $germRate = rand(72, 98) + rand(0, 9) / 10;
-                // PASSED jika germination >= 80%, FAILED jika di bawah itu
                 $result = $germRate >= 80 ? TestResult::PASSED->value : TestResult::FAILED->value;
 
                 LabTest::create([

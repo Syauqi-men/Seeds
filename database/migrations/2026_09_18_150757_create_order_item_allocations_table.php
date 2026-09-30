@@ -10,6 +10,18 @@ return new class extends Migration
     {
         Schema::create('order_item_allocations', function (Blueprint $table) {
             $table->id();
+            
+            $table->foreignId('order_item_id')
+                  ->constrained('order_items')
+                  ->cascadeOnDelete();
+                  
+            $table->foreignId('seed_lot_id')
+                  ->constrained('seed_lots')
+                  ->restrictOnDelete();
+                  
+            $table->decimal('alloc_quantity', 10, 2)
+                  ->comment('Jumlah yang dialokasikan dari lot ini');
+
             $table->timestamps();
         });
     }

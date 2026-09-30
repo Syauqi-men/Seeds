@@ -10,11 +10,10 @@ class SeedSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ambil ID kategori dari DB (sudah diisi oleh SeedCategorySeeder)
+        // Get Category ID from DB(filled by SeedCategorySeeder)
         $cats = SeedCategory::all()->keyBy('name');
 
         $seeds = [
-            // === Kedelai ===
             ['var_name' => 'Anjasmoro', 'var_class' => 'BS', 'category_id' => $cats['Kedelai']->id,
              'description' => 'Varietas unggul nasional dengan potensi hasil tinggi, berbiji besar.'],
             ['var_name' => 'Grobogan',  'var_class' => 'FS', 'category_id' => $cats['Kedelai']->id,
@@ -24,7 +23,6 @@ class SeedSeeder extends Seeder
             ['var_name' => 'Wilis',     'var_class' => 'NS', 'category_id' => $cats['Kedelai']->id,
              'description' => 'Varietas klasik dengan daya adaptasi luas.'],
 
-            // === Kacang Tanah ===
             ['var_name' => 'Hypoma 1', 'var_class' => 'BS', 'category_id' => $cats['Kacang Tanah']->id,
              'description' => 'Varietas baru hasil pemuliaan BATAN, toleran kekeringan.'],
             ['var_name' => 'Hypoma 2', 'var_class' => 'FS', 'category_id' => $cats['Kacang Tanah']->id,
@@ -34,7 +32,6 @@ class SeedSeeder extends Seeder
             ['var_name' => 'Kancil',   'var_class' => 'FS', 'category_id' => $cats['Kacang Tanah']->id,
              'description' => 'Tahan penyakit layu bakteri, cocok lahan kering.'],
 
-            // === Kacang Hijau ===
             ['var_name' => 'Vima 1',   'var_class' => 'BS', 'category_id' => $cats['Kacang Hijau']->id,
              'description' => 'Varietas unggul, toleran curah hujan rendah.'],
             ['var_name' => 'Vima 2',   'var_class' => 'FS', 'category_id' => $cats['Kacang Hijau']->id,

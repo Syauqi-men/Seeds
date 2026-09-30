@@ -15,6 +15,12 @@ return new class extends Migration
                   ->constrained('users')
                   ->restrictOnDelete();
 
+            $table->foreignId('petugas_benih_id')
+                  ->nullable()
+                  ->constrained('users')
+                  ->nullOnDelete()
+                  ->comment('Petugas gudang yang memproses pesanan ini');
+
             $table->string('cust_name')->comment('Nama pemesan — direkap dari pesanan offline, tidak memiliki akun di sistem');
 
             $table->string('reference_num')

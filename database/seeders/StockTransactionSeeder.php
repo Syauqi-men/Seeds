@@ -15,10 +15,10 @@ class StockTransactionSeeder extends Seeder
         $lots = SeedLot::all();
 
         foreach ($lots as $lot) {
-            // 3-5 transaksi per lot: minimal satu IN, sisanya mix
+            // Transaction per lot
             $numTx = rand(3, 5);
 
-            // Transaksi IN pertama (stok masuk)
+            // First transaction (IN)
             StockTransaction::create([
                 'seed_lot_id'      => $lot->id,
                 'transaction_type' => TransactionType::IN->value,
@@ -33,8 +33,8 @@ class StockTransactionSeeder extends Seeder
             for ($i = 1; $i < $numTx; $i++) {
                 $type = $types[array_rand($types)];
                 $qty  = $type === TransactionType::OUT->value
-                    ? rand(10, 100) + 0.00    // keluar: jumlah kecil
-                    : rand(-50, 50) + 0.00;   // adjustment: bisa negatif atau positif
+                    ? rand(10, 100) + 0.00    // OUT: small amount
+                    : rand(-50, 50) + 0.00;   // adjustment: negatif or positive
 
                 if ($type === TransactionType::IN->value) {
                     $qty = rand(50, 300) + 0.00;
@@ -43,7 +43,7 @@ class StockTransactionSeeder extends Seeder
                 StockTransaction::create([
                     'seed_lot_id'      => $lot->id,
                     'transaction_type' => $type,
-                    'quantity'         => round(abs($qty) ?: 10, 2), // pastikan tidak nol
+                    'quantity'         => round(abs($qty) ?: 10, 2), // not null !
                     'reference_no'     => 'TRX-' . strtoupper(substr($lot->lot_number, -6)) . '-' . str_pad($i + 1, 3, '0', STR_PAD_LEFT),
                     'notes'            => match($type) {
                         TransactionType::IN->value         => 'Penerimaan stok tambahan.',

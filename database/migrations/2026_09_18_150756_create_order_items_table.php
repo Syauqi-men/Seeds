@@ -10,6 +10,21 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            
+            $table->foreignId('order_id')
+                  ->constrained('orders')
+                  ->cascadeOnDelete();
+                  
+            $table->foreignId('seed_id')
+                  ->constrained('seeds')
+                  ->restrictOnDelete();
+                  
+            $table->enum('seed_class', ['NS', 'BS', 'FS', 'SS'])
+                  ->comment('Kelas benih yang dipesan');
+                  
+            $table->decimal('quantity', 10, 2)
+                  ->comment('Jumlah yang dipesan dalam kg');
+
             $table->timestamps();
         });
     }

@@ -43,7 +43,8 @@
                     Dashboard
                 </a>
 
-
+                {{-- Master Data — Administrator saja --}}
+                @role('Administrator')
                 <div class="sidebar-section">Master Data</div>
                 <a href="{{ route('admin.seed-categories.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seed-categories*') ? 'active' : '' }}">
@@ -57,6 +58,23 @@
                     Kategori Benih
                 </a>
 
+                <a href="{{ route('admin.workers.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.workers*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Data Pekerja
+                </a>
+                @endrole
+
+                {{-- Pengolahan Benih — Administrator & Petugas Benih --}}
+                @role('Administrator|Petugas Benih')
+                <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="{{ route('admin.seeds.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seeds*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -70,22 +88,6 @@
                     Varietas Benih
                 </a>
 
-
-                <a href="{{ route('admin.workers.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.workers*') ? 'active' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    Data Pekerja
-                </a>
-
-                
-                <div class="sidebar-section">Pengolahan Benih</div>
                 <a href="{{ route('admin.seed-lots.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.seed-lots*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -121,9 +123,8 @@
                     Mutasi Benih
                 </a>
 
-
                 <a href="{{ route('admin.lab-tests.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.lab-tests\\*') ? 'active' : '' }}">
+                    class="sidebar-link {{ request()->routeIs('admin.lab-tests*') ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -133,8 +134,10 @@
                     </svg>
                     Uji Lab
                 </a>
+                @endrole
 
-
+                {{-- Persediaan — Administrator & Order Processor --}}
+                @role('Administrator|Order Processor')
                 <div class="sidebar-section">Persediaan</div>
                 <a href="{{ route('admin.stock-transactions.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.stock-transactions*') ? 'active' : '' }}">
@@ -148,7 +151,24 @@
                     </svg>
                     Transaksi Stok
                 </a>
+                @endrole
 
+                {{-- Pesanan - Semua Role Bisa Akses --}}
+                @role('Administrator|Order Processor|Petugas Benih')
+                <a href="{{ route('admin.orders.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.orders*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    Pesanan
+                </a>
+                @endrole
+
+                {{-- Sistem — semua role --}}
                 <div class="sidebar-section">Sistem</div>
                 <a href="{{ route('admin.activity-log.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.activity-log*') ? 'active' : '' }}">
@@ -163,6 +183,23 @@
                     </svg>
                     Log Aktivitas
                 </a>
+
+                {{-- Manajemen Pengguna — Administrator saja --}}
+                @role('Administrator')
+                <a href="{{ route('admin.users.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        <line x1="19" y1="8" x2="23" y2="8"/>
+                        <line x1="21" y1="6" x2="21" y2="10"/>
+                    </svg>
+                    Manajemen Pengguna
+                </a>
+                @endrole
+
             </nav>
 
             <div class="sidebar-footer">
@@ -187,7 +224,17 @@
                     <span style="font-weight:600;color:var(--color-text)">@yield('title', 'Dashboard')</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:var(--space-md)">
-                    <span style="font-size:0.85rem;color:var(--color-text-muted)">{{ Auth::user()->name }}</span>
+                    {{-- Nama + Badge Role --}}
+                    <div style="display:flex;align-items:center;gap:6px">
+                        <span style="font-size:0.85rem;color:var(--color-text-muted)">{{ Auth::user()->name }}</span>
+                        @php $roleName = Auth::user()->roles->first()?->name; @endphp
+                        @if($roleName)
+                            <span class="badge {{ $roleName === 'Administrator' ? 'badge-ready' : ($roleName === 'Petugas Benih' ? 'badge-processing' : 'badge-quarantine') }}"
+                                style="font-size:0.7rem">
+                                {{ $roleName }}
+                            </span>
+                        @endif
+                    </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn btn-ghost btn-sm">
