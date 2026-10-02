@@ -95,7 +95,7 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        $order->load(['items.seed']);
+        $order->load(['items.seed', 'items.allocations.seedLot']);
         return view('admin.orders.edit', compact('order'));
     }
 
@@ -136,6 +136,30 @@ class OrderController extends Controller
 
         if ($isPetugasBenih && !$isAdmin && empty($order->petugas_benih_id)) {
             $data['petugas_benih_id'] = $user->id;
+        }
+
+        // ── Validasi Alokasi saat status diubah ke 'completed' atau 'ready' ──
+        $newStatus = $data['status'] ?? $order->status;
+        if (in_array($newStatus, ['completed', 'ready'])) {
+            $order->load('items.allocations');
+            $itemsBelumLengkap = [];
+
+            foreach ($order->items as $item) {
+                $totalAlokasi = $item->allocations->sum('alloc_quantity');
+                // Bandingkan dengan toleransi kecil (0.001) untuk menghindari masalah desimal
+                if (abs($totalAlokasi - (float) $item->quantity) > 0.001) {
+                    $itemsBelumLengkap[] = ($item->seed->var_name ?? 'Item #' . $item->id)
+                        . ' (dialokasikan: ' . number_format($totalAlokasi, 2)
+                        . ' kg, dipesan: ' . number_format($item->quantity, 2) . ' kg)';
+                }
+            }
+
+            if (!empty($itemsBelumLengkap)) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Tidak dapat mengubah status ke "' . ($newStatus === 'completed' ? 'Selesai' : 'Siap') . '". '
+                        . 'Alokasi karung belum lengkap untuk: ' . implode('; ', $itemsBelumLengkap) . '.');
+            }
         }
 
         $order->update($data);

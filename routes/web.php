@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\{ ActivityLogController,
-            DashboardController, LabTestController, OrderController,
-            ProductionProcessController, SeedCategoryController,
+            DashboardController, LabTestController, OrderAllocationController,
+            OrderController, ProductionProcessController, SeedCategoryController,
             SeedController, SeedLotController, SeedMutationController,
             StockTransactionController, UserController, WorkerController };
 use App\Http\Controllers\LandingController;
@@ -54,5 +54,18 @@ Route::middleware(['auth', 'verified'])
         // ── Administrator + Order Processor + Petugas Benih ──────────────
         Route::middleware('role:Administrator|Order Processor|Petugas Benih')->group(function () {
             Route::resource('orders', OrderController::class)->only(['index', 'show', 'edit', 'update']);
+        });
+
+        // ── Alokasi Lot Benih — Petugas Benih + Administrator ────────────
+        Route::middleware('role:Administrator|Petugas Benih')->group(function () {
+            // GET  : ambil daftar lot + alokasi existing (AJAX)
+            Route::get('orders/{order}/items/{item}/lots', [OrderAllocationController::class, 'lots'])
+                ->name('orders.items.lots');
+            // POST : simpan alokasi
+            Route::post('orders/{order}/items/{item}/allocations', [OrderAllocationController::class, 'store'])
+                ->name('orders.items.allocations.store');
+            // DELETE : hapus semua alokasi item
+            Route::delete('orders/{order}/items/{item}/allocations', [OrderAllocationController::class, 'destroy'])
+                ->name('orders.items.allocations.destroy');
         });
     });
