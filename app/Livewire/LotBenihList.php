@@ -38,7 +38,7 @@ class LotBenihList extends Component
             $query->where('seed_lots.status', $this->filterStatus);
         }
         if ($this->filterCategory) {
-            // Filter berdasarkan category_id di tabel seeds
+            // Filter by category_id on seeds table
             $query->where('seeds.category_id', $this->filterCategory);
         }
 

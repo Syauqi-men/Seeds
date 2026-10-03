@@ -31,7 +31,7 @@ class Order extends Model
         'created_at'     => 'datetime',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -47,7 +47,7 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

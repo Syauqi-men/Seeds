@@ -7,23 +7,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * Model SeedCategory — menggantikan Enum SeedCategory.
- * Digunakan sebagai relasi dari model Seed (category_id).
- */
 class SeedCategory extends Model
 {
     use LogsActivity;
 
     protected $fillable = ['name', 'abbr', 'description'];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations
     public function seeds(): HasMany
     {
         return $this->hasMany(Seed::class, 'category_id');
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

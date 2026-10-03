@@ -6,14 +6,6 @@ use App\Models\Seed;
 use App\Models\SeedLot;
 use Livewire\Component;
 
-/**
- * SeedLotForm — Livewire component untuk Tambah/Edit Lot Benih.
- *
- * Perubahan:
- *   - Status dihapus dari form (default 'Raw' saat create, tidak diubah via form)
- *   - lot_code_prefix dihapus dari form (kolom masih ada di DB, tersimpan tapi tidak di-input)
- *   - Format nomor lot baru: NNN-[ALIAS]-[YY] (contoh: 001-KP-26)
- */
 class SeedLotForm extends Component
 {
     public ?SeedLot $seedLot     = null;
@@ -27,7 +19,8 @@ class SeedLotForm extends Component
     public string $location          = '';
     public bool $autoLotNumber       = true;
 
-    // Alias lokasi yang tersedia
+
+    // Location alias
     public array $locationOptions = [
         'KP' => 'KP — Kendalpayak',
         'JG' => 'JG — Jambegede',
@@ -104,37 +97,23 @@ class SeedLotForm extends Component
         if ($this->autoLotNumber) $this->generateLotNumber();
     }
 
-    /**
-     * Format nomor lot: NNN-[ABBR]-XX-[KELAS]-[ALIAS]-[TH]
-     * Contoh: 001-KDL-XX-NS-KP-26
-     *
-     *   NNN   = nomor urut 3 digit (hanya menghitung lot format baru tahun ini)
-     *   ABBR  = singkatan kategori dari seed_categories.abbr (mis. KDL)
-     *   XX    = kode tanaman (diabstraksikan, akan dikustomisasi nanti)
-     *   KELAS = var_class dari varietas yang dipilih (NS/BS/FS/SS)
-     *   ALIAS = alias lokasi dari dropdown (KP/JG/NG/MN/GT)
-     *   TH    = 2 digit tahun (mis. 26)
-     */
     public function generateLotNumber(): void
     {
         $alias  = $this->location ?: 'XX';
         $year2  = now()->format('y');
-        $abbr   = 'XX';   // default kategori belum dipilih
-        $kelas  = 'XX';   // default kelas belum dipilih
+        $abbr   = 'XX';  
+        $kelas  = 'XX';   
 
-        // Ambil abbr kategori dan kelas dari varietas yang dipilih
         if ($this->seed_id) {
-            $seed = \App\Models\Seed::with('category')->find($this->seed_id);
+            $seed = Seed::with('category')->find($this->seed_id);
             if ($seed) {
                 $abbr  = strtoupper($seed->category?->abbr ?? 'XX');
                 $kelas = $seed->var_class->value;
             }
         }
 
-        // Counter: hanya lot yang sudah pakai format baru (mengandung pola NNN-XXX-XX-XX-XX-YY)
-        // Identifikasi format baru dengan regex: dimulai angka 3 digit lalu tanda hubung
         $count = SeedLot::whereYear('created_at', now()->year)
-            ->where('lot_number', '~', '^\d{3}-')  // PostgreSQL regex: mulai 3 digit - 
+            ->where('lot_number', '~', '^\d{3}-')  // PostgreSQL regex: start 3 digit 
             ->count() + 1;
 
         $this->lot_number = sprintf('%03d-%s-XX-%s-%s-%s', $count, $abbr, $kelas, $alias, $year2);
@@ -145,7 +124,7 @@ class SeedLotForm extends Component
         $data = $this->validate();
 
         if ($this->seedLot && $this->seedLot->exists) {
-            // ── Update lot yang sudah ada ────────────────────────────────
+            // ── Update lot yang sudah ada 
             $arrivalChanged = (float) ($this->seedLot->arrival_weight ?? 0)
                            !== (float) ($data['arrival_weight'] ?? 0);
 

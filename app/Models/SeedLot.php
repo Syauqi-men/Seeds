@@ -38,7 +38,7 @@ class SeedLot extends Model
         'graded_stock'    => 'decimal:2',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function seed(): BelongsTo
     {
         return $this->belongsTo(Seed::class);
@@ -59,7 +59,7 @@ class SeedLot extends Model
         return $this->hasMany(StockTransaction::class);
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

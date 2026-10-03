@@ -99,7 +99,7 @@ class OrderAllocationController extends Controller
         }
 
         DB::transaction(function () use ($item, $data) {
-            // Hapus alokasi lama untuk item ini, lalu buat ulang
+            // Remake old allocation
             $item->allocations()->delete();
 
             foreach ($data['allocations'] as $alloc) {
@@ -115,9 +115,7 @@ class OrderAllocationController extends Controller
         ]);
     }
 
-    /**
-     * Hapus semua alokasi untuk satu item pesanan.
-     */
+    // Delete all allocation for order item
     public function destroy(Order $order, OrderItem $item)
     {
         abort_if($item->order_id !== $order->id, 404);

@@ -17,16 +17,15 @@ class Seed extends Model
     protected $fillable = [
         'var_name',
         'var_class',
-        'category_id',   // FK ke seed_categories (menggantikan ENUM category)
+        'category_id',
         'description',
     ];
 
     protected $casts = [
         'var_class' => VarClass::class,
-        // category tidak di-cast lagi — akses lewat relasi $seed->category
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function category(): BelongsTo
     {
         return $this->belongsTo(SeedCategory::class, 'category_id');
@@ -37,7 +36,7 @@ class Seed extends Model
         return $this->hasMany(SeedLot::class);
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

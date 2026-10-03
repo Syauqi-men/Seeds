@@ -69,7 +69,7 @@ class SeedCategoryController extends Controller
 
     public function destroy(SeedCategory $seedCategory)
     {
-        // Cegah hapus jika masih ada varietas benih yang menggunakan kategori ini
+        // Cannot delete if there are still varieties using this categoty
         if ($seedCategory->seeds()->exists()) {
             return redirect()->route('admin.seed-categories.index')
                              ->with('error', "Kategori \"{$seedCategory->name}\" tidak dapat dihapus karena masih digunakan oleh " . $seedCategory->seeds()->count() . ' varietas benih.');

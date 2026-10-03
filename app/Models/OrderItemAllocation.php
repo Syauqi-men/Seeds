@@ -20,7 +20,7 @@ class OrderItemAllocation extends Model
         'alloc_quantity' => 'decimal:2',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function orderItem(): BelongsTo
     {
         return $this->belongsTo(OrderItem::class);

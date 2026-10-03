@@ -24,11 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Daftarkan observer yang memicu recalculate snapshot stok (PRD §0.4)
         StockTransaction::observe(StockTransactionObserver::class);
         ProductionProcess::observe(ProductionProcessObserver::class);
 
-        // Force HTTPS ketika di production
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }

@@ -34,7 +34,7 @@ class ProductionProcess extends Model
         'waste_quantity'  => 'decimal:2',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function seedLot(): BelongsTo
     {
         return $this->belongsTo(SeedLot::class);
@@ -45,7 +45,7 @@ class ProductionProcess extends Model
         return $this->belongsTo(Worker::class);
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

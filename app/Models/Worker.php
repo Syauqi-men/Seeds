@@ -26,13 +26,13 @@ class Worker extends Model
         'is_active' => 'boolean',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function productionProcesses(): HasMany
     {
         return $this->hasMany(ProductionProcess::class);
     }
 
-    // ─── Scopes ───────────────────────────────────────────────────────────
+    // Scopes 
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -45,7 +45,7 @@ class Worker extends Model
         });
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

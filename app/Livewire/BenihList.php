@@ -32,7 +32,7 @@ class BenihList extends Component
             $query->where('var_name', 'like', '%' . $this->search . '%');
         }
         if ($this->filterCategory) {
-            // Filter berdasarkan category_id (ID dari seed_categories)
+            // Filter by category_id (ID from seed_categories)
             $query->where('category_id', $this->filterCategory);
         }
         if ($this->filterVarClass) {

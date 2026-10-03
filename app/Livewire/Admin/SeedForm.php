@@ -4,7 +4,6 @@ namespace App\Livewire\Admin;
 
 use App\Models\Seed;
 use App\Models\SeedCategory;
-use App\Models\SeedLot;
 use Livewire\Component;
 
 class SeedForm extends Component
@@ -12,7 +11,7 @@ class SeedForm extends Component
     public ?Seed $seed = null;
     public string $var_name    = '';
     public string $var_class   = '';
-    public string $category_id = '';   // ID dari tabel seed_categories
+    public string $category_id = '';   
     public string $description = '';
 
     protected function rules(): array

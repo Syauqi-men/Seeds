@@ -15,7 +15,7 @@ class AdminSeeder extends Seeder
             [
                 'name'              => 'Administrator BRMP',
                 'email'             => env('ADMIN_EMAIL', 'admin@brmp.go.id'),
-                'password'          => Hash::make(env('ADMIN_PASSWORD', 'password123')),
+                'password'          => Hash::make(env('ADMIN_PASSWORD', 'admin123')),
                 'email_verified_at' => now(),
             ]
         );

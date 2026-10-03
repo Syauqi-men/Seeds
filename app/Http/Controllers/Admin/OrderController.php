@@ -138,7 +138,6 @@ class OrderController extends Controller
             $data['petugas_benih_id'] = $user->id;
         }
 
-        // ── Validasi Alokasi saat status diubah ke 'completed' atau 'ready' ──
         $newStatus = $data['status'] ?? $order->status;
         if (in_array($newStatus, ['completed', 'ready'])) {
             $order->load('items.allocations');
@@ -146,7 +145,6 @@ class OrderController extends Controller
 
             foreach ($order->items as $item) {
                 $totalAlokasi = $item->allocations->sum('alloc_quantity');
-                // Bandingkan dengan toleransi kecil (0.001) untuk menghindari masalah desimal
                 if (abs($totalAlokasi - (float) $item->quantity) > 0.001) {
                     $itemsBelumLengkap[] = ($item->seed->var_name ?? 'Item #' . $item->id)
                         . ' (dialokasikan: ' . number_format($totalAlokasi, 2)

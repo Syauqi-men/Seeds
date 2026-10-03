@@ -24,7 +24,7 @@ class OrderItem extends Model
         'quantity'   => 'decimal:2',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
