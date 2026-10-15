@@ -1,0 +1,94 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   BRMP Aneka Kacang — Design Tokens (Nuvio design language)
+   Kanvas putih, teks charcoal, Inter, navigasi pucat, frame panel diagonal,
+   sidebar 250px, gutter 16px. Aksen emerald BRMP dipakai tipis.
+──────────────────────────────────────────────────────────────────────────────*/
+
+:root {
+  /* ── Surface ─────────────────────────────────────────────────────────────*/
+  --nv-canvas:        #FFFFFF;
+  --nv-surface:       #FFFFFF;
+  --nv-surface-muted: #F8F8F7;   /* navigasi pucat, header tabel */
+  --nv-surface-hover: #F2F2F0;
+  --nv-surface-dark:  #1C1D1F;
+
+  /* ── Text ────────────────────────────────────────────────────────────────*/
+  --nv-text:          #1F2124;   /* charcoal */
+  --nv-text-muted:    #6B6E75;
+  --nv-text-subtle:   #9A9DA3;
+  --nv-text-inverse:  #FFFFFF;
+
+  /* ── Lines ───────────────────────────────────────────────────────────────*/
+  --nv-border:        #E8E8E5;
+  --nv-border-strong: #D6D6D2;
+  --nv-hatch:         #E3E3DF;   /* garis frame diagonal */
+
+  /* ── Accent (emerald BRMP, dipakai tipis) ────────────────────────────────*/
+  --nv-accent:        #059669;
+  --nv-accent-strong: #047857;
+  --nv-accent-soft:   #ECFDF5;
+  --nv-accent-line:   #A7F3D0;
+  --nv-focus:         0 0 0 3px rgba(5, 150, 105, .18);
+
+  /* ── Semantic status ─────────────────────────────────────────────────────*/
+  --nv-info:          #2563EB;  --nv-info-soft:    #EFF4FF;
+  --nv-success:       #059669;  --nv-success-soft: #ECFDF5;
+  --nv-warning:       #D97706;  --nv-warning-soft: #FFF7EB;
+  --nv-danger:        #DC2626;  --nv-danger-soft:  #FEF2F2;
+  --nv-yellow:        #A16207;  --nv-yellow-soft:  #FEFAE8;
+  --nv-neutral:       #6B6E75;  --nv-neutral-soft: #F3F3F1;
+
+  /* ── Layout (ukuran referensi desktop) ───────────────────────────────────*/
+  --nv-sidebar-w:     250px;
+  --nv-gutter:        16px;
+  --nv-topbar-h:      56px;
+  --nv-activity-w:    332px;
+  --nv-metric-h:      140px;
+  --nv-chart-h:       404px;
+  --nv-activity-h:    560px;
+
+  /* ── Shape & depth ───────────────────────────────────────────────────────*/
+  --nv-radius-sm:     6px;
+  --nv-radius:        10px;
+  --nv-radius-lg:     14px;
+  --nv-shadow-sm:     0 1px 2px rgba(17, 18, 20, .04);
+  --nv-shadow:        0 1px 2px rgba(17, 18, 20, .04), 0 4px 12px rgba(17, 18, 20, .04);
+  --nv-shadow-lg:     0 12px 40px rgba(17, 18, 20, .14);
+
+  /* ── Typography ──────────────────────────────────────────────────────────*/
+  --nv-font:          'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --nv-text-xs:       .75rem;
+  --nv-text-sm:       .8125rem;
+  --nv-text-md:       .875rem;
+  --nv-text-lg:       1rem;
+
+  /* ── Motion ──────────────────────────────────────────────────────────────
+     120ms feedback · 180ms menu/perubahan nilai · 240ms panel/dialog/layout
+     320ms update chart · 24ms stagger terbatas · easing cubic-bezier(.2,0,0,1)
+  */
+  --nv-dur-feedback:  120ms;
+  --nv-dur-menu:      180ms;
+  --nv-dur-panel:     240ms;
+  --nv-dur-chart:     320ms;
+  --nv-stagger:       24ms;
+  --nv-ease:          cubic-bezier(.2, 0, 0, 1);
+}
+
+/* Reduced motion: matikan durasi, stagger dan smooth scroll.
+   Media query ini juga berlaku langsung jika preferensi diubah saat sesi berjalan. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nv-dur-feedback: 0ms;
+    --nv-dur-menu:     0ms;
+    --nv-dur-panel:    0ms;
+    --nv-dur-chart:    0ms;
+    --nv-stagger:      0ms;
+  }
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+}

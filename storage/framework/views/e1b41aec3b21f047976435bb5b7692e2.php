@@ -3,350 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin — BRMP Aneka Kacang</title>
+    <title>Login — BRMP Aneka Kacang</title>
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <style>
-        /* ── Auth page specific styles ── */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            background: #064E3B;
+            background: var(--nv-surface-muted);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
         }
-
-        /* Background blobs */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -20%;
-            right: -15%;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -20%;
-            left: -15%;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,95,70,0.4) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .auth-card {
-            background: white;
+            background: var(--nv-surface);
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
+            border: 1px solid var(--nv-border);
+            border-radius: var(--nv-radius-lg);
+            box-shadow: var(--nv-shadow-lg);
             padding: 2.5rem;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
-            position: relative;
-            z-index: 1;
-            animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: nv-reveal var(--nv-dur-panel) var(--nv-ease) both;
         }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(24px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Accent strip at top */
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #047857, #10B981, #34D399);
-        }
-
         .auth-header {
             text-align: center;
             margin-bottom: 2rem;
         }
-
         .auth-logo {
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: center;
+            width: 52px; height: 52px;
+            margin: 0 auto 1rem;
+            border-radius: var(--nv-radius);
+            background: var(--nv-surface-dark);
+            display: grid; place-items: center;
+            color: #fff;
         }
-
         .auth-logo img {
-            height: 56px;
-            width: auto;
+            width: 100%; height: 100%; object-fit: contain;
+            border-radius: var(--nv-radius); background: #fff;
         }
-
-        .auth-logo-placeholder {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #047857, #10B981);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-        }
-
         .auth-title {
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #064E3B;
-            margin-bottom: 0.3rem;
+            font-family: var(--nv-font);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--nv-text);
+            margin-bottom: 0.25rem;
         }
-
         .auth-subtitle {
-            font-size: 0.82rem;
-            color: #6B7280;
-            line-height: 1.4;
+            font-size: var(--nv-text-sm);
+            color: var(--nv-text-muted);
+            line-height: 1.5;
         }
-
         .auth-divider {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+            display: flex; align-items: center; gap: 10px;
             margin: 1.5rem 0;
         }
-        .auth-divider::before,
-        .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #E8E3D8;
+        .auth-divider::before, .auth-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--nv-border);
         }
         .auth-divider span {
-            font-size: 0.72rem;
-            color: #9CA3AF;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: var(--nv-text-xs); color: var(--nv-text-subtle);
             white-space: nowrap;
         }
-
-        .form-group {
-            margin-bottom: 1.1rem;
-        }
-
-        .form-label {
+        .auth-form .form-group { margin-bottom: 1rem; }
+        .auth-form .form-label {
             display: block;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #374151;
+            font-size: var(--nv-text-sm);
+            font-weight: 500;
+            color: var(--nv-text);
             margin-bottom: 0.35rem;
         }
-
-        .form-control {
-            width: 100%;
-            padding: 0.65rem 0.875rem;
-            border: 1.5px solid #D1D5DB;
-            border-radius: 0;
-            font-family: inherit;
-            font-size: 0.9rem;
-            color: #111827;
-            background: white;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
+        .auth-form .form-control {
+            width: 100%; height: 40px;
+            padding: 0 12px;
+            border: 1px solid var(--nv-border);
+            border-radius: var(--nv-radius-sm);
+            font: inherit; font-size: var(--nv-text-md);
+            color: var(--nv-text);
+            box-shadow: var(--nv-shadow-sm);
+            transition: border-color var(--nv-dur-feedback) var(--nv-ease), box-shadow var(--nv-dur-feedback) var(--nv-ease);
         }
-
-        .form-control:focus {
-            border-color: #10B981;
-            box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+        .auth-form .form-control:hover { border-color: var(--nv-border-strong); }
+        .auth-form .form-control:focus { outline: none; border-color: var(--nv-accent); box-shadow: var(--nv-focus); }
+        .auth-form .form-control.is-invalid { border-color: var(--nv-danger); box-shadow: 0 0 0 3px rgba(220,38,38,.12); }
+        .form-error { font-size: var(--nv-text-xs); color: var(--nv-danger); margin-top: 4px; }
+        .password-wrapper { position: relative; }
+        .password-wrapper .form-control { padding-right: 40px; }
+        .password-toggle {
+            position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
+            width: 36px; height: 36px;
+            display: grid; place-items: center;
+            background: none; border: 0; cursor: pointer;
+            color: var(--nv-text-subtle);
+            border-radius: var(--nv-radius-sm);
+            transition: color var(--nv-dur-feedback) var(--nv-ease);
         }
-
-        .form-control.is-invalid {
-            border-color: #EF4444;
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
-        }
-
-        .form-error {
-            font-size: 0.78rem;
-            color: #EF4444;
-            margin-top: 0.3rem;
-        }
-
-        .form-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            margin-top: 0.25rem;
-        }
-
-        .remember-label {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.82rem;
-            color: #6B7280;
-            cursor: pointer;
-        }
-
-        .remember-label input[type="checkbox"] {
-            width: 15px;
-            height: 15px;
-            accent-color: #10B981;
-            cursor: pointer;
-        }
-
-        .forgot-link {
-            font-size: 0.82rem;
-            color: #059669;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .forgot-link:hover { color: #047857; }
-
+        .password-toggle:hover { color: var(--nv-text-muted); }
+        .password-toggle .lucide { width: 16px; height: 16px; }
         .btn-login {
-            width: 100%;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            border: none;
-            border-radius: 0;
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 700;
+            width: 100%; height: 40px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--nv-surface-dark); color: #fff;
+            border: 1px solid var(--nv-surface-dark); border-radius: var(--nv-radius-sm);
+            font: inherit; font-size: var(--nv-text-md); font-weight: 600;
             cursor: pointer;
-            letter-spacing: 0.3px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(4,120,87,0.4);
+            box-shadow: var(--nv-shadow-sm);
+            transition: background var(--nv-dur-feedback) var(--nv-ease), transform var(--nv-dur-feedback) var(--nv-ease);
+            margin-top: 0.5rem;
         }
-        .btn-login:hover {
-            background: linear-gradient(135deg, #047857, #065F46);
-            box-shadow: 0 6px 20px rgba(4,120,87,0.5);
-            transform: translateY(-1px);
-        }
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .auth-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-
-        .auth-footer a {
-            font-size: 0.82rem;
-            color: #059669;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .auth-footer a:hover { color: #047857; }
-
+        .btn-login:hover { background: #000; }
+        .btn-login:active { transform: translateY(1px); }
         .session-status {
-            padding: 0.7rem 1rem;
-            background: #ECFDF5;
-            border: 1px solid #A7F3D0;
-            color: #065F46;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
+            padding: 10px 14px; margin-bottom: 1rem;
+            background: var(--nv-success-soft); color: #065F46;
+            border: 1px solid #C9F0DD; border-radius: var(--nv-radius-sm);
+            font-size: var(--nv-text-sm);
         }
-
-        /* Decorative circles */
-        .deco-circle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.06;
+        .auth-footer {
+            margin-top: 1.5rem; text-align: center;
         }
-        .deco-1 { width: 180px; height: 180px; background: #10B981; top: -60px; right: -60px; }
-        .deco-2 { width: 100px; height: 100px; background: #10B981; bottom: -30px; left: -30px; }
+        .auth-footer a {
+            font-size: var(--nv-text-sm); color: var(--nv-text-muted);
+            display: inline-flex; align-items: center; gap: 4px;
+            font-weight: 500;
+            transition: color var(--nv-dur-feedback) var(--nv-ease);
+        }
+        .auth-footer a:hover { color: var(--nv-text); }
+        .auth-footer a .lucide { width: 14px; height: 14px; }
     </style>
 </head>
 <body>
     <div class="auth-card">
-        <div class="deco-circle deco-1"></div>
-        <div class="deco-circle deco-2"></div>
-
-        
         <div class="auth-header">
             <div class="auth-logo">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(file_exists(public_path('images/logo-brmp.png'))): ?>
                     <img src="<?php echo e(asset('images/logo-brmp.png')); ?>" alt="Logo BRMP">
                 <?php else: ?>
-                    <div class="auth-logo-placeholder">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                    </div>
+                    <i data-lucide="layers" style="width:24px;height:24px;"></i>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
             <h1 class="auth-title">BRMP Aneka Kacang</h1>
-            <p class="auth-subtitle">Sistem Informasi Manajemen Stok Benih<br>Balai Riset dan Modernisasi Pertanian</p>
+            <p class="auth-subtitle">Sistem Informasi Manajemen Stok Benih<br>Balai Riset dan Pengujian Tanaman</p>
         </div>
 
-        <div class="auth-divider"><span>Login Administrator</span></div>
+        <div class="auth-divider"><span>Masuk ke panel admin</span></div>
 
-        
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('status')): ?>
             <div class="session-status"><?php echo e(session('status')); ?></div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-        
-        <form method="POST" action="<?php echo e(route('login')); ?>">
+        <form method="POST" action="<?php echo e(route('login')); ?>" class="auth-form">
             <?php echo csrf_field(); ?>
-
             <div class="form-group">
-                <label class="form-label" for="email">Alamat Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-control <?php echo e($errors->has('email') ? 'is-invalid' : ''); ?>"
-                    value="<?php echo e(old('email')); ?>"
-                    placeholder="admin@brmp.go.id"
-                    required
-                    autofocus
-                    autocomplete="username"
-                >
+                <label class="form-label" for="email"><i data-lucide="mail" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Alamat Email</label>
+                <input type="email" id="email" name="email" class="form-control <?php echo e($errors->has('email') ? 'is-invalid' : ''); ?>" value="<?php echo e(old('email')); ?>" placeholder="admin@brmp.go.id" required autofocus autocomplete="username">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($errors->has('email')): ?>
                     <div class="form-error"><?php echo e($errors->first('email')); ?></div>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="password">Password</label>
-                <div style="position:relative">
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        class="form-control <?php echo e($errors->has('password') ? 'is-invalid' : ''); ?>"
-                        placeholder="••••••••"
-                        required
-                        autocomplete="current-password"
-                        style="padding-right:2.5rem"
-                    >
-                    <button type="button" tabindex="-1" onclick="toggleLoginPassword()"
-                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;padding:0;line-height:1;display:flex;align-items:center">
-                        
-                        <svg id="login-eye-open" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        
-                        <svg id="login-eye-slash" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round"
-                            style="display:none">
-                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                            <path d="M10.73 14.73a3 3 0 1 1-4.24-4.24"/>
-                            <line x1="1" y1="1" x2="23" y2="23"/>
-                        </svg>
+                <label class="form-label" for="password"><i data-lucide="lock" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" class="form-control <?php echo e($errors->has('password') ? 'is-invalid' : ''); ?>" placeholder="••••••••" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" tabindex="-1" onclick="toggleLoginPassword()">
+                        <i data-lucide="eye" id="login-eye-open"></i>
+                        <i data-lucide="eye-off" id="login-eye-slash" style="display:none"></i>
                     </button>
                 </div>
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($errors->has('password')): ?>
@@ -354,44 +174,36 @@
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
 
-            <div class="form-row">
-                <label class="r emember-label">
-                    <input type="checkbox" name="remember" id="remember_me">
-                    Ingat saya
-                </label>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Route::has('password.request')): ?>
-                    <a href="<?php echo e(route('password.request')); ?>" class="forgot-link">Lupa password?</a>
-                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            </div>
-
             <button type="submit" class="btn-login">
-                Masuk ke Panel Admin
+                <i data-lucide="log-in" style="width:16px;height:16px;"></i>
+                Masuk
             </button>
         </form>
 
         <div class="auth-footer">
             <a href="<?php echo e(route('benih.index')); ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                <i data-lucide="chevron-left"></i>
                 Kembali ke halaman publik
             </a>
         </div>
     </div>
-<script>
-    function toggleLoginPassword() {
-        var input  = document.getElementById('password');
-        var eyeOpen  = document.getElementById('login-eye-open');
-        var eyeSlash = document.getElementById('login-eye-slash');
-        if (input.type === 'password') {
-            input.type = 'text';
-            eyeOpen.style.display  = 'none';
-            eyeSlash.style.display = 'block';
-        } else {
-            input.type = 'password';
-            eyeOpen.style.display  = 'block';
-            eyeSlash.style.display = 'none';
+
+    <script>
+        function toggleLoginPassword() {
+            var input = document.getElementById('password');
+            var eyeOpen = document.getElementById('login-eye-open');
+            var eyeSlash = document.getElementById('login-eye-slash');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeSlash.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeSlash.style.display = 'none';
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
 <?php /**PATH C:\Users\ahmad\Downloads\Document\Apps\Seeds\resources\views/auth/login.blade.php ENDPATH**/ ?>

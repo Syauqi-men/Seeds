@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Seed;
 use App\Models\SeedCategory;
+use App\Models\StockTransaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +16,41 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'petugasBenih', 'items.seed'])
-            ->latest()
-            ->paginate(15);
+        /** @var User $user */
+        $user = Auth::user();
 
-        return view('admin.orders.index', compact('orders'));
+        if ($user->hasRole('Order Processor') && !$user->hasRole('Administrator')) {
+            $statusOrder = ['ready', 'completed', 'preparing', 'pending', 'cancelled'];
+        } else {
+            $statusOrder = ['pending', 'preparing', 'ready', 'completed', 'cancelled'];
+        }
+
+        $statusLabels = [
+            'pending'   => 'Pending',
+            'preparing' => 'Diproses',
+            'ready'     => 'Siap',
+            'completed' => 'Selesai',
+            'cancelled' => 'Dibatalkan',
+        ];
+
+        $statusBadges = [
+            'pending'   => 'badge-quarantine',
+            'preparing' => 'badge-processing',
+            'ready'     => 'badge-ready',
+            'completed' => 'badge-ready',
+            'cancelled' => 'badge-depleted',
+        ];
+
+        // Get all orders, group by status
+        $allOrders = Order::with(['user', 'petugasBenih', 'items.seed'])
+            ->latest()
+            ->get();
+
+        $groupedOrders = collect($statusOrder)->mapWithKeys(function ($status) use ($allOrders) {
+            return [$status => $allOrders->where('status', $status)->values()];
+        });
+
+        return view('admin.orders.index', compact('groupedOrders', 'statusOrder', 'statusLabels', 'statusBadges'));
     }
 
     public function create()
@@ -138,9 +169,13 @@ class OrderController extends Controller
             $data['petugas_benih_id'] = $user->id;
         }
 
+        // Save old status
+        $oldStatus = $order->status;
         $newStatus = $data['status'] ?? $order->status;
+
+        // Validate alloc when status cheange to completed/ready
         if (in_array($newStatus, ['completed', 'ready'])) {
-            $order->load('items.allocations');
+            $order->load('items.allocations.seedLot', 'items.seed');
             $itemsBelumLengkap = [];
 
             foreach ($order->items as $item) {
@@ -160,6 +195,55 @@ class OrderController extends Controller
             }
         }
 
+        if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+            DB::transaction(function () use ($order, $data) {
+                $order->load('items.allocations.seedLot', 'items.seed');
+
+                foreach ($order->items as $item) {
+                    foreach ($item->allocations as $alloc) {
+                        $lot = $alloc->seedLot;
+
+                        // Minus clean_stock permanently
+                        $lot->clean_stock -= $alloc->alloc_quantity;
+                        $lot->save();
+
+                        // Note to history book as out order
+                        StockTransaction::create([
+                            'seed_lot_id'      => $lot->id,
+                            'transaction_type' => 'OUT',
+                            'quantity'         => $alloc->alloc_quantity,
+                            'reference_no'     => $order->reference_num ?? 'ORD-' . $order->id,
+                            'notes'            => 'Pengeluaran pesanan: ' . $order->cust_name
+                                                . ' (Varietas: ' . ($item->seed->var_name ?? '-') . ')',
+                            'transacted_at'    => now(),
+                        ]);
+                    }
+                }
+
+                $order->update($data);
+            });
+
+            return redirect()->route('admin.orders.index')
+                             ->with('success', 'Pesanan diselesaikan. Stok telah dipotong otomatis dan tercatat di riwayat transaksi.');
+        }
+
+        // TAHAP 4: Lepas alokasi saat status berubah ke 'cancelled'
+        if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
+            DB::transaction(function () use ($order, $data) {
+                // Hapus semua alokasi agar karung benih bebas kembali
+                // Delete all allocation then 
+                foreach ($order->items as $item) {
+                    $item->allocations()->delete();
+                }
+
+                $order->update($data);
+            });
+
+            return redirect()->route('admin.orders.index')
+                             ->with('success', 'Pesanan dibatalkan. Semua alokasi karung telah dilepas.');
+        }
+
+        // ── Update biasa (status selain completed/cancelled) ──
         $order->update($data);
 
         return redirect()->route('admin.orders.index')

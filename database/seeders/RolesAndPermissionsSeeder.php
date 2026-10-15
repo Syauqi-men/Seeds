@@ -17,6 +17,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $adminRole      = Role::firstOrCreate(['name' => 'Administrator']);
         $benihRole      = Role::firstOrCreate(['name' => 'Petugas Benih']);
         $transaksiRole  = Role::firstOrCreate(['name' => 'Order Processor']);
+        $produksiRole   = Role::firstOrCreate(['name' => 'Proses Produksi']);
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@brmp.go.id'],
@@ -46,5 +47,14 @@ class RolesAndPermissionsSeeder extends Seeder
             ]
         );
         $transaksi->syncRoles([$transaksiRole]);
+
+        $produksi = User::firstOrCreate(
+            ['email' => 'produksi@brmp.go.id'],
+            [
+                'name'     => 'Petugas Produksi',
+                'password' => Hash::make('Prod1234'),
+            ]
+        );
+        $produksi->syncRoles([$produksiRole]);
     }
 }

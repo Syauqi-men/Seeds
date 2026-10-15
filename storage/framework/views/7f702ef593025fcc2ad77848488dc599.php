@@ -27,7 +27,7 @@
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 <div class="navbar-logo-text">
                     <span>BRMP Aneka Kacang</span>
-                    <span class="subtitle">Balai Riset dan Modernisasi Pertanian</span>
+                    <span class="subtitle">Balai Perakitan dan Pengujian Tanaman Aneka Kacang </span>
                 </div>
             </a>
 

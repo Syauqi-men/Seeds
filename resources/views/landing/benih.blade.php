@@ -15,27 +15,4 @@
     {{-- Livewire Component untuk Filter + List --}}
     @livewire('benih-list')
 </div>
-
-{{-- Aktivitas Terbaru --}}
-{{-- @if($recentActivities->isNotEmpty())
-<div class="board mt-lg">
-    <div class="board-body">
-        <h2 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-primary-800)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:6px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Aktivitas Terbaru
-        </h2>
-        <div class="activity-feed">
-            @foreach($recentActivities as $activity)
-            <div class="activity-item">
-                <div class="activity-dot"></div>
-                <div>
-                    <div class="activity-text">{{ $activity->description }}</div>
-                    <div class="activity-time">{{ $activity->created_at->diffForHumans() }}</div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-@endif --}}
 @endsection

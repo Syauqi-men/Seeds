@@ -39,9 +39,6 @@ unset($__componentSlots);
 unset($__split);
 ?>
 </div>
-
-
-
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('landing.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\ahmad\Downloads\Document\Apps\Seeds\resources\views/landing/benih.blade.php ENDPATH**/ ?>
