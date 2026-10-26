@@ -22,7 +22,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'admin@brmp.go.id'],
             [
-                'name'     => 'Super Admin',
+                'name'     => 'Admin',
                 'password' => Hash::make('Admin123'),
             ]
         );

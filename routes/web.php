@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\{ ActivityLogController,
-            DashboardController, LabTestController, OrderAllocationController,
+            DashboardController, LabTestController, OrderAllocationController, ReportController,
             OrderController, ProductionProcessController, SeedCategoryController,
             SeedController, SeedLotController, SeedMutationController,
             StockTransactionController, UserController, WorkerController };
@@ -18,13 +18,19 @@ Route::get('/lot-benih', [LandingController::class, 'lotBenih'])->name('lot-beni
 require __DIR__.'/auth.php';
 
 // Admin Panel
-Route::middleware(['auth', 'verified'])
+Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Laporan (export CSV)
+        Route::get('reports/stock-availability.csv', [ReportController::class, 'stockAvailability'])
+            ->name('reports.stock-availability');
+        Route::get('reports/stock-availability.xlsx', [ReportController::class, 'stockAvailabilityXlsx'])
+            ->name('reports.stock-availability.xlsx');
 
         // Log Aktivitas 
         Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');

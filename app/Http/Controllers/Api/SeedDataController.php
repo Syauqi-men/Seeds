@@ -26,7 +26,7 @@ class SeedDataController extends Controller
     /**
      * GET /api/production-processes
      *
-     * Riwayat proses produksi, group by kategori → varietas → lot.
+     * Riwayat proses produksi per kategori, varietas, dan lot.
      */
     public function productionProcesses(Request $request): JsonResponse
     {
@@ -54,7 +54,6 @@ class SeedDataController extends Controller
                 'seeds.var_name as varietas',
                 DB::raw('SUM(seed_lots.clean_stock) as total_stok_bersih')
             )
-            ->where('seed_lots.status', '!=', 'Depleted') // opsional, memastikan lot aktif
             ->groupBy('seed_categories.name', 'seeds.var_class', 'seeds.var_name')
             ->havingRaw('SUM(seed_lots.clean_stock) > 0')
             ->orderBy('seed_categories.name')
@@ -80,15 +79,12 @@ class SeedDataController extends Controller
         ]);
     }
 
-    //  Seed Lots — helper
-    // Query lot benih + filter opsional (status, kategori, kelas, varietas).
+    // Seed Lots: helper
+    // Query lot benih + filter opsional (kategori, kelas, varietas).
     private function seedLotQuery(Request $request): Builder
     {
         $query = SeedLot::query()->with('seed.category');
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
-        }
         if ($request->filled('kategori')) {
             $kategori = $request->input('kategori');
             $query->whereHas('seed.category', fn (Builder $q) => $q->where('name', 'like', "%{$kategori}%"));
@@ -106,7 +102,7 @@ class SeedDataController extends Controller
     }
 
     /**
-     * Kelompokkan lot: Kategori → (Kelas + Varietas).
+     * Kelompokkan lot berdasarkan kategori, kelas, dan varietas.
      *
      * @param  Collection<int, SeedLot>  $lots
      */
@@ -156,8 +152,6 @@ class SeedDataController extends Controller
     {
         return [
             'lot_number'     => $lot->lot_number,
-            'status'         => $lot->status->value,
-            'status_label'   => $lot->status->label(),
             'stok_bersih_kg' => (float) $lot->clean_stock,
         ];
     }
@@ -167,7 +161,7 @@ class SeedDataController extends Controller
         return $lot->seed->var_class->value . '|' . $lot->seed->var_name;
     }
 
-    //  Production Processes — helper
+    //  Production Processes helper
 
     // Query proses produksi + filter opsional.
     private function productionProcessQuery(Request $request): Builder
@@ -200,7 +194,7 @@ class SeedDataController extends Controller
     }
 
     /**
-     * Kelompokkan proses: Kategori → (Kelas + Varietas) → Lot.
+     * Kelompokkan proses berdasarkan kategori, varietas, dan lot.
      *
      * @param  Collection<int, ProductionProcess>  $processes
      */

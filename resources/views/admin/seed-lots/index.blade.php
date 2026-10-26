@@ -19,7 +19,6 @@
             <tr>
                 <th>Nomor Lot</th>
                 <th>Varietas</th>
-                <th>Status</th>
                 <th>Stok Mentah</th>
                 <th>Stok Bersih</th>
                 <th>Diperbarui</th>
@@ -32,9 +31,8 @@
                 <td><span style="font-weight:600">{{ $lot->lot_number }}</span></td>
                 <td>
                     <div>{{ $lot->seed->var_name }}</div>
-                    <div class="text-small text-muted">{{ $lot->seed->category?->name ?? '—' }} &bull; {{ $lot->seed->var_class->value }}</div>
+                    <div class="text-small text-muted">{{ $lot->seed->category?->name ?? '-' }} &bull; {{ $lot->seed->var_class->value }}</div>
                 </td>
-                <td><span class="badge badge-{{ strtolower($lot->status->value) }}">{{ $lot->status->label() }}</span></td>
                 <td>{{ number_format($lot->raw_stock, 2) }} kg</td>
                 <td>{{ number_format($lot->clean_stock, 2) }} kg</td>
                 <td class="text-muted text-small">{{ $lot->updated_at->translatedFormat('d M Y') }}</td>
@@ -66,7 +64,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="7" class="text-center text-muted" style="padding:var(--space-xl)">Belum ada lot benih.</td></tr>
+            <tr><td colspan="6" class="text-center text-muted" style="padding:var(--space-xl)">Belum ada lot benih.</td></tr>
             @endforelse
         </tbody>
     </table>

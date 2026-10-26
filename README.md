@@ -1,34 +1,19 @@
-# BRMP Aneka Kacang — Seed Stock Information & Management System
+# BRMP Aneka Kacang: Seed Stock Information & Management System
 
-A web-based information and stock management system for **BRMP Aneka Kacang** (Balai Riset dan Mekanisasi Pertanian Aneka Kacang). This application provides a public-facing landing page that displays real-time seed stock data, and a secure admin panel for managing all seed-related records including varieties, lots, production processes, lab test results, and stock transactions.
-
-Built as an internship project, the system replaces manual record-keeping with a structured digital workflow — every stock change is automatically calculated and audit-logged without any manual triggers.
-
+A web-based information and stock management system for **BRMP Aneka Kacang** (Balai Riset dan Modernisasi Pertanian Aneka Kacang). This application provides a public-facing landing page that displays real-time seed stock data, and a secure admin panel for managing all seed-related records including varieties, lots, production processes, lab test results, and stock transactions.
 ---
 
 ## Features
 
 ### Landing Page (Public)
-- Fully responsive layout across all screen sizes
-- Browse all registered **seed varieties** (Kedelai, Kacang Tanah, Kacang Hijau) with live filtering
-- Browse all **seed lots** with real-time search, category filter, and status filter (powered by Livewire)
-- Displays dynamic stock data (raw stock & clean stock) sourced directly from the database
-- Timestamps showing when each lot was last updated
+- Browse all registered **seed varieties** 
 
 ### Admin Panel (Login Required)
 - Secure admin authentication via Laravel Breeze
 - **Dashboard** with summary statistics: total varieties, lots, ready stock, depleted lots, total raw & clean stock
-- Recent transaction feed and activity audit trail on the dashboard
-- Full **CRUD** management for:
-  - Seed Varieties (`seeds`) — name, class (NS/BS/FS/SS), category
-  - Seed Lots (`seed_lots`) — lot number (auto-generated), status, harvest date, origin/arrival weight & moisture
-  - Production Processes (`production_processes`) — input/output/shrinkage/waste quantities, moisture before & after
-  - Lab Tests (`lab_tests`) — germination rate, moisture content, pass/fail result
-  - Stock Transactions (`stock_transactions`) — IN / OUT / ADJUSTMENT entries with reference number
-- **Automatic stock recalculation** via Observer pattern on every save/update/delete — no manual triggers needed
-- **Activity Log** with date and module filters — full audit trail of all admin actions (powered by Spatie Laravel Activitylog)
-- Delete confirmation modals on all destructive actions
-
+- Full **CRUD** management for seed processing
+- **Automatic stock recalculation** via Observer pattern on every save/update/delete.
+- **Activity Log** with date and module filters (full audit trail of all admin actions)
 ---
 
 ## Technology Stack
@@ -49,25 +34,6 @@ Built as an internship project, the system replaces manual record-keeping with a
 
 ---
 
-## Architecture Notes
-
-```
-seeds (varieties) ─┬─▶ seed_lots ─┬─▶ production_processes
-                   │               ├─▶ lab_tests
-                   │               └─▶ stock_transactions
-                   │
-                   └── Lot Number Format: LOT-{ABBR}-{YEAR}-{000}
-                         e.g. LOT-KD-2025-001 (Kedelai)
-                              LOT-KT-2025-001 (Kacang Tanah)
-                              LOT-KH-2025-001 (Kacang Hijau)
-```
-
-**Stock Observer Pattern:**  
-`SeedLotObserver` automatically recalculates two stock fields on every change:
-- `raw_stock` — sum of all IN transactions minus OUT ± ADJUSTMENT
-- `clean_stock` — sum of all production process output quantities
-
----
 
 ## Installation
 
@@ -93,13 +59,13 @@ npm install
 # Copy environment file
 cp .env.example .env
 
-# Configure database in .env
-DB_CONNECTION=pgsql
+# Configure database in .env (currently use postgres)
+DB_CONNECTION=
 DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=db_nama
-DB_USERNAME=db_user
-DB_PASSWORD=db_password
+DB_PORT=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 
 # Set admin credentials in .env (used by AdminSeeder)
 ADMIN_EMAIL=admin@brmp.go.id
@@ -123,21 +89,3 @@ php artisan serve
 ```
 
 The application will be available at **http://127.0.0.1:8000**
-
----
-
-## Default Admin Credentials
-
-After running `php artisan migrate --seed`, the default admin account is:
-
-```
-URL:      http://127.0.0.1:8000/login
-Email:    admin@brmp.go.id
-Password: (value of ADMIN_EMAIL / ADMIN_PASSWORD in .env)
-```
-
-> **Important:** Change `ADMIN_PASSWORD` in `.env` before deploying to any public or production environment, then re-run `php artisan db:seed --class=AdminSeeder --force`.
-
-## License
-
-This project was developed as part of an internship at **BRMP Aneka Kacang**. All rights reserved by the respective institution.

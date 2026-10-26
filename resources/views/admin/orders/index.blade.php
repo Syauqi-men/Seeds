@@ -62,7 +62,7 @@
                     <tbody>
                         @foreach($orders as $order)
                         <tr>
-                            <td style="font-weight:600">{{ $order->reference_num ?? '—' }}</td>
+                            <td style="font-weight:600">{{ $order->reference_num ?? '-' }}</td>
                             <td>{{ $order->cust_name }}</td>
                             <td>
                                 @php

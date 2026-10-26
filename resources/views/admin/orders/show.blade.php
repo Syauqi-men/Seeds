@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Detail Pesanan</h1>
-        <p class="page-subtitle">{{ $order->reference_num ?? 'Tanpa Referensi' }} — {{ $order->cust_name }}</p>
+        <p class="page-subtitle">{{ $order->reference_num ?? 'Tanpa Referensi' }} | {{ $order->cust_name }}</p>
     </div>
     <div style="display:flex;gap:var(--space-sm)">
         <a href="{{ route('admin.orders.index') }}" class="btn btn-ghost">
@@ -75,7 +75,7 @@
         </div>
         <div>
             <span class="text-small text-muted" style="display:block">No. Referensi</span>
-            {{ $order->reference_num ?? '—' }}
+            {{ $order->reference_num ?? '-' }}
         </div>
         <div>
             <span class="text-small text-muted" style="display:block">Tanggal Dibuat</span>
@@ -83,11 +83,11 @@
         </div>
         <div>
             <span class="text-small text-muted" style="display:block">Dicatat oleh</span>
-            {{ $order->user->name ?? '—' }}
+            {{ $order->user->name ?? '-' }}
         </div>
         <div>
             <span class="text-small text-muted" style="display:block">Diproses oleh</span>
-            {{ $order->petugasBenih->name ?? '— (belum diproses)' }}
+            {{ $order->petugasBenih->name ?? 'Belum diproses' }}
         </div>
         @if($order->notes)
         <div style="grid-column: span 3">
@@ -116,7 +116,7 @@
             @foreach($order->items as $i => $item)
             <tr>
                 <td class="text-muted">{{ $i + 1 }}</td>
-                <td style="font-weight:600">{{ $item->seed->var_name ?? '—' }}</td>
+                <td style="font-weight:600">{{ $item->seed->var_name ?? '-' }}</td>
                 <td><span class="badge badge-processing">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
                 <td style="text-align:right;font-weight:600">{{ number_format($item->quantity, 2) }}</td>
             </tr>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\LotStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,14 +23,12 @@ class SeedLot extends Model
         'arrival_moisture',
         'location',
         'lot_code_prefix',
-        'status',
         'raw_stock',
         'clean_stock',
         'graded_stock',
     ];
 
     protected $casts = [
-        'status'          => LotStatus::class,
         'harvest_date'    => 'date',
         'raw_stock'       => 'decimal:2',
         'clean_stock'     => 'decimal:2',

@@ -1,12 +1,11 @@
 <form wire:submit="save">
-    {{-- Baris 1: Varietas + Lokasi --}}
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--space-md)">
         <div class="form-group">
             <label class="form-label required" for="seed_id">Varietas Benih</label>
             <select id="seed_id" wire:model.live="seed_id" class="form-control @error('seed_id') is-invalid @enderror">
                 <option value="">-- Pilih Varietas --</option>
                 @foreach($seeds as $seed)
-                <option value="{{ $seed->id }}">{{ $seed->var_name }} ({{ $seed->category?->name ?? '—' }} - {{ $seed->var_class->value }})</option>
+                <option value="{{ $seed->id }}">{{ $seed->var_name }} ({{ $seed->category?->name ?? '-' }} - {{ $seed->var_class->value }})</option>
                 @endforeach
             </select>
             @error('seed_id') <span class="form-error">{{ $message }}</span> @enderror
@@ -24,7 +23,6 @@
         </div>
     </div>
 
-    {{-- Nomor Lot (auto-generate) --}}
     <div class="form-group">
         <label class="form-label required" for="lot_number">Nomor Lot</label>
         <div style="display:flex;gap:var(--space-sm);align-items:center">
@@ -66,7 +64,6 @@
         </div>
     </div>
 
-    {{-- Read-only stock info (edit mode only) --}}
     @if($seedLot && $seedLot->exists)
     <div class="form-group">
         <label class="form-label">Stok (Dikelola Otomatis)</label>

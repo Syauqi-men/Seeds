@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Edit Pesanan</h1>
-        <p class="page-subtitle">{{ $order->reference_num ?? 'Tanpa Referensi' }} — {{ $order->cust_name }}</p>
+        <p class="page-subtitle">{{ $order->reference_num ?? 'Tanpa Referensi' }} | {{ $order->cust_name }}</p>
     </div>
     <a href="{{ route('admin.orders.index') }}" class="btn btn-ghost">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -141,7 +141,7 @@
                 @endphp
                 <tr>
                     <td class="text-muted">{{ $i + 1 }}</td>
-                    <td>{{ $item->seed->var_name ?? '—' }}</td>
+                    <td>{{ $item->seed->var_name ?? '-' }}</td>
                     <td><span class="badge badge-processing">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
                     <td style="text-align:right">{{ number_format($item->quantity, 2) }}</td>
                     <td style="text-align:right">
@@ -172,9 +172,7 @@
     </div>
 </form>
 
-{{-- ═══════════════════════════════════════════════════════════
-     MODAL ALOKASI KARUNG — hanya render untuk Petugas Benih/Admin
-     ═══════════════════════════════════════════════════════════ --}}
+{{-- MODAL ALOKASI KARUNG: hanya render untuk Petugas Benih/Admin --}}
 @if($canAllocate)
 <div id="modalAlokasi" class="modal-backdrop" style="display:none" onclick="if(event.target===this)tutupModal()">
     <div class="modal-box" style="max-width:680px;width:95%">
@@ -234,20 +232,20 @@
 </div>
 
 <script>
-// ── State Modal ──────────────────────────────────────────────────────────────
+// State Modal 
 let modalItemId    = null;
 let modalItemQty   = 0;
 let alokasi        = [];  // [{seed_lot_id, lot_number, alloc_quantity}]
 const orderId      = {{ $order->id }};
 
-// ── Buka Modal ───────────────────────────────────────────────────────────────
+// Buka Modal 
 function bukaModalAlokasi(itemId, namaBenih, kelas, qty) {
     modalItemId  = itemId;
     modalItemQty = parseFloat(qty);
     alokasi      = [];
 
     document.getElementById('modalJudul').textContent   = 'Alokasi Karung: ' + namaBenih;
-    document.getElementById('modalSubjudul').textContent = 'Kelas ' + kelas + ' — Dipesan: ' + qty.toFixed ? qty.toFixed(2) : qty + ' kg';
+    document.getElementById('modalSubjudul').textContent = 'Kelas ' + kelas + ' (Dipesan: ' + (qty.toFixed ? qty.toFixed(2) : qty) + ' kg)';
     sembunyikanPesan();
     document.getElementById('modalAlokasi').style.display = 'flex';
     document.getElementById('modalAlokasi').style.alignItems = 'center';
@@ -256,14 +254,14 @@ function bukaModalAlokasi(itemId, namaBenih, kelas, qty) {
     muatLot(itemId);
 }
 
-// ── Tutup Modal ──────────────────────────────────────────────────────────────
+// Tutup Modal 
 function tutupModal() {
     document.getElementById('modalAlokasi').style.display = 'none';
     modalItemId = null;
     alokasi     = [];
 }
 
-// ── Muat Daftar Lot via AJAX ─────────────────────────────────────────────────
+// Muat Daftar Lot via AJAX 
 function muatLot(itemId) {
     document.getElementById('barisDaftarLot').innerHTML =
         '<tr><td colspan="5" class="text-center text-muted" style="padding:20px">Memuat...</td></tr>';
@@ -290,7 +288,7 @@ function muatLot(itemId) {
     });
 }
 
-// ── Render Tabel Lot ─────────────────────────────────────────────────────────
+// Render Tabel Lot 
 function renderDaftarLot(lots) {
     const tbody = document.getElementById('barisDaftarLot');
     if (!lots || lots.length === 0) {
@@ -313,7 +311,7 @@ function renderDaftarLot(lots) {
     `).join('');
 }
 
-// ── Tambah Baris Alokasi ─────────────────────────────────────────────────────
+// Tambah Baris Alokasi 
 function tambahAlokasi(lotId, lotNumber, maxStok) {
     // Cek apakah lot ini sudah ada di daftar alokasi
     const existing = alokasi.find(a => a.seed_lot_id === lotId);
@@ -325,13 +323,13 @@ function tambahAlokasi(lotId, lotNumber, maxStok) {
     renderAlokasi();
 }
 
-// ── Hapus Baris Alokasi ──────────────────────────────────────────────────────
+// Hapus Baris Alokasi 
 function hapusAlokasi(index) {
     alokasi.splice(index, 1);
     renderAlokasi();
 }
 
-// ── Render Daftar Alokasi Terpilih ───────────────────────────────────────────
+// Render Daftar Alokasi Terpilih 
 function renderAlokasi() {
     const container = document.getElementById('daftarAlokasi');
     const kosong    = document.getElementById('kosongAlokasi');
@@ -362,13 +360,13 @@ function renderAlokasi() {
     hitungTotal();
 }
 
-// ── Update Jumlah Alokasi ────────────────────────────────────────────────────
+// Update Jumlah Alokasi 
 function updateJumlah(index, value) {
     alokasi[index].alloc_quantity = parseFloat(value) || 0;
     hitungTotal();
 }
 
-// ── Hitung & Tampilkan Ringkasan Total ───────────────────────────────────────
+// Hitung & Tampilkan Ringkasan Total 
 function hitungTotal() {
     const total   = alokasi.reduce((sum, a) => sum + (parseFloat(a.alloc_quantity) || 0), 0);
     const sisa    = modalItemQty - total;
@@ -377,7 +375,7 @@ function hitungTotal() {
     el.innerHTML  = `<span style="color:${warna}">Total: ${total.toFixed(2)} kg / ${modalItemQty.toFixed(2)} kg (sisa: ${sisa.toFixed(2)} kg)</span>`;
 }
 
-// ── Simpan Alokasi via AJAX ──────────────────────────────────────────────────
+// Simpan Alokasi via AJAX 
 function simpanAlokasi() {
     sembunyikanPesan();
 
@@ -414,7 +412,7 @@ function simpanAlokasi() {
     });
 }
 
-// ── Tampilkan Pesan di dalam Modal ───────────────────────────────────────────
+// Tampilkan Pesan di dalam Modal 
 function tampilkanPesan(teks, tipe) {
     const el = document.getElementById('modalPesan');
     const warna = tipe === 'success' ? '#c6f6d5' : tipe === 'warning' ? '#fefcbf' : '#fed7d7';

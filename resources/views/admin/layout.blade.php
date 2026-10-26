@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin — @yield('title', 'Panel Admin') | BRMP Aneka Kacang</title>
+    <title>Admin: @yield('title', 'Panel Sistem') | BRMP Aneka Kacang</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
@@ -15,39 +15,31 @@
         :data-sidebar="sidebar" :data-drawer="drawer ? 'open' : undefined"
         x-on:keydown.escape.window="drawer = false">
 
-        {{-- Sidebar --}}
         <aside class="nv-sidebar">
             <a href="{{ route('admin.dashboard') }}" class="nv-sidebar__brand">
                 <div class="nv-wordmark-mark">
                     <i data-lucide="sprout"></i>
                 </div>
                 <div class="nv-wordmark">
-                    <strong>Panel Admin</strong>
+                    <strong>Panel Sistem</strong>
                     <span>BRMP Aneka Kacang</span>
                 </div>
             </a>
 
             <nav class="nv-sidebar__nav">
-                {{-- Utama --}}
-                <details open class="nv-nav-group">
-                    <summary>
-                        <span>Utama</span>
-                        <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
-                    </summary>
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="nv-nav-link"
-                        {!! request()->routeIs('admin.dashboard') ? 'aria-current="page"' : '' !!}>
-                        <i data-lucide="layout-dashboard"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </details>
+                <a href="{{ route('admin.dashboard') }}"
+                    class="nv-nav-link"
+                    {!! request()->routeIs('admin.dashboard') ? 'aria-current="page"' : '' !!}>
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Beranda</span>
+                </a>
 
-                {{-- Master Data — Administrator saja --}}
+                {{-- Master Data: Administrator saja --}}
                 @role('Administrator')
                     <details open class="nv-nav-group">
                         <summary>
                             <span>Master Data</span>
-                            <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
+                            <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                         </summary>
                         <a href="{{ route('admin.seed-categories.index') }}"
                             class="nv-nav-link"
@@ -64,12 +56,12 @@
                     </details>
                 @endrole
 
-                {{-- Pengolahan Benih — Administrator, Petugas Benih, Proses Produksi --}}
+                {{-- Pengolahan Benih: Administrator, Petugas Benih, Proses Produksi --}}
                 @role('Administrator|Petugas Benih|Proses Produksi')
                     <details open class="nv-nav-group">
                         <summary>
                             <span>Pengolahan Benih</span>
-                            <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
+                            <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                         </summary>
                         @role('Administrator|Petugas Benih')
                             <a href="{{ route('admin.seeds.index') }}"
@@ -108,12 +100,12 @@
                     </details>
                 @endrole
 
-                {{-- Persediaan — Administrator, Order Processor, Petugas Benih --}}
+                {{-- Persediaan: Administrator, Order Processor, Petugas Benih --}}
                 @role('Administrator|Order Processor|Petugas Benih')
                     <details open class="nv-nav-group">
                         <summary>
                             <span>Persediaan</span>
-                            <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
+                            <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                         </summary>
                         @role('Administrator|Order Processor')
                             <a href="{{ route('admin.stock-transactions.index') }}"
@@ -132,11 +124,11 @@
                     </details>
                 @endrole
 
-                {{-- Sistem — semua role --}}
+                {{-- Sistem: semua role --}}
                 <details open class="nv-nav-group">
                     <summary>
                         <span>Sistem</span>
-                        <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
+                        <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                     </summary>
                     <a href="{{ route('admin.activity-log.index') }}"
                         class="nv-nav-link"
@@ -149,104 +141,98 @@
                             class="nv-nav-link"
                             {!! request()->routeIs('admin.users*') ? 'aria-current="page"' : '' !!}>
                             <i data-lucide="user-plus"></i>
-                            <span>Manajemen Pengguna</span>
+                            <span>Kelola Pengguna</span>
                         </a>
                     @endrole
                 </details>
             </nav>
-
-            {{-- Sidebar Footer --}}
-            @php
-                $currentUser = Auth::user();
-                $currentRole = $currentUser?->roles->first()?->name;
-                $roleTone = match($currentRole) {
-                    'Administrator' => 'nv-status--success',
-                    'Petugas Benih', 'Proses Produksi' => 'nv-status--info',
-                    'Order Processor' => 'nv-status--warning',
-                    default => 'nv-status--neutral',
-                };
-            @endphp
-            <div class="nv-sidebar__footer">
-                <div class="nv-profile">
-                    <div class="nv-avatar">
-                        {{ strtoupper(substr($currentUser?->name ?? 'U', 0, 2)) }}
-                    </div>
-                    <div class="nv-profile__meta">
-                        <strong>{{ $currentUser?->name }}</strong>
-                        <span>{{ $currentRole ?? 'Pengguna' }}</span>
-                    </div>
-                    @if ($currentRole)
-                        <span class="nv-status {{ $roleTone }}" style="font-size: 0.68rem; height: 20px; padding: 0 6px;">
-                            {{ $currentRole }}
-                        </span>
-                    @endif
-                </div>
-                <a href="{{ route('home') }}" class="nv-nav-link" target="_blank" title="Lihat Landing Page">
-                    <i data-lucide="home"></i>
-                    <span>Lihat Landing Page</span>
-                </a>
-            </div>
         </aside>
 
-        {{-- Scrim button for mobile drawer --}}
-        <button class="nv-scrim" @click="drawer = false" aria-label="Tutup menu"></button>
+        <button class="nv-scrim" id="nv-scrim-btn" @click="drawer = false" aria-label="Tutup menu"></button>
 
-        {{-- Main --}}
         <div class="nv-main">
-            {{-- Topbar --}}
+            @php
+                $currentUser = Auth::user();
+                $currentRole = $currentUser?->roles->first()?->name ?? 'Pengguna';
+            @endphp
             <header class="nv-topbar">
                 <div class="nv-topbar__left">
-                    <button type="button" class="nv-btn nv-btn--icon nv-btn--ghost"
+                    <button type="button" id="nv-sidebar-toggle" class="nv-btn nv-btn--icon nv-btn--ghost"
                         @click="sidebar = sidebar === 'open' ? 'closed' : 'open'; if(window.innerWidth <= 760) drawer = !drawer"
                         aria-label="Toggle menu">
                         <i data-lucide="panel-left"></i>
                     </button>
                     <nav class="nv-breadcrumb" aria-label="Breadcrumb">
-                        <a href="{{ route('admin.dashboard') }}" class="nv-crumb-root">Admin</a>
+                        <a href="{{ route('admin.dashboard') }}" class="nv-crumb-root">Sistem</a>
                         <i data-lucide="chevron-right" class="nv-crumb-sep"></i>
                         <span aria-current="page">@yield('title', 'Dashboard')</span>
                     </nav>
                 </div>
 
                 <div class="nv-topbar__right">
-                    <div style="display: flex; align-items: center; gap: 8px;" class="nv-hide-sm">
-                        <span style="font-size: var(--nv-text-sm); font-weight: 500; color: var(--nv-text)">{{ $currentUser?->name }}</span>
-                        @if ($currentRole)
-                            <span class="nv-status {{ $roleTone }}" style="font-size: 0.7rem; height: 20px; padding: 0 6px;">
-                                {{ $currentRole }}
-                            </span>
-                        @endif
+                    <div class="nv-user-menu" id="nv-export-menu">
+                        <button type="button"
+                            class="nv-btn"
+                            id="nv-export-menu-btn"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-controls="nv-export-dropdown">
+                            <i data-lucide="download"></i>
+                            <span>Export</span>
+                            <i data-lucide="chevron-down"></i>
+                        </button>
+
+                        <div class="nv-user-dropdown" id="nv-export-dropdown" role="menu" hidden>
+                            <div class="nv-user-dropdown__header">
+                                <strong class="nv-user-dropdown__name">Laporan Ketersediaan Benih</strong>
+                                <span class="nv-user-dropdown__role">Rekap per varietas dan kelas</span>
+                            </div>
+                            <a href="{{ route('admin.reports.stock-availability.xlsx') }}" class="nv-user-dropdown__item" role="menuitem">
+                                <i data-lucide="file-spreadsheet"></i>
+                                <span>Excel (.xlsx)</span>
+                            </a>
+                            <a href="{{ route('admin.reports.stock-availability') }}" class="nv-user-dropdown__item" role="menuitem">
+                                <i data-lucide="file-text"></i>
+                                <span>CSV (.csv)</span>
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="nv-divider-v nv-hide-sm"></div>
-
-                    <a href="{{ route('admin.activity-log.index') }}" class="nv-btn nv-btn--icon nv-btn--ghost nv-hide-sm" title="Log Aktivitas">
-                        <i data-lucide="bell"></i>
-                    </a>
-
-                    @role('Administrator')
-                        <a href="{{ route('admin.users.index') }}" class="nv-btn nv-btn--icon nv-btn--ghost nv-hide-sm" title="Manajemen Pengguna">
-                            <i data-lucide="settings"></i>
-                        </a>
-                    @endrole
-
-                    <a href="{{ route('home') }}" class="nv-btn nv-btn--icon nv-btn--ghost" title="Lihat Landing Page" target="_blank">
-                        <i data-lucide="home"></i>
-                    </a>
-
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline-flex; margin: 0;">
-                        @csrf
-                        <button type="submit" class="nv-btn nv-btn--ghost" title="Keluar">
-                            <i data-lucide="log-out"></i>
-                            <span class="nv-hide-sm">Keluar</span>
+                    <div class="nv-user-menu" id="nv-user-menu">
+                        <button type="button"
+                            class="nv-user-circle"
+                            id="nv-user-menu-btn"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-label="Menu Pengguna"
+                            title="{{ $currentUser?->name }} ({{ $currentRole }})">
+                            <i data-lucide="user"></i>
                         </button>
-                    </form>
+
+                        <div class="nv-user-dropdown" id="nv-user-dropdown" role="menu" hidden>
+                            <div class="nv-user-dropdown__header">
+                                <strong class="nv-user-dropdown__name">{{ $currentUser?->name ?? 'Pengguna' }}</strong>
+                                <span class="nv-user-dropdown__role">{{ $currentRole }}</span>
+                            </div>
+
+                            <a href="{{ route('home') }}" class="nv-user-dropdown__item" role="menuitem">
+                                <i data-lucide="home"></i>
+                                <span>Lihat Landing Page</span>
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                                @csrf
+                                <button type="submit" class="nv-user-dropdown__item nv-user-dropdown__item--danger" role="menuitem">
+                                    <i data-lucide="log-out"></i>
+                                    <span>Keluar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            {{-- Admin Content --}}
             <main class="admin-content">
-                {{-- Flash Messages --}}
                 @if (session('success'))
                     <div class="alert alert-success">
                         <i data-lucide="check"></i>
@@ -265,6 +251,73 @@
         </div>
     </div>
     @livewireScripts
+    <script>
+        (function () {
+            var menus = [
+                { wrap: 'nv-export-menu', btn: 'nv-export-menu-btn', panel: 'nv-export-dropdown' },
+                { wrap: 'nv-user-menu', btn: 'nv-user-menu-btn', panel: 'nv-user-dropdown' }
+            ].map(function (m) {
+                return {
+                    wrap: document.getElementById(m.wrap),
+                    btn: document.getElementById(m.btn),
+                    panel: document.getElementById(m.panel)
+                };
+            }).filter(function (m) { return m.wrap && m.btn && m.panel; });
+
+            function closeMenu(m) {
+                m.panel.setAttribute('hidden', '');
+                m.btn.setAttribute('aria-expanded', 'false');
+            }
+
+            menus.forEach(function (m) {
+                m.btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var wasHidden = m.panel.hasAttribute('hidden');
+                    menus.forEach(closeMenu);
+                    if (wasHidden) {
+                        m.panel.removeAttribute('hidden');
+                        m.btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+
+            document.addEventListener('click', function (e) {
+                menus.forEach(function (m) {
+                    if (!m.wrap.contains(e.target)) closeMenu(m);
+                });
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') menus.forEach(closeMenu);
+            });
+
+            // Fallback toggle sidebar untuk halaman tanpa Livewire/Alpine
+            var shell = document.querySelector('.nv-shell');
+            var toggleBtn = document.getElementById('nv-sidebar-toggle');
+            var scrimBtn = document.getElementById('nv-scrim-btn');
+            if (shell && toggleBtn) {
+                if (!shell.hasAttribute('data-sidebar')) {
+                    shell.setAttribute('data-sidebar', window.innerWidth > 760 ? 'open' : 'closed');
+                }
+                toggleBtn.addEventListener('click', function () {
+                    if (window.Alpine) return;
+                    var current = shell.getAttribute('data-sidebar') || 'open';
+                    shell.setAttribute('data-sidebar', current === 'open' ? 'closed' : 'open');
+                    if (window.innerWidth <= 760) {
+                        var isDrawer = shell.getAttribute('data-drawer') === 'open';
+                        if (isDrawer) shell.removeAttribute('data-drawer');
+                        else shell.setAttribute('data-drawer', 'open');
+                    }
+                });
+                if (scrimBtn) {
+                    scrimBtn.addEventListener('click', function () {
+                        if (window.Alpine) return;
+                        shell.removeAttribute('data-drawer');
+                    });
+                }
+            }
+        })();
+    </script>
 </body>
 
 </html>

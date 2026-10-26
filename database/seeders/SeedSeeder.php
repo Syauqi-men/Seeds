@@ -20,8 +20,6 @@ class SeedSeeder extends Seeder
              'description' => 'Varietas adaptif lahan sawah tadah hujan, umur genjah.'],
             ['var_name' => 'Dena 1',    'var_class' => 'SS', 'category_id' => $cats['Kedelai']->id,
              'description' => 'Toleran naungan hingga 50%, cocok untuk tumpang sari.'],
-            ['var_name' => 'Wilis',     'var_class' => 'NS', 'category_id' => $cats['Kedelai']->id,
-             'description' => 'Varietas klasik dengan daya adaptasi luas.'],
 
             ['var_name' => 'Hypoma 1', 'var_class' => 'BS', 'category_id' => $cats['Kacang Tanah']->id,
              'description' => 'Varietas baru hasil pemuliaan BATAN, toleran kekeringan.'],
@@ -38,8 +36,6 @@ class SeedSeeder extends Seeder
              'description' => 'Umur genjah 55 hari, cocok untuk lahan kering.'],
             ['var_name' => 'Murai',    'var_class' => 'SS', 'category_id' => $cats['Kacang Hijau']->id,
              'description' => 'Biji besar, kulit polong tidak mudah pecah.'],
-            ['var_name' => 'Kutilang', 'var_class' => 'NS', 'category_id' => $cats['Kacang Hijau']->id,
-             'description' => 'Varietas lama dengan adaptasi luas di berbagai agroekosistem.'],
         ];
 
         foreach ($seeds as $data) {

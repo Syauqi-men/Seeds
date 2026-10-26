@@ -26,12 +26,12 @@
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:var(--space-md)">
             <div class="form-group">
                 <label class="form-label required">Daya Kecambah (%)</label>
-                <input type="number" name="germination_rate" step="0.1" min="0" max="100" value="{{ old('germination_rate') }}" class="form-control @error('germination_rate') is-invalid @enderror" placeholder="0–100">
+                <input type="number" name="germination_rate" step="0.1" min="0" max="100" value="{{ old('germination_rate') }}" class="form-control @error('germination_rate') is-invalid @enderror" placeholder="0 - 100">
                 @error('germination_rate') <span class="form-error">{{ $message }}</span> @enderror
             </div>
             <div class="form-group">
                 <label class="form-label">Kadar Air (%)</label>
-                <input type="number" name="moisture_content" step="0.1" min="0" max="100" value="{{ old('moisture_content') }}" class="form-control" placeholder="0–100">
+                <input type="number" name="moisture_content" step="0.1" min="0" max="100" value="{{ old('moisture_content') }}" class="form-control" placeholder="0 - 100">
             </div>
             <div class="form-group">
                 <label class="form-label required">Hasil Uji</label>

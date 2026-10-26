@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\LotStatus;
 use App\Models\Seed;
 use App\Models\SeedLot;
 use Carbon\Carbon;
@@ -16,62 +15,56 @@ class SeedLotSeeder extends Seeder
         $counter = 1;
 
         $lotsData = [
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 180, 'status' => LotStatus::Ready],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 160, 'status' => LotStatus::Ready],
-            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 140, 'status' => LotStatus::Ready],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Processing],
-            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Processing],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Processing],
-            ['var' => 'Anjasmoro', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Quarantine],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Quarantine],
-            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 50,  'status' => LotStatus::Raw],
-            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 40,  'status' => LotStatus::Raw],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 30,  'status' => LotStatus::Depleted],
-            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 15,  'status' => LotStatus::Raw],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 180],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 160],
+            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 140],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120],
+            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90],
+            ['var' => 'Anjasmoro', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70],
+            ['var' => 'Anjasmoro', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 60],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 50],
+            ['var' => 'Anjasmoro', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 40],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 30],
+            ['var' => 'Anjasmoro', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 15],
 
-            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 200, 'status' => LotStatus::Ready],
-            ['var' => 'Grobogan', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 160, 'status' => LotStatus::Ready],
-            ['var' => 'Grobogan', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Raw],
-            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Depleted],
-            ['var' => 'Grobogan', 'alias' => 'MN', 'year' => 26, 'harvest_offset' => 20,  'status' => LotStatus::Raw],
+            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 200],
+            ['var' => 'Grobogan', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 160],
+            ['var' => 'Grobogan', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 120],
+            ['var' => 'Grobogan', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90],
+            ['var' => 'Grobogan', 'alias' => 'MN', 'year' => 26, 'harvest_offset' => 20],
 
-            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Processing],
-            ['var' => 'Dena 1', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Processing],
-            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10,  'status' => LotStatus::Raw],
+            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 100],
+            ['var' => 'Dena 1', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 80],
+            ['var' => 'Dena 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10],
 
-            ['var' => 'Wilis', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 150, 'status' => LotStatus::Ready],
-            ['var' => 'Wilis', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
+            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120],
+            ['var' => 'Hypoma 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 90],
+            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 60],
+            ['var' => 'Hypoma 1', 'alias' => 'JG', 'year' => 26, 'harvest_offset' => 15],
 
-            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Ready],
-            ['var' => 'Hypoma 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Processing],
-            ['var' => 'Hypoma 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
-            ['var' => 'Hypoma 1', 'alias' => 'JG', 'year' => 26, 'harvest_offset' => 15,  'status' => LotStatus::Raw],
+            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 110],
+            ['var' => 'Hypoma 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80],
+            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 20],
 
-            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 110, 'status' => LotStatus::Ready],
-            ['var' => 'Hypoma 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Ready],
-            ['var' => 'Hypoma 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 20,  'status' => LotStatus::Raw],
+            ['var' => 'Bima', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100],
+            ['var' => 'Bima', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70],
 
-            ['var' => 'Bima', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 100, 'status' => LotStatus::Quarantine],
-            ['var' => 'Bima', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Quarantine],
+            ['var' => 'Kancil', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 150],
+            ['var' => 'Kancil', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 60],
 
-            ['var' => 'Kancil', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 150, 'status' => LotStatus::Depleted],
-            ['var' => 'Kancil', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Raw],
+            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90],
+            ['var' => 'Vima 1', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70],
+            ['var' => 'Vima 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 50],
+            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10],
 
-            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
-            ['var' => 'Vima 1', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Processing],
-            ['var' => 'Vima 1', 'alias' => 'NG', 'year' => 25, 'harvest_offset' => 50,  'status' => LotStatus::Ready],
-            ['var' => 'Vima 1', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 10,  'status' => LotStatus::Raw],
+            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 80],
+            ['var' => 'Vima 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 60],
+            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 12],
 
-            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 80,  'status' => LotStatus::Ready],
-            ['var' => 'Vima 2', 'alias' => 'MN', 'year' => 25, 'harvest_offset' => 60,  'status' => LotStatus::Ready],
-            ['var' => 'Vima 2', 'alias' => 'KP', 'year' => 26, 'harvest_offset' => 12,  'status' => LotStatus::Raw],
-
-            ['var' => 'Murai', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120, 'status' => LotStatus::Raw],
-            ['var' => 'Murai', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70,  'status' => LotStatus::Processing],
-
-            ['var' => 'Kutilang', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 200, 'status' => LotStatus::Depleted],
-            ['var' => 'Kutilang', 'alias' => 'GT', 'year' => 25, 'harvest_offset' => 90,  'status' => LotStatus::Ready],
+            ['var' => 'Murai', 'alias' => 'KP', 'year' => 25, 'harvest_offset' => 120],
+            ['var' => 'Murai', 'alias' => 'JG', 'year' => 25, 'harvest_offset' => 70],
         ];
 
         foreach ($lotsData as $item) {
@@ -91,19 +84,18 @@ class SeedLotSeeder extends Seeder
             SeedLot::updateOrCreate(
                 ['lot_number' => $lotNumber],
                 [
-                    'seed_id'      => $seed->id,
-                    'lot_number'   => $lotNumber,
-                    'location'     => $alias,
-                    'harvest_date' => $item['harvest_offset']
+                    'seed_id'          => $seed->id,
+                    'lot_number'       => $lotNumber,
+                    'location'         => $alias,
+                    'harvest_date'     => $item['harvest_offset']
                         ? Carbon::now()->subDays($item['harvest_offset'])->format('Y-m-d')
                         : null,
                     'origin_weight'    => rand(300, 2000) + 0.50,
                     'origin_moisture'  => rand(12, 18) + 0.5,
                     'arrival_weight'   => rand(290, 1990) + 0.20,
                     'arrival_moisture' => rand(11, 17) + 0.3,
-                    'status'       => $item['status']->value,
-                    'created_at'   => $createdAt,
-                    'updated_at'   => $createdAt,
+                    'created_at'       => $createdAt,
+                    'updated_at'       => $createdAt,
                 ]
             );
         }

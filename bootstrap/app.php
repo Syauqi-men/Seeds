@@ -38,9 +38,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 || $request->expectsJson()
         );
 
-        // 401 — belum login / token tidak valid
+        // 401: belum login / token tidak valid
         $exceptions->renderable(function (\Illuminate\Auth\AuthenticationException $e, $request) use ($isBrowserApiRequest) {
-            // Browser → ke halaman login; setelah login otomatis kembali ke URL API (redirect()->intended)
+            // Browser: ke halaman login; setelah login otomatis kembali ke URL API (redirect()->intended)
             if ($isBrowserApiRequest($request)) {
                 return redirect()->guest(route('login'))
                     ->with('status', 'Silakan login terlebih dahulu untuk mengakses data API.');
@@ -53,8 +53,7 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        // 403 — sudah login tapi role tidak diizinkan
-        // (browser → halaman error 403 bawaan Laravel)
+        // 403: sudah login tapi role tidak diizinkan (browser dapat halaman error 403 bawaan Laravel)
         $exceptions->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) use ($isBrowserApiRequest) {
             if ($request->is('api/*') && ! $isBrowserApiRequest($request)) {
                 return response()->json([
@@ -63,13 +62,17 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        // Sesi habis / CSRF expired → redirect ke login, bukan tampil 419
-        $exceptions->renderable(function (\Illuminate\Session\TokenMismatchException $e, $request) {
-            if ($request->is('api/*')) {
-                return response()->json(['message' => 'Sesi telah berakhir, silakan login kembali.'], 419);
+        // Tangani status HTTP 419 (sesi habis / CSRF token kadaluwarsa): redirect ke login
+        $exceptions->respond(function ($response, $e, $request) {
+            if ($response->getStatusCode() === 419) {
+                if ($request->is('api/*')) {
+                    return response()->json(['message' => 'Sesi telah berakhir, silakan login kembali.'], 419);
+                }
+
+                return redirect()->route('login')
+                    ->with('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas. Silakan masuk kembali.');
             }
 
-            return redirect()->route('login')
-                ->with('error', 'Sesi telah berakhir, silakan login kembali.');
+            return $response;
         });
     })->create();

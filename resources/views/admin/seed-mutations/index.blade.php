@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Mutasi Benih</h1>
-        <p class="page-subtitle">Pencatatan pengambilan sampel benih — setiap mutasi mengurangi 2 kg stok bersih</p>
+        <p class="page-subtitle">Pencatatan pengambilan sampel benih. Setiap mutasi mengurangi 2 kg stok bersih.</p>
     </div>
     <a href="{{ route('admin.seed-mutations.create') }}" class="btn btn-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -38,7 +38,7 @@
                 <td>
                     <span class="badge badge-depleted">− 2 kg</span>
                 </td>
-                <td class="text-small text-muted">{{ $mut->notes ?: '—' }}</td>
+                <td class="text-small text-muted">{{ $mut->notes ?: '-' }}</td>
                 <td class="text-small text-muted">{{ $mut->created_at->translatedFormat('d M Y') }}</td>
                 <td style="text-align:right">
                     <div x-data="{ del: false }">

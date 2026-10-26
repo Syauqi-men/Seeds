@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('seeds', function (Blueprint $table) {
             $table->id();
             $table->string('var_name');
-            $table->enum('var_class', ['NS', 'BS', 'FS', 'SS']);
+            $table->enum('var_class', ['BS', 'FS', 'SS']);
             $table->foreignId('category_id')->constrained('seed_categories')->cascadeOnDelete();
             $table->text('description')->nullable();
             $table->timestamps();

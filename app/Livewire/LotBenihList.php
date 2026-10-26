@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Enums\LotStatus;
 use App\Models\SeedCategory;
 use App\Models\SeedLot;
 use Livewire\Component;
@@ -13,13 +12,11 @@ class LotBenihList extends Component
     use WithPagination;
 
     public string $search         = '';
-    public string $filterStatus   = '';
     public string $filterCategory = '';
 
-    protected $queryString = ['search', 'filterStatus', 'filterCategory'];
+    protected $queryString = ['search', 'filterCategory'];
 
     public function updatingSearch(): void { $this->resetPage(); }
-    public function updatingFilterStatus(): void { $this->resetPage(); }
     public function updatingFilterCategory(): void { $this->resetPage(); }
 
     public function render()
@@ -34,9 +31,6 @@ class LotBenihList extends Component
                   ->orWhere('seeds.var_name', 'like', '%' . $this->search . '%');
             });
         }
-        if ($this->filterStatus) {
-            $query->where('seed_lots.status', $this->filterStatus);
-        }
         if ($this->filterCategory) {
             // Filter by category_id on seeds table
             $query->where('seeds.category_id', $this->filterCategory);
@@ -46,7 +40,6 @@ class LotBenihList extends Component
 
         return view('livewire.lot-benih-list', [
             'lots'       => $lots,
-            'statuses'   => LotStatus::cases(),
             'categories' => SeedCategory::orderBy('name')->get(),
         ]);
     }

@@ -32,10 +32,10 @@
                     @if($cat->abbr)
                     <span class="badge badge-raw">{{ $cat->abbr }}</span>
                     @else
-                    <span class="text-muted">—</span>
+                    <span class="text-muted">-</span>
                     @endif
                 </td>
-                <td class="text-small text-muted">{{ $cat->description ?? '—' }}</td>
+                <td class="text-small text-muted">{{ $cat->description ?? '-' }}</td>
                 <td>
                     <span style="font-weight:600;color:var(--color-primary-700)">{{ $cat->seeds_count }}</span>
                     <span class="text-small text-muted"> varietas</span>

@@ -13,7 +13,7 @@
             <rect x="3" y="14" width="7" height="7"/></svg>
             Data Lot Benih
         </h1>
-        <p>Informasi lot benih beserta status dan stok masing-masing lot yang tercatat di BRMP Aneka Kacang</p>
+        <p>Informasi lot benih dan stok masing-masing lot yang tercatat di BRMP Aneka Kacang</p>
     </div>
     @livewire('lot-benih-list')
 </div>

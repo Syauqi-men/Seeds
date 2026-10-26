@@ -31,7 +31,7 @@
                 class="form-control @error('abbr') is-invalid @enderror"
                 placeholder="Contoh: KDL" maxlength="10" style="max-width:120px">
             @error('abbr') <span class="form-error">{{ $message }}</span> @enderror
-            <span class="form-hint">Singkatan 2–10 karakter (opsional), digunakan sebagai kode ringkas.</span>
+            <span class="form-hint">Singkatan 2-10 karakter (opsional), digunakan sebagai kode ringkas.</span>
         </div>
 
         <div class="form-group">

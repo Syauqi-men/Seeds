@@ -22,11 +22,11 @@ class SeedLotForm extends Component
 
     // Location alias
     public array $locationOptions = [
-        'KP' => 'KP — Kendalpayak',
-        'JG' => 'JG — Jambegede',
-        'NG' => 'NG — Ngale',
-        'MN' => 'MN — Muneng',
-        'GT' => 'GT — Genteng',
+        'KP' => 'KP: Kendalpayak',
+        'JG' => 'JG: Jambegede',
+        'NG' => 'NG: Ngale',
+        'MN' => 'MN: Muneng',
+        'GT' => 'GT: Genteng',
     ];
 
     protected function rules(): array
@@ -124,7 +124,7 @@ class SeedLotForm extends Component
         $data = $this->validate();
 
         if ($this->seedLot && $this->seedLot->exists) {
-            // ── Update lot yang sudah ada 
+            // Update lot yang sudah ada
             $arrivalChanged = (float) ($this->seedLot->arrival_weight ?? 0)
                            !== (float) ($data['arrival_weight'] ?? 0);
 
@@ -137,11 +137,10 @@ class SeedLotForm extends Component
 
             session()->flash('success', 'Lot benih berhasil diperbarui.');
         } else {
-            // ── Buat lot baru ────────────────────────────────────────────
+            // Buat lot baru 
             // raw_stock awal = arrival_weight (berat benih saat tiba)
             // Graded & clean dimulai dari 0, akan bertambah saat proses produksi
-            $data['status']      = 'Raw';
-            $data['raw_stock']   = (float) ($data['arrival_weight'] ?? 0);
+            $data['raw_stock']    = (float) ($data['arrival_weight'] ?? 0);
             $data['graded_stock'] = 0;
             $data['clean_stock']  = 0;
 

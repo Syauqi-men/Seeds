@@ -19,7 +19,7 @@ return new class extends Migration
                   ->constrained('seeds')
                   ->restrictOnDelete();
                   
-            $table->enum('seed_class', ['NS', 'BS', 'FS', 'SS'])
+            $table->enum('seed_class', ['BS', 'FS', 'SS'])
                   ->comment('Kelas benih yang dipesan');
                   
             $table->decimal('quantity', 10, 2)

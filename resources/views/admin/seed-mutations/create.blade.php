@@ -40,7 +40,7 @@
                     <option value="">-- Pilih Lot Benih --</option>
                     @foreach($lots as $lot)
                     <option value="{{ $lot->id }}" {{ old('seed_lot_id') == $lot->id ? 'selected' : '' }}>
-                        {{ $lot->lot_number }} — {{ $lot->seed->var_name }}
+                        {{ $lot->lot_number }} | {{ $lot->seed->var_name }}
                         (stok bersih: {{ number_format($lot->clean_stock, 2) }} kg)
                     </option>
                     @endforeach

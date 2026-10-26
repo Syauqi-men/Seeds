@@ -44,7 +44,7 @@
                         <div class="text-small text-muted">{{ $proc->worker->code }}</div>
                         @endif
                     @else
-                        <span class="text-muted">—</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
                 <td>{{ number_format($proc->input_quantity, 2) }}</td>

@@ -38,7 +38,7 @@
                             {{ $role->name }}
                         </span>
                     @empty
-                        <span class="text-muted text-small">—</span>
+                        <span class="text-muted text-small">-</span>
                     @endforelse
                 </td>
                 <td style="text-align:right">

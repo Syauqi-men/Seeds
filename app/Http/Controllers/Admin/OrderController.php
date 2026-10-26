@@ -58,7 +58,44 @@ class OrderController extends Controller
         $categories = SeedCategory::orderBy('name')->get();
         $seeds = Seed::orderBy('var_name')->get();
 
-        return view('admin.orders.create', compact('seeds', 'categories'));
+        // Ringkasan stok bersih (clean stock) per kategori -> kelas -> varietas
+        $stockSummary = SeedCategory::with(['seeds' => function ($q) {
+            $q->withSum('seedLots', 'clean_stock')
+              ->orderBy('var_name');
+        }])
+        ->orderByRaw("CASE 
+            WHEN name LIKE '%Kedelai%' THEN 1 
+            WHEN name LIKE '%Hijau%' THEN 2 
+            WHEN name LIKE '%Tanah%' THEN 3 
+            ELSE 4 END")
+        ->get()
+        ->map(function ($cat) {
+            $byClass = $cat->seeds->groupBy(fn($s) => $s->var_class->value);
+
+            // Kelas benih: BS, FS, SS
+            $targetClasses = ['BS', 'FS', 'SS'];
+
+            $classesData = [];
+            foreach ($targetClasses as $cls) {
+                $classesData[$cls] = $byClass->get($cls, collect())->map(function ($s) {
+                    return [
+                        'id'       => $s->id,
+                        'name'     => $s->var_name,
+                        'class'    => $s->var_class->value,
+                        'stock'    => (float) ($s->seed_lots_sum_clean_stock ?? 0),
+                    ];
+                });
+            }
+
+            return [
+                'category_id'       => $cat->id,
+                'category_name'     => $cat->name,
+                'total_clean_stock' => (float) $cat->seeds->sum('seed_lots_sum_clean_stock'),
+                'classes'           => $classesData,
+            ];
+        });
+
+        return view('admin.orders.create', compact('seeds', 'categories', 'stockSummary'));
     }
 
     public function store(Request $request)
@@ -72,7 +109,7 @@ class OrderController extends Controller
 
             'items'                => 'required|array|min:1',
             'items.*.seed_id'      => 'required|exists:seeds,id',
-            'items.*.seed_class'   => 'required|in:NS,BS,FS,SS',
+            'items.*.seed_class'   => 'required|in:BS,FS,SS',
             'items.*.quantity'     => 'required|numeric|min:0.01',
         ], [
             'cust_name.required'          => 'Nama pemesan wajib diisi.',
@@ -169,11 +206,9 @@ class OrderController extends Controller
             $data['petugas_benih_id'] = $user->id;
         }
 
-        // Save old status
         $oldStatus = $order->status;
         $newStatus = $data['status'] ?? $order->status;
 
-        // Validate alloc when status cheange to completed/ready
         if (in_array($newStatus, ['completed', 'ready'])) {
             $order->load('items.allocations.seedLot', 'items.seed');
             $itemsBelumLengkap = [];
@@ -202,12 +237,9 @@ class OrderController extends Controller
                 foreach ($order->items as $item) {
                     foreach ($item->allocations as $alloc) {
                         $lot = $alloc->seedLot;
-
-                        // Minus clean_stock permanently
                         $lot->clean_stock -= $alloc->alloc_quantity;
                         $lot->save();
 
-                        // Note to history book as out order
                         StockTransaction::create([
                             'seed_lot_id'      => $lot->id,
                             'transaction_type' => 'OUT',
@@ -227,11 +259,8 @@ class OrderController extends Controller
                              ->with('success', 'Pesanan diselesaikan. Stok telah dipotong otomatis dan tercatat di riwayat transaksi.');
         }
 
-        // TAHAP 4: Lepas alokasi saat status berubah ke 'cancelled'
         if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
             DB::transaction(function () use ($order, $data) {
-                // Hapus semua alokasi agar karung benih bebas kembali
-                // Delete all allocation then 
                 foreach ($order->items as $item) {
                     $item->allocations()->delete();
                 }
@@ -243,7 +272,6 @@ class OrderController extends Controller
                              ->with('success', 'Pesanan dibatalkan. Semua alokasi karung telah dilepas.');
         }
 
-        // ── Update biasa (status selain completed/cancelled) ──
         $order->update($data);
 
         return redirect()->route('admin.orders.index')

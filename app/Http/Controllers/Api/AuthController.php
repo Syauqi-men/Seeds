@@ -21,35 +21,28 @@ class AuthController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
-        // Validasi format input kredensial dan nama perangkat
         $credentials = $request->validate([
             'email'       => ['required', 'email'],
             'password'    => ['required', 'string'],
             'device_name' => ['nullable', 'string', 'max:100'],
         ]);
 
-        // Cari data pengguna berdasarkan email
-        // Search user data based user email
         $user = User::where('email', $credentials['email'])->first();
 
-        // Verifikasi kecocokan pengguna dan hash password (401 Unauthorized)
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json([
                 'message' => 'Email atau password salah.',
             ], 401);
         }
 
-        // User has at least 1 role permissioned 
         if (! $user->hasAnyRole(self::ALLOWED_ROLES)) {
             return response()->json([
                 'message' => 'Akun Anda tidak memiliki akses ke API ini. Hanya Administrator dan Petugas Benih.',
             ], 403);
         }
 
-        // Make new Sanctum token based device_name
         $token = $user->createToken($credentials['device_name'] ?? 'api-token')->plainTextToken;
 
-        // Return success, token and simple profile
         return response()->json([
             'message'    => 'Login berhasil.',
             'token'      => $token,

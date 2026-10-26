@@ -23,7 +23,7 @@ class SeedForm extends Component
 
         return [
             'var_name'    => ['required', 'string', 'max:255'],
-            'var_class'   => ['required', 'in:NS,BS,FS,SS'],
+            'var_class'   => ['required', 'in:BS,FS,SS'],
             'category_id' => ['required', 'exists:seed_categories,id'],
             'description' => ['nullable', 'string', 'max:1000'],
         ];

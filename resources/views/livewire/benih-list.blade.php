@@ -1,96 +1,91 @@
-<div>
-    {{-- Filter Bar --}}
-    <div class="filter-bar">
-        <input
-            wire:model.live.debounce.400ms="search"
-            type="text"
-            class="filter-input"
-            placeholder="Cari nama varietas..."
-            id="search-benih"
-        >
-        <select wire:model.live="filterCategory" class="filter-select" id="filter-category">
-            <option value="">Semua Kategori</option>
-            @foreach($categories as $cat)
-            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-            @endforeach
-        </select>
-        <select wire:model.live="filterVarClass" class="filter-select" id="filter-varclass">
-            <option value="">Semua Kelas</option>
-            @foreach($varClasses as $vc)
-            <option value="{{ $vc->value }}">{{ $vc->value }}</option>
-            @endforeach
-        </select>
-    </div>
+<div wire:poll.5s.visible class="bk" id="top">
 
-    <div class="board-body">
-        @forelse($seeds as $seed)
-        {{-- Seed Group --}}
-        <div class="seed-group">
-            <div class="seed-group-header">
-                <div>
-                    <span class="seed-group-title">{{ $seed->var_name }}</span>
-                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category?->name ?? 'lain')) }}" style="margin-left:8px">
-                        {{ $seed->category?->name ?? '—' }}
-                    </span>
-                    <span class="badge badge-raw" style="margin-left:4px">{{ $seed->var_class->value }}</span>
-                </div>
-                <span class="seed-group-meta">{{ $seed->seedLots->count() }} lot</span>
+    <section class="wrap hero" aria-labelledby="judul">
+        <div>
+            <h1 id="judul">Informasi Ketersediaan<br>Stok Benih BRMP Aneka Kacang</h1>
+            <p class="lead">Data stok setiap varietas diambil langsung dari sistem inventaris. Pilih komoditas, lihat kelas benih, dan cek ketersediaan terkini.</p>
+            <div class="cta">
+                <a class="btn btn-dark" href="#katalog">Cek stok varietas</a>
+                <a class="btn btn-line" href="#kelas">Apa itu BS, FS, SS?</a>
             </div>
+        </div>
 
-            @if($seed->seedLots->isEmpty())
-                <p class="text-muted text-small" style="padding:var(--space-md)">Belum ada lot benih untuk varietas ini.</p>
-            @else
-            <div class="cards-grid">
-                @foreach($seed->seedLots->take(10) as $lot)
-                <div class="card">
-                    <div class="card-title">{{ $lot->lot_number }}</div>
-                    <div class="card-subtitle">
-                        @if($lot->harvest_date)
-                            Panen: {{ $lot->harvest_date->translatedFormat('d M Y') }}
-                        @else
-                            Tanggal panen belum dicatat
-                        @endif
-                    </div>
-
-                    <div class="card-stats">
-                        <div class="stat-item">
-                            <div class="stat-label">Stok Mentah</div>
-                            <div class="stat-value">{{ number_format($lot->raw_stock, 1) }}<span style="font-size:0.65rem;color:var(--color-text-muted)"> kg</span></div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Stok Bersih</div>
-                            <div class="stat-value">{{ number_format($lot->clean_stock, 1) }}<span style="font-size:0.65rem;color:var(--color-text-muted)"> kg</span></div>
-                        </div>
-                    </div>
-
-                    <div class="card-footer">
-                        <span class="badge badge-{{ strtolower($lot->status->value) }}">{{ $lot->status->label() }}</span>
-                        <span class="card-timestamp">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            {{ $lot->updated_at->diffForHumans() }}
-                        </span>
-                    </div>
-                </div>
+        <aside class="ledger" aria-label="Ringkasan total stok">
+            <div class="ledger-top">
+                <span class="lbl">Total stok tercatat</span>
+            </div>
+            <div class="big">{{ $grandText }}<small>kg</small></div>
+            <div class="segs" aria-hidden="true">
+                @foreach($segs as $s)
+                    <div style="width: {{ $s['pct'] }}; background-color: {{ $s['color'] }}"></div>
                 @endforeach
             </div>
-
-            @if($seed->seedLots->count() > 10)
-            <div class="text-center mt-md">
-                <span class="text-small text-muted">+{{ $seed->seedLots->count() - 10 }} lot lainnya</span>
+            <div class="lrows">
+                @foreach($classes as $k)
+                    <div class="lrow">
+                        <span class="code"><i style="background-color: {{ $k['color'] }}"></i>{{ $k['code'] }}</span>
+                        <span class="nm">{{ $k['label'] }}</span>
+                        <span class="vv">{{ $k['totalText'] }} kg</span>
+                        <span class="pp">{{ $k['pct'] }}</span>
+                    </div>
+                @endforeach
             </div>
-            @endif
-            @endif
-        </div>
-        @empty
-        <div class="text-center" style="padding:var(--space-2xl)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-text-light);margin-bottom:var(--space-md)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <p class="text-muted">Tidak ada varietas benih yang sesuai filter.</p>
-        </div>
-        @endforelse
+        </aside>
+    </section>
 
-        {{-- Pagination --}}
-        <div class="mt-lg">
-            {{ $seeds->links() }}
+    <section class="sec wrap" id="kelas" aria-labelledby="judul-kelas">
+        <div class="sec-head">
+            <div>
+                <h2 id="judul-kelas">Tiga kelas benih, satu rantai mutu</h2>
+                <p>BS, FS, dan SS adalah tingkatan benih berdasarkan hierarki perbanyakan untuk menjaga kemurnian dan mutu genetik varietas.</p>
+            </div>
         </div>
-    </div>
+        <div class="kelas">
+            @foreach($classes as $k)
+                <div class="kcell">
+                    <div class="kbar" style="background-color: {{ $k['color'] }}"></div>
+                    <span class="step">Kelas {{ $k['step'] }}</span>
+                    <div class="kcode">{{ $k['code'] }}</div>
+                    <h3>{{ $k['label'] }}</h3>
+                    <p>{{ $k['desc'] }}</p>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <section class="cat" id="katalog" aria-labelledby="judul-katalog">
+        <div class="wrap sec">
+            <div class="sec-head">
+                <div>
+                    <h2 id="judul-katalog">Stok per varietas</h2>
+                    <p>Menampilkan stok benih yang tersedia saat ini.</p>
+                </div>
+            </div>
+
+            @if($noResults)
+                <div class="vc-empty">
+                    <p>Belum ada data stok yang tersedia.</p>
+                </div>
+            @else
+                <div class="vc-grid">
+                    @foreach($cards as $card)
+                        <article class="vc-card" wire:key="vc-{{ $card['key'] }}" style="--vc-accent: {{ $card['color'] }}">
+                            <div class="vc-card__top">
+                                <span class="vc-card__cat">{{ $card['category'] }}</span>
+                                <span class="vc-card__badge" style="background-color: {{ $card['color'] }}">
+                                    {{ $card['class_code'] }}
+                                </span>
+                            </div>
+                            <div class="vc-card__name">{{ $card['variety'] }}</div>
+                            <div class="vc-card__class">{{ $card['class_name'] }}</div>
+                            <div class="vc-card__stock">
+                                {{ $card['stock'] }}<span class="vc-card__unit">kg</span>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
+
 </div>

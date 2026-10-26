@@ -4,7 +4,7 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">{{ $seedLot->lot_number }}</h1>
-        <p class="page-subtitle">{{ $seedLot->seed->var_name }} &bull; {{ $seedLot->seed->category?->name ?? '—' }} &bull; {{ $seedLot->seed->var_class->value }}</p>
+        <p class="page-subtitle">{{ $seedLot->seed->var_name }} &bull; {{ $seedLot->seed->category?->name ?? '-' }} &bull; {{ $seedLot->seed->var_class->value }}</p>
     </div>
     <div style="display:flex;gap:var(--space-sm)">
         <a href="{{ route('admin.seed-lots.edit', $seedLot) }}" class="btn btn-secondary">Edit</a>
@@ -16,8 +16,6 @@
     <div class="form-card">
         <h3 style="margin-bottom:var(--space-md);font-size:1rem">Informasi Lot</h3>
         <dl style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm)">
-            <dt class="text-muted text-small">Status</dt>
-            <dd><span class="badge badge-{{ strtolower($seedLot->status->value) }}">{{ $seedLot->status->label() }}</span></dd>
             <dt class="text-muted text-small">Tanggal Panen</dt>
             <dd>{{ $seedLot->harvest_date?->translatedFormat('d M Y') ?? '-' }}</dd>
             <dt class="text-muted text-small">Stok Mentah</dt>
@@ -86,7 +84,7 @@
                         <div class="text-small text-muted">{{ $proc->worker->code }}</div>
                         @endif
                     @else
-                        <span class="text-muted">—</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
                 <td>{{ number_format($proc->input_quantity, 2) }} kg</td>

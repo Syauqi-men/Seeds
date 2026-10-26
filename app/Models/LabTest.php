@@ -29,13 +29,13 @@ class LabTest extends Model
         'moisture_content' => 'decimal:2',
     ];
 
-    // ─── Relations ────────────────────────────────────────────────────────
+    // Relations 
     public function seedLot(): BelongsTo
     {
         return $this->belongsTo(SeedLot::class);
     }
 
-    // ─── Activity Log ─────────────────────────────────────────────────────
+    // Activity Log 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
