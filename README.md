@@ -74,15 +74,15 @@ npm install
 cp .env.example .env
 
 # Configure database in .env
-DB_CONNECTION=pgsql
+DB_CONNECTION=
 DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=brmp_seed
-DB_USERNAME=postgres
-DB_PASSWORD=your_postgres_password
+DB_PORT=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 
 # Set admin credentials in .env (used by Seeders)
-ADMIN_EMAIL=admin@brmp.go.id
+ADMIN_EMAIL=
 ADMIN_PASSWORD=your_secure_password
 
 # Generate application key
