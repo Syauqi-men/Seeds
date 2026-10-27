@@ -73,6 +73,13 @@ class UserController extends Controller
             'role.required'  => 'Peran pengguna wajib dipilih.',
         ]);
 
+        $currentRole = $user->roles->first()?->name;
+        if ($user->id === Auth::id() && $data['role'] !== $currentRole) {
+            return back()
+                ->withInput()
+                ->with('error', 'Anda tidak dapat mengubah peran (role) akun sendiri.');
+        }
+
         $user->update([
             'name'  => $data['name'],
             'email' => $data['email'],

@@ -36,14 +36,6 @@
                     </a>
 
                     <div class="navbar-menu">
-                        <a href="{{ route('benih.index') }}" class="nav-link {{ request()->routeIs('benih*') ? 'active' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8c0 0-2 2-2 4s2 4 2 4"/><path d="M12 8c0 0 2 2 2 4s-2 4-2 4"/><path d="M8 12h8"/></svg>
-                            Benih
-                        </a>
-                        <a href="{{ route('lot-benih.index') }}" class="nav-link {{ request()->routeIs('lot-benih*') ? 'active' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                            Lot Benih
-                        </a>
                         @auth
                         <a href="{{ route('admin.dashboard') }}" class="nav-icon-btn" title="Panel Admin">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -62,8 +54,6 @@
 
                 {{-- Mobile menu --}}
                 <div class="navbar-mobile" :class="{ 'open': mobileOpen }">
-                    <a href="{{ route('benih.index') }}" class="nav-link">Benih</a>
-                    <a href="{{ route('lot-benih.index') }}" class="nav-link">Lot Benih</a>
                     @auth
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">Panel Admin</a>
                     @else

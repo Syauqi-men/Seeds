@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // Daftar role yang diizinkan mengakses endpoint API
-    public const ALLOWED_ROLES = ['Administrator', 'Petugas Benih'];
+    public const ALLOWED_ROLES = ['Administrator', 'Seed'];
 
     /**
      * Autentikasi pengguna dan terbitkan token akses Bearer.
@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         if (! $user->hasAnyRole(self::ALLOWED_ROLES)) {
             return response()->json([
-                'message' => 'Akun Anda tidak memiliki akses ke API ini. Hanya Administrator dan Petugas Benih.',
+                'message' => 'Akun Anda tidak memiliki akses ke API ini. Hanya Administrator dan Seed.',
             ], 403);
         }
 

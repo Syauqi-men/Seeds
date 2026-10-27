@@ -19,7 +19,7 @@ class OrderController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if ($user->hasRole('Order Processor') && !$user->hasRole('Administrator')) {
+        if ($user->hasRole('Order') && !$user->hasRole('Administrator')) {
             $statusOrder = ['ready', 'completed', 'preparing', 'pending', 'cancelled'];
         } else {
             $statusOrder = ['pending', 'preparing', 'ready', 'completed', 'cancelled'];
@@ -172,8 +172,8 @@ class OrderController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $isAdmin = $user->hasRole('Administrator');
-        $isOrderProcessor = $user->hasRole('Order Processor');
-        $isPetugasBenih = $user->hasRole('Petugas Benih');
+        $isOrderProcessor = $user->hasRole('Order');
+        $isPetugasBenih = $user->hasRole('Seed');
 
         $rules = [];
 

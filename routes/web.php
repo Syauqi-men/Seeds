@@ -42,8 +42,8 @@ Route::middleware(['auth'])
             Route::resource('workers', WorkerController::class)->except(['show']);
         });
 
-        // Administrator + Petugas Benih + Proses Produksi
-        Route::middleware('role:Administrator|Petugas Benih|Proses Produksi')->group(function () {
+        // Administrator + Seed + Production
+        Route::middleware('role:Administrator|Seed|Production')->group(function () {
             Route::resource('seeds', SeedController::class);
             Route::resource('seed-lots', SeedLotController::class);
             Route::resource('production-processes', ProductionProcessController::class);
@@ -51,19 +51,19 @@ Route::middleware(['auth'])
             Route::resource('lab-tests', LabTestController::class);
         });
 
-        // Administrator + Order Processor 
-        Route::middleware('role:Administrator|Order Processor')->group(function () {
+        // Administrator + Order 
+        Route::middleware('role:Administrator|Order')->group(function () {
             Route::resource('stock-transactions', StockTransactionController::class);
             Route::resource('orders', OrderController::class)->only(['create', 'store', 'destroy']);
         });
 
-        // Administrator + Order Processor + Petugas Benih 
-        Route::middleware('role:Administrator|Order Processor|Petugas Benih')->group(function () {
+        // Administrator + Order + Seed 
+        Route::middleware('role:Administrator|Order|Seed')->group(function () {
             Route::resource('orders', OrderController::class)->only(['index', 'show', 'edit', 'update']);
         });
 
-        // Seedlot Alloc : Petugas Benih + Administrator 
-        Route::middleware('role:Administrator|Petugas Benih')->group(function () {
+        // Seedlot Alloc : Seed + Administrator 
+        Route::middleware('role:Administrator|Seed')->group(function () {
             // GET  : get lot list + existing alloc (AJAX)
             Route::get('orders/{order}/items/{item}/lots', [OrderAllocationController::class, 'lots'])
                 ->name('orders.items.lots');

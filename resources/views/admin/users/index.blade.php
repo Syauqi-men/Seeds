@@ -34,7 +34,7 @@
                 <td class="text-muted">{{ $user->email }}</td>
                 <td>
                     @forelse($user->roles as $role)
-                        <span class="badge {{ $role->name === 'Administrator' ? 'badge-ready' : ($role->name === 'Petugas Benih' ? 'badge-processing' : 'badge-quarantine') }}">
+                        <span class="badge {{ $role->name === 'Administrator' ? 'badge-ready' : ($role->name === 'Seed' ? 'badge-processing' : 'badge-quarantine') }}">
                             {{ $role->name }}
                         </span>
                     @empty

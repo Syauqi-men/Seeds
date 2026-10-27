@@ -14,10 +14,26 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cache role & permission
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
+        // Migrasi nama role lama ke nama role baru jika sudah ada di database
+        $roleRenames = [
+            'Petugas Benih'   => 'Seed',
+            'Order Processor' => 'Order',
+            'Proses Produksi' => 'Production',
+        ];
+        foreach ($roleRenames as $oldName => $newName) {
+            $oldRole = Role::where('name', $oldName)->first();
+            $newRole = Role::where('name', $newName)->first();
+            if ($oldRole && ! $newRole) {
+                $oldRole->update(['name' => $newName]);
+            } elseif ($oldRole && $newRole) {
+                $oldRole->delete();
+            }
+        }
+
         $adminRole      = Role::firstOrCreate(['name' => 'Administrator']);
-        $benihRole      = Role::firstOrCreate(['name' => 'Petugas Benih']);
-        $transaksiRole  = Role::firstOrCreate(['name' => 'Order Processor']);
-        $produksiRole   = Role::firstOrCreate(['name' => 'Proses Produksi']);
+        $benihRole      = Role::firstOrCreate(['name' => 'Seed']);
+        $transaksiRole  = Role::firstOrCreate(['name' => 'Order']);
+        $produksiRole   = Role::firstOrCreate(['name' => 'Production']);
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@brmp.go.id'],

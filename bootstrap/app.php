@@ -53,12 +53,17 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        // 403: sudah login tapi role tidak diizinkan (browser dapat halaman error 403 bawaan Laravel)
+        // 403: sudah login tapi role tidak diizinkan
         $exceptions->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) use ($isBrowserApiRequest) {
             if ($request->is('api/*') && ! $isBrowserApiRequest($request)) {
                 return response()->json([
-                    'message' => 'Akses ditolak. Hanya Administrator dan Petugas Benih yang dapat mengakses data ini.',
+                    'message' => 'Akses ditolak. Hanya Administrator dan Seed yang dapat mengakses data ini.',
                 ], 403);
+            }
+
+            if (! $request->is('api/*') && ! $request->expectsJson()) {
+                return redirect()->route('admin.dashboard')
+                    ->with('error', 'Akses ditolak. Anda tidak memiliki hak akses (role) untuk membuka halaman tersebut.');
             }
         });
 

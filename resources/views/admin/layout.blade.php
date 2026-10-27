@@ -56,14 +56,14 @@
                     </details>
                 @endrole
 
-                {{-- Pengolahan Benih: Administrator, Petugas Benih, Proses Produksi --}}
-                @role('Administrator|Petugas Benih|Proses Produksi')
+                {{-- Pengolahan Benih: Administrator, Seed, Production --}}
+                @role('Administrator|Seed|Production')
                     <details open class="nv-nav-group">
                         <summary>
                             <span>Pengolahan Benih</span>
                             <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                         </summary>
-                        @role('Administrator|Petugas Benih')
+                        @role('Administrator|Seed')
                             <a href="{{ route('admin.seeds.index') }}"
                                 class="nv-nav-link"
                                 {!! request()->routeIs('admin.seeds*') ? 'aria-current="page"' : '' !!}>
@@ -89,7 +89,7 @@
                                 <span>Uji Lab</span>
                             </a>
                         @endrole
-                        @role('Administrator|Proses Produksi')
+                        @role('Administrator|Production')
                             <a href="{{ route('admin.production-processes.index') }}"
                                 class="nv-nav-link"
                                 {!! request()->routeIs('admin.production-processes*') ? 'aria-current="page"' : '' !!}>
@@ -100,14 +100,14 @@
                     </details>
                 @endrole
 
-                {{-- Persediaan: Administrator, Order Processor, Petugas Benih --}}
-                @role('Administrator|Order Processor|Petugas Benih')
+                {{-- Persediaan: Administrator, Order, Seed --}}
+                @role('Administrator|Order|Seed')
                     <details open class="nv-nav-group">
                         <summary>
                             <span>Persediaan</span>
                             <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
                         </summary>
-                        @role('Administrator|Order Processor')
+                        @role('Administrator|Order')
                             <a href="{{ route('admin.stock-transactions.index') }}"
                                 class="nv-nav-link"
                                 {!! request()->routeIs('admin.stock-transactions*') ? 'aria-current="page"' : '' !!}>

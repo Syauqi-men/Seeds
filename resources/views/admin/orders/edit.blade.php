@@ -14,9 +14,9 @@
 
 @php
     $user = auth()->user();
-    $canEditDetails = $user->hasAnyRole(['Administrator', 'Order Processor']);
-    $canEditStatus  = $user->hasAnyRole(['Administrator', 'Petugas Benih']);
-    $canAllocate    = $user->hasAnyRole(['Administrator', 'Petugas Benih']);
+    $canEditDetails = $user->hasAnyRole(['Administrator', 'Order']);
+    $canEditStatus  = $user->hasAnyRole(['Administrator', 'Seed']);
+    $canAllocate    = $user->hasAnyRole(['Administrator', 'Seed']);
 @endphp
 
 @if(session('error'))
@@ -97,7 +97,7 @@
                 </select>
                 @error('status') <span class="form-error">{{ $message }}</span> @enderror
                 @if(!$canEditStatus)
-                    <small class="text-muted" style="display:block;margin-top:4px">Hanya Petugas Benih yang dapat mengubah status.</small>
+                    <small class="text-muted" style="display:block;margin-top:4px">Hanya role Seed yang dapat mengubah status.</small>
                 @endif
             </div>
             <div class="form-group">
@@ -172,7 +172,7 @@
     </div>
 </form>
 
-{{-- MODAL ALOKASI KARUNG: hanya render untuk Petugas Benih/Admin --}}
+{{-- MODAL ALOKASI KARUNG: hanya render untuk Seed/Admin --}}
 @if($canAllocate)
 <div id="modalAlokasi" class="modal-backdrop" style="display:none" onclick="if(event.target===this)tutupModal()">
     <div class="modal-box" style="max-width:680px;width:95%">

@@ -20,14 +20,24 @@
             </div>
             <div class="form-group">
                 <label class="form-label required" for="u_role">Peran (Role)</label>
-                <select id="u_role" name="role" class="form-control @error('role') is-invalid @enderror">
-                    <option value="">-- Pilih Peran --</option>
-                    @foreach($roles as $role)
-                    <option value="{{ $role->name }}" {{ old('role', $userRole) === $role->name ? 'selected' : '' }}>
-                        {{ $role->name }}
-                    </option>
-                    @endforeach
-                </select>
+                @if($user->id === auth()->id())
+                    <input type="hidden" name="role" value="{{ $userRole }}">
+                    <select id="u_role" class="form-control" disabled>
+                        <option value="{{ $userRole }}" selected>{{ $userRole }}</option>
+                    </select>
+                    <small class="text-muted" style="display:block;margin-top:4px;font-size:0.8rem">
+                        Peran akun yang sedang digunakan tidak dapat diubah.
+                    </small>
+                @else
+                    <select id="u_role" name="role" class="form-control @error('role') is-invalid @enderror">
+                        <option value="">-- Pilih Peran --</option>
+                        @foreach($roles as $role)
+                        <option value="{{ $role->name }}" {{ old('role', $userRole) === $role->name ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                @endif
                 @error('role') <span class="form-error">{{ $message }}</span> @enderror
             </div>
         </div>

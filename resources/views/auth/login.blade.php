@@ -368,10 +368,11 @@
       outline-offset: 4px;
     }
 
-    .back-chevron {
-      font-family: var(--font-body);
-      font-weight: 600;
-      line-height: 1;
+    .back-link .lucide,
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -484,7 +485,7 @@
 
         <nav class="back-nav" aria-label="Navigasi halaman publik">
           <a href="{{ route('benih.index') }}" class="back-link">
-            <span class="back-chevron" aria-hidden="true">&lt;</span>
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
             <span>Kembali ke halaman publik</span>
           </a>
         </nav>

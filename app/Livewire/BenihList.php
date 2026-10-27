@@ -14,21 +14,21 @@ class BenihList extends Component
             'label' => 'Benih Penjenis',
             'color' => '#1F3D2B',
             'step'  => 1,
-            'desc'  => 'Benih sumber dari pemulia. Menjadi dasar perbanyakan kelas berikutnya.',
+            'desc'  => 'Benih sumber yang diproduksi langsung oleh pemulia tanaman. Kelas ini adalah tetua awal untuk tahapan perbanyakan selanjutnya.',
         ],
         [
             'code'  => 'FS',
             'label' => 'Benih Dasar',
             'color' => '#3B7F9E',
             'step'  => 2,
-            'desc'  => 'Hasil perbanyakan Benih Penjenis di bawah pengawasan mutu.',
+            'desc'  => 'Turunan pertama dari Benih Penjenis. Proses produksinya diawasi ketat untuk menjamin standar mutunya.',
         ],
         [
             'code'  => 'SS',
             'label' => 'Benih Pokok',
             'color' => '#D9A536',
             'step'  => 3,
-            'desc'  => 'Hasil perbanyakan Benih Dasar, dipakai untuk perbanyakan lanjutan.',
+            'desc'  => 'Hasil perbanyakan dari Benih Dasar. Benih inilah yang nantinya akan diperbanyak lagi menjadi benih sebar untuk petani.',
         ],
     ];
 
