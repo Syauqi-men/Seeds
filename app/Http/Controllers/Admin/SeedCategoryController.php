@@ -69,15 +69,24 @@ class SeedCategoryController extends Controller
 
     public function destroy(SeedCategory $seedCategory)
     {
-        // Cannot delete if there are still varieties using this categoty
-        if ($seedCategory->seeds()->exists()) {
+        $hasOrders = \App\Models\OrderItem::whereIn(
+            'seed_id',
+            $seedCategory->seeds()->pluck('id')
+        )->exists();
+
+        if ($hasOrders) {
             return redirect()->route('admin.seed-categories.index')
-                             ->with('error', "Kategori \"{$seedCategory->name}\" tidak dapat dihapus karena masih digunakan oleh " . $seedCategory->seeds()->count() . ' varietas benih.');
+                             ->with('error', "Kategori \"{$seedCategory->name}\" tidak dapat dihapus karena varietas di dalamnya memiliki riwayat transaksi pesanan.");
         }
 
-        $seedCategory->delete();
+        try {
+            $seedCategory->delete();
 
-        return redirect()->route('admin.seed-categories.index')
-                         ->with('success', 'Kategori benih berhasil dihapus.');
+            return redirect()->route('admin.seed-categories.index')
+                             ->with('success', 'Kategori benih berhasil dihapus.');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.seed-categories.index')
+                             ->with('error', 'Gagal menghapus kategori benih: ' . $e->getMessage());
+        }
     }
 }

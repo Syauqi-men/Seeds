@@ -165,7 +165,7 @@
                     <nav class="nv-breadcrumb" aria-label="Breadcrumb">
                         <a href="{{ route('admin.dashboard') }}" class="nv-crumb-root">Sistem</a>
                         <i data-lucide="chevron-right" class="nv-crumb-sep"></i>
-                        <span aria-current="page">@yield('title', 'Dashboard')</span>
+                        <span aria-current="page">@yield('title', 'Beranda')</span>
                     </nav>
                 </div>
 

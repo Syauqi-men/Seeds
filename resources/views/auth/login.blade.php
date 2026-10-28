@@ -436,7 +436,7 @@
                 name="email"
                 class="text-input"
                 value="{{ old('email') }}"
-                placeholder="admin@brmp.go.id"
+                placeholder="email@brmp.go.id"
                 autocomplete="username"
                 required
                 autofocus

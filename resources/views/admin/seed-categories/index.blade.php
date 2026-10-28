@@ -46,8 +46,7 @@
                         <a href="{{ route('admin.seed-categories.edit', $cat) }}" class="btn btn-ghost btn-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </a>
-                        <button @click="del=true" class="btn btn-danger btn-sm"
-                            {{ $cat->seeds_count > 0 ? 'disabled title=Tidak dapat dihapus karena masih digunakan' : '' }}>
+                        <button @click="del=true" class="btn btn-danger btn-sm" title="Hapus Kategori">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
                         </button>
 
@@ -56,8 +55,11 @@
                             <div class="modal-box">
                                 <h3 class="modal-title">Hapus Kategori?</h3>
                                 <p style="font-size:0.9rem;color:var(--color-text-muted);margin-bottom:var(--space-lg)">
-                                    Kategori <strong>{{ $cat->name }}</strong> akan dihapus permanen.
-                                    Tindakan ini tidak dapat dibatalkan.
+                                    @if($cat->seeds_count > 0)
+                                        Kategori <strong>{{ $cat->name }}</strong> beserta <strong>{{ $cat->seeds_count }} varietas benih</strong> di dalamnya akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                    @else
+                                        Kategori <strong>{{ $cat->name }}</strong> akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+                                    @endif
                                 </p>
                                 <div style="display:flex;gap:var(--space-sm);justify-content:flex-end">
                                     <button @click="del=false" class="btn btn-ghost">Batal</button>

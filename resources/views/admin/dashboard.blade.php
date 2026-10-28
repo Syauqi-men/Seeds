@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('title', 'Dashboard')
+@section('title', 'Beranda')
 @section('content')
 
 @php
@@ -174,7 +174,7 @@
             <div class="nv-panel__head">
                 <div class="nv-panel__title"><i data-lucide="warehouse"></i> Stok</div>
                 <span class="nv-cell-muted" style="font-size: var(--nv-text-xs);">
-                    Total Stok Bersih: <strong style="color: var(--nv-text);">{{ $kg($grandTotalStock) }} kg</strong> (arahkan kursor pada grafik untuk rincian kelas BS, FS, SS)
+                    Total Stok: <strong style="color: var(--nv-text);">{{ $kg($grandTotalStock) }} kg</strong>
                 </span>
             </div>
 

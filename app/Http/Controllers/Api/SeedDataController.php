@@ -55,9 +55,9 @@ class SeedDataController extends Controller
                 DB::raw('SUM(seed_lots.clean_stock) as total_stok_bersih')
             )
             ->groupBy('seed_categories.name', 'seeds.var_class', 'seeds.var_name')
-            ->havingRaw('SUM(seed_lots.clean_stock) > 0')
+            
             ->orderBy('seed_categories.name')
-            ->orderBy('seeds.var_class')
+            ->orderBy('seeds.var_class')->havingRaw('SUM(seed_lots.clean_stock) > 0')
             ->orderBy('seeds.var_name')
             ->get();
 
