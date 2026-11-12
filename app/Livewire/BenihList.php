@@ -10,25 +10,29 @@ class BenihList extends Component
     /** Definisi kelas mutu benih. */
     public const CLASSES = [
         [
-            'code'  => 'BS',
-            'label' => 'Benih Penjenis',
-            'color' => '#1F3D2B',
-            'step'  => 1,
-            'desc'  => 'Benih sumber yang diproduksi langsung oleh pemulia tanaman. Kelas ini adalah tetua awal untuk tahapan perbanyakan selanjutnya.',
+            'code'       => 'BS',
+            'label'      => 'Benih Penjenis',
+            'color'      => '#ed8e5f',
+            'text_color' => '#ffffff',
+            'step'       => 1,
+            'desc'       => 'Benih sumber yang diproduksi langsung oleh pemulia tanaman. Kelas ini adalah tetua awal untuk tahapan perbanyakan selanjutnya.',
         ],
         [
-            'code'  => 'FS',
-            'label' => 'Benih Dasar',
-            'color' => '#3B7F9E',
-            'step'  => 2,
-            'desc'  => 'Turunan pertama dari Benih Penjenis. Proses produksinya diawasi ketat untuk menjamin standar mutunya.',
+            'code'       => 'FS',
+            'label'      => 'Benih Dasar',
+            'color'      => '#ffe5e5',
+            'text_color' => '#991b1b',
+            'border'     => '#fca5a5',
+            'step'       => 2,
+            'desc'       => 'Turunan pertama dari Benih Penjenis. Proses produksinya diawasi ketat untuk menjamin standar mutunya.',
         ],
         [
-            'code'  => 'SS',
-            'label' => 'Benih Pokok',
-            'color' => '#D9A536',
-            'step'  => 3,
-            'desc'  => 'Hasil perbanyakan dari Benih Dasar. Benih inilah yang nantinya akan diperbanyak lagi menjadi benih sebar untuk petani.',
+            'code'       => 'SS',
+            'label'      => 'Benih Pokok',
+            'color'      => '#73264c',
+            'text_color' => '#ffffff',
+            'step'       => 3,
+            'desc'       => 'Hasil perbanyakan dari Benih Dasar. Benih inilah yang nantinya akan diperbanyak lagi menjadi benih sebar untuk petani.',
         ],
     ];
 
@@ -82,14 +86,18 @@ class BenihList extends Component
 
                     $cls = $classByCode[$code];
                     $cards[] = [
-                        'category'   => $category->name,
-                        'variety'    => $varName,
-                        'class_code' => $code,
-                        'class_name' => $cls['label'],
-                        'color'      => $cls['color'],
-                        'step'       => $cls['step'],
-                        'stock'      => self::formatKg($stock),
-                        'key'        => $category->id . '-' . $varName . '-' . $code,
+                        'category'       => $category->name,
+                        'category_color' => SeedCategory::colorFor($category->name),
+                        'category_badge' => SeedCategory::badgeClassFor($category->name),
+                        'variety'        => $varName,
+                        'class_code'     => $code,
+                        'class_name'     => $cls['label'],
+                        'color'          => $cls['color'],
+                        'text_color'     => $cls['text_color'] ?? '#ffffff',
+                        'border'         => $cls['border'] ?? null,
+                        'step'           => $cls['step'],
+                        'stock'          => self::formatKg($stock),
+                        'key'            => $category->id . '-' . $varName . '-' . $code,
                     ];
                 }
             }

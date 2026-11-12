@@ -117,7 +117,7 @@
             <tr>
                 <td class="text-muted">{{ $i + 1 }}</td>
                 <td style="font-weight:600">{{ $item->seed->var_name ?? '-' }}</td>
-                <td><span class="badge badge-processing">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
+                <td><span class="badge {{ \App\Enums\VarClass::badgeClassFor($item->seed_class->value ?? $item->seed_class) }}">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
                 <td style="text-align:right;font-weight:600">{{ number_format($item->quantity, 2) }}</td>
             </tr>
             @endforeach

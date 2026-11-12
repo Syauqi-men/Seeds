@@ -40,11 +40,14 @@
         <div x-show="expanded" x-transition.opacity.duration.200ms style="margin-top:var(--space-md);">
             <div style="display:flex;flex-direction:column;gap:12px;">
                 @foreach($stockSummary as $catData)
-                <div style="border:1px solid var(--nv-border);border-radius:var(--nv-radius-sm);overflow:hidden;background:var(--nv-surface);">
+                @php
+                    $catColor = \App\Models\SeedCategory::colorFor($catData['category_name']);
+                    $catBadge = \App\Models\SeedCategory::badgeClassFor($catData['category_name']);
+                @endphp
+                <div style="border:1px solid var(--nv-border);border-left:3px solid {{ $catColor }};border-radius:var(--nv-radius-sm);overflow:hidden;background:var(--nv-surface);">
                     {{-- Header Kategori --}}
                     <div style="background:var(--nv-surface-muted);padding:8px 12px;border-bottom:1px solid var(--nv-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-                        <span style="font-weight:700;font-size:0.86rem;color:var(--nv-text);display:flex;align-items:center;gap:6px;">
-                            <i data-lucide="sprout" style="width:14px;height:14px;color:var(--nv-accent);"></i>
+                        <span class="badge {{ $catBadge }}" style="font-size:0.76rem;font-weight:600;">
                             {{ $catData['category_name'] }}
                         </span>
                         <span style="font-size:0.75rem;color:var(--nv-text-muted);">
@@ -57,7 +60,7 @@
                         @foreach($catData['classes'] as $clsName => $items)
                         <div style="background:var(--nv-surface);padding:8px 10px;min-width:0;">
                             <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:6px;margin-bottom:6px;border-bottom:1px dashed var(--nv-border);">
-                                <span class="badge {{ $clsName === 'BS' ? 'badge-processing' : ($clsName === 'FS' ? 'badge-ready' : ($clsName === 'SS' ? 'badge-quarantine' : 'badge-raw')) }}" style="font-size:0.68rem;padding:2px 7px;">
+                                <span class="badge {{ \App\Enums\VarClass::badgeClassFor($clsName) }}" style="font-size:0.68rem;padding:2px 7px;">
                                     Kelas {{ $clsName }}
                                 </span>
                                 <span style="font-size:0.7rem;color:var(--nv-text-subtle);">

@@ -142,7 +142,7 @@
                 <tr>
                     <td class="text-muted">{{ $i + 1 }}</td>
                     <td>{{ $item->seed->var_name ?? '-' }}</td>
-                    <td><span class="badge badge-processing">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
+                    <td><span class="badge {{ \App\Enums\VarClass::badgeClassFor($item->seed_class->value ?? $item->seed_class) }}">{{ $item->seed_class->value ?? $item->seed_class }}</span></td>
                     <td style="text-align:right">{{ number_format($item->quantity, 2) }}</td>
                     <td style="text-align:right">
                         <span class="{{ $isFull ? 'badge badge-ready' : 'badge badge-quarantine' }}">

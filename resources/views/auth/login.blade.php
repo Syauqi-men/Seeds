@@ -25,6 +25,12 @@
       --error-ink: #8C2D25;
       --error-surface: #F9ECEA;
 
+      /* Radii (concentric: outer 16px - padding 6px = inner 10px) */
+      --radius-outer: 16px;
+      --radius-inner: 10px;
+      --radius-control: 8px;
+      --radius-sm: 6px;
+
       /* Typography */
       --font-display: 'Newsreader', Georgia, serif;
       --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -80,7 +86,8 @@
       max-width: 780px;
       background-color: var(--specimen-sheet);
       border: 1px solid var(--border-strong);
-      padding: 0.375rem;
+      padding: 6px;
+      border-radius: var(--radius-outer);
       box-shadow: 0 20px 45px -18px rgba(25, 40, 32, 0.14);
       animation: sheet-settle 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
@@ -98,6 +105,8 @@
 
     .sheet-inner-frame {
       border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-inner);
+      overflow: hidden;
       display: grid;
       grid-template-columns: 1fr;
     }
@@ -167,6 +176,29 @@
       object-fit: contain;
     }
 
+    .system-name {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+    }
+
+    .system-name__line {
+      font-size: var(--size-lg);
+      font-weight: 500;
+      color: var(--herbarium-slate);
+      letter-spacing: 0.005em;
+    }
+
+    .system-name__abbr {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      color: #2F7D4F;
+    }
+
     /* Kolom Kanan */
     .auth-column {
       padding: 2rem;
@@ -198,6 +230,7 @@
       margin-bottom: 1.25rem;
       background-color: var(--error-surface);
       border-left: 3px solid var(--error-ink);
+      border-radius: var(--radius-control);
       color: var(--error-ink);
       font-size: var(--size-sm);
     }
@@ -237,7 +270,7 @@
       padding: 0 0.875rem;
       background-color: var(--input-surface);
       border: 1px solid var(--border-strong);
-      border-radius: 3px;
+      border-radius: var(--radius-control);
       font-family: var(--font-body);
       font-size: var(--size-base);
       color: var(--chlorophyll-ink);
@@ -275,7 +308,7 @@
       place-items: center;
       background: transparent;
       border: 1px solid transparent;
-      border-radius: 2px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       color: var(--herbarium-slate);
       transition: color 140ms ease, background-color 140ms ease;
@@ -316,7 +349,7 @@
       background-color: var(--canopy-pine);
       color: var(--specimen-sheet);
       border: 1px solid var(--canopy-pine);
-      border-radius: 3px;
+      border-radius: var(--radius-control);
       font-family: var(--font-body);
       font-size: var(--size-base);
       font-weight: 500;
@@ -408,6 +441,11 @@
             <i data-lucide="layers" style="width:64px;height:64px;color:var(--canopy-pine);"></i>
           @endif
         </div>
+
+        <p class="system-name">
+          <span class="system-name__line">Sistem Manajemen</span>
+          <span class="system-name__abbr">UPBS</span>
+        </p>
       </aside>
 
       <section class="auth-column" aria-labelledby="login-title">

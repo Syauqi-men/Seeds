@@ -76,6 +76,12 @@
                                 <i data-lucide="package"></i>
                                 <span>Lot Benih</span>
                             </a>
+                            <a href="{{ route('admin.reports.index') }}"
+                                class="nv-nav-link"
+                                {!! request()->routeIs('admin.reports*') ? 'aria-current="page"' : '' !!}>
+                                <i data-lucide="download"></i>
+                                <span>Export Benih</span>
+                            </a>
                             <a href="{{ route('admin.seed-mutations.index') }}"
                                 class="nv-nav-link"
                                 {!! request()->routeIs('admin.seed-mutations*') ? 'aria-current="page"' : '' !!}>
@@ -170,34 +176,6 @@
                 </div>
 
                 <div class="nv-topbar__right">
-                    <div class="nv-user-menu" id="nv-export-menu">
-                        <button type="button"
-                            class="nv-btn"
-                            id="nv-export-menu-btn"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            aria-controls="nv-export-dropdown">
-                            <i data-lucide="download"></i>
-                            <span>Export</span>
-                            <i data-lucide="chevron-down"></i>
-                        </button>
-
-                        <div class="nv-user-dropdown" id="nv-export-dropdown" role="menu" hidden>
-                            <div class="nv-user-dropdown__header">
-                                <strong class="nv-user-dropdown__name">Laporan Ketersediaan Benih</strong>
-                                <span class="nv-user-dropdown__role">Rekap per varietas dan kelas</span>
-                            </div>
-                            <a href="{{ route('admin.reports.stock-availability.xlsx') }}" class="nv-user-dropdown__item" role="menuitem">
-                                <i data-lucide="file-spreadsheet"></i>
-                                <span>Excel (.xlsx)</span>
-                            </a>
-                            <a href="{{ route('admin.reports.stock-availability') }}" class="nv-user-dropdown__item" role="menuitem">
-                                <i data-lucide="file-text"></i>
-                                <span>CSV (.csv)</span>
-                            </a>
-                        </div>
-                    </div>
-
                     <div class="nv-user-menu" id="nv-user-menu">
                         <button type="button"
                             class="nv-user-circle"

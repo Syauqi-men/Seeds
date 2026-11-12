@@ -26,7 +26,9 @@ Route::middleware(['auth'])
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Laporan (export CSV)
+        // Export Benih (halaman & unduh CSV / Excel)
+        Route::get('export-benih', [ReportController::class, 'index'])
+            ->name('reports.index');
         Route::get('reports/stock-availability.csv', [ReportController::class, 'stockAvailability'])
             ->name('reports.stock-availability');
         Route::get('reports/stock-availability.xlsx', [ReportController::class, 'stockAvailabilityXlsx'])

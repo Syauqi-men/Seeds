@@ -13,6 +13,24 @@ class SeedCategory extends Model
 
     protected $fillable = ['name', 'abbr', 'description'];
 
+    public const COLORS = [
+        'kedelai'      => '#EBB036', // Kuning keemasan terang/muda
+        'kacang hijau' => '#3D7A4A', // Hijau sedikit matang
+        'kacang tanah' => '#B86B52', // Merah kecoklatan muda
+    ];
+
+    public static function colorFor(?string $name): string
+    {
+        $key = mb_strtolower(trim((string) $name));
+        return self::COLORS[$key] ?? '#64748B';
+    }
+
+    public static function badgeClassFor(?string $name): string
+    {
+        $slug = str_replace(' ', '-', mb_strtolower(trim((string) $name)));
+        return 'badge-category-' . ($slug !== '' ? $slug : 'lain');
+    }
+
     // Relations
     public function seeds(): HasMany
     {

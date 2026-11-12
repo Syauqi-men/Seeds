@@ -35,9 +35,9 @@
                     @endif
                 </td>
                 <td>
-                    <span class="badge badge-category-{{ str_replace(' ', '-', strtolower($seed->category?->name ?? 'lain')) }}">{{ $seed->category?->name ?? '-' }}</span>
+                    <span class="badge {{ \App\Models\SeedCategory::badgeClassFor($seed->category?->name) }}">{{ $seed->category?->name ?? '-' }}</span>
                 </td>
-                <td><span class="badge badge-raw">{{ $seed->var_class->value }}</span></td>
+                <td><span class="badge {{ $seed->var_class?->badgeClass() ?? 'badge-raw' }}">{{ $seed->var_class->value }}</span></td>
                 <td>{{ $seed->seed_lots_count }}</td>
                 <td class="text-muted text-small">{{ $seed->updated_at->translatedFormat('d M Y') }}</td>
                 <td style="text-align:right">

@@ -58,7 +58,7 @@ class SeedMutationController extends Controller
                 'notes'       => $request->notes,
             ]);
 
-            $lot->decrement('clean_stock', 2);
+            \App\Observers\SeedLotObserver::recalculate($lot->fresh());
         });
 
         return redirect()
@@ -70,7 +70,11 @@ class SeedMutationController extends Controller
     {
         $seedMutation->loadMissing('seedLot');
         $lotNumber = $seedMutation->seedLot->lot_number ?? '-';
+        $lot = $seedMutation->seedLot;
         $seedMutation->delete();
+        if ($lot) {
+            \App\Observers\SeedLotObserver::recalculate($lot->fresh());
+        }
 
         return redirect()
             ->route('admin.seed-mutations.index')

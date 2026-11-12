@@ -2,32 +2,40 @@
 
 :root {
   /* Surface */
-  --nv-canvas:        #FFFFFF;
+  --nv-canvas:        #F8FAF8;
   --nv-surface:       #FFFFFF;
-  --nv-surface-muted: #F8F8F7;   /* navigasi pucat, header tabel */
-  --nv-surface-hover: #F2F2F0;
-  --nv-surface-dark:  #1C1D1F;
+  --nv-surface-muted: #F1F4F1;   /* navigasi pucat, header tabel */
+  --nv-surface-hover: #EBF0EC;
+  --nv-surface-dark:  #1B3322;   /* Hijau lumut matang pekat */
 
   /* Text */
-  --nv-text:          #1F2124;   /* charcoal */
-  --nv-text-muted:    #6B6E75;
-  --nv-text-subtle:   #9A9DA3;
+  --nv-text:          #111C15;   /* Deep pine-black (teks utama kanvas & konten) */
+  --nv-text-muted:    #4E5D53;
+  --nv-text-subtle:   #7E8E83;
   --nv-text-inverse:  #FFFFFF;
 
   /* Lines */
-  --nv-border:        #E8E8E5;
-  --nv-border-strong: #D6D6D2;
-  --nv-hatch:         #E3E3DF;   /* garis frame diagonal */
+  --nv-border:        #E2E8E2;
+  --nv-border-strong: #D0D8D0;
+  --nv-hatch:         #E1E8E1;   /* garis frame diagonal */
 
-  /* Accent (emerald BRMP) */
-  --nv-accent:        #059669;
-  --nv-accent-strong: #047857;
+  /* Accent (Forest Emerald BRMP) */
+  --nv-accent:        #15803D;
+  --nv-accent-strong: #166534;
   --nv-accent-soft:   #ECFDF5;
-  --nv-accent-line:   #A7F3D0;
-  --nv-focus:         0 0 0 3px rgba(5, 150, 105, .18);
+  --nv-accent-line:   #86EFAC;
+  --nv-focus:         0 0 0 3px rgba(21, 128, 61, .20);
 
-  /* Sidebar (Nuvio Original + Soft #AFFFC3 Tint) */
-  --nv-sidebar-bg:    color-mix(in srgb, #AFFFC3 30%, #FFFFFF);
+  /* Sidebar (Hijau Matang / Lumut) */
+  --nv-sidebar-bg:           #1B3322;
+  --nv-sidebar-border:       rgba(255, 255, 255, 0.08);
+  --nv-sidebar-text:         #D2E3D6;
+  --nv-sidebar-text-muted:   #8FA896;
+  --nv-sidebar-hover-bg:     rgba(255, 255, 255, 0.08);
+  --nv-sidebar-hover-text:   #FFFFFF;
+  --nv-sidebar-active-bg:    #284932;
+  --nv-sidebar-active-text:  #FFFFFF;
+  --nv-sidebar-active-line:  #34D399;
 
   /* Semantic status */
   --nv-info:          #2563EB;  --nv-info-soft:    #EFF4FF;
@@ -54,8 +62,8 @@
   --nv-shadow:        0 1px 2px rgba(17, 18, 20, .04), 0 4px 12px rgba(17, 18, 20, .04);
   --nv-shadow-lg:     0 12px 40px rgba(17, 18, 20, .14);
 
-  /* Typography */
-  --nv-font:          'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Typography: Angka pakai IBM Plex Sans via AppDigits, teks huruf pakai Inter */
+  --nv-font:          'AppDigits', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --nv-text-xs:       .75rem;
   --nv-text-sm:       .8125rem;
   --nv-text-md:       .875rem;

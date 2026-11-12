@@ -10,7 +10,7 @@ class SeedLotController extends Controller
 {
     public function index()
     {
-        $lots = SeedLot::with('seed')
+        $lots = SeedLot::with('seed.category')
             ->orderBy('updated_at', 'desc')
             ->paginate(15);
         return view('admin.seed-lots.index', compact('lots'));

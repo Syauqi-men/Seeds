@@ -27,7 +27,9 @@
         <tbody>
             @forelse($categories as $cat)
             <tr>
-                <td style="font-weight:600">{{ $cat->name }}</td>
+                <td>
+                    <span class="badge {{ \App\Models\SeedCategory::badgeClassFor($cat->name) }}" style="font-size:0.78rem">{{ $cat->name }}</span>
+                </td>
                 <td>
                     @if($cat->abbr)
                     <span class="badge badge-raw">{{ $cat->abbr }}</span>

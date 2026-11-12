@@ -6,6 +6,49 @@
 @import './tokens.css';
 @import './components.css';
 
+/* Hybrid Typography Global:
+   Angka (0-9) menggunakan IBM Plex Sans (tajam, tegas, beda 0/O & 1/l, tabular native).
+   Huruf dan teks menggunakan Inter (bersih, proporsional, legibilitas tinggi). */
+@font-face {
+  font-family: 'AppDigits';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('IBM Plex Sans'),
+       url('https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2') format('woff2');
+  unicode-range: U+0030-0039;
+}
+
+@font-face {
+  font-family: 'AppDigits';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('IBM Plex Sans Medium'), local('IBM Plex Sans'),
+       url('https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2') format('woff2');
+  unicode-range: U+0030-0039;
+}
+
+@font-face {
+  font-family: 'AppDigits';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('IBM Plex Sans SemiBold'), local('IBM Plex Sans'),
+       url('https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2') format('woff2');
+  unicode-range: U+0030-0039;
+}
+
+@font-face {
+  font-family: 'AppDigits';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('IBM Plex Sans Bold'), local('IBM Plex Sans'),
+       url('https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2') format('woff2');
+  unicode-range: U+0030-0039;
+}
+
 /* Alias token lama ke token Nuvio */
 :root {
   --color-primary-50:  #ECFDF5;
@@ -55,6 +98,44 @@
   --font-body:    var(--nv-font);
 
   --container-width: 1120px;
+
+  /* Warna Global 3 Komoditas Benih */
+  /* Kedelai: kuning keemasan terang/muda */
+  --seed-kedelai:        #EBB036;
+  --seed-kedelai-soft:   #FFFBEB;
+  --seed-kedelai-border: #FDE68A;
+  --seed-kedelai-ink:    #854D0E;
+
+  /* Kacang Hijau: hijau sedikit matang */
+  --seed-kacang-hijau:        #3D7A4A;
+  --seed-kacang-hijau-soft:   #ECF5EE;
+  --seed-kacang-hijau-border: #C2DEC8;
+  --seed-kacang-hijau-ink:    #1E4D2B;
+
+  /* Kacang Tanah: merah kecoklatan muda */
+  --seed-kacang-tanah:        #B86B52;
+  --seed-kacang-tanah-soft:   #FBF0EC;
+  --seed-kacang-tanah-border: #E8C7BC;
+  --seed-kacang-tanah-ink:    #7A3B28;
+
+  /* Warna Global 3 Kelas Benih */
+  /* BS (Breeder Seed): #ed8e5f */
+  --class-bs:        #ed8e5f;
+  --class-bs-soft:   #FDF4EE;
+  --class-bs-border: #F8CEB7;
+  --class-bs-ink:    #8A3D14;
+
+  /* FS (Foundation Seed): #ffe5e5 */
+  --class-fs:        #ffe5e5;
+  --class-fs-soft:   #FFF5F5;
+  --class-fs-border: #FECACA;
+  --class-fs-ink:    #991B1B;
+
+  /* SS (Stock Seed): #73264c */
+  --class-ss:        #73264c;
+  --class-ss-soft:   #F7EEF3;
+  --class-ss-border: #E1B9CE;
+  --class-ss-ink:    #5C1B3B;
 }
 
 /* Reset & Base */
@@ -72,6 +153,7 @@ body {
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'cv11', 'ss01';
 }
+
 
 h1, h2, h3, h4, h5, h6 { font-family: var(--nv-font); font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
 
@@ -318,9 +400,32 @@ svg.lucide { flex-shrink: 0; stroke-width: 1.75; }
 .badge-quarantine { background: var(--nv-yellow-soft);  color: var(--nv-yellow);  border-color: #F6E7A9; }
 .badge-ready      { background: var(--nv-success-soft); color: var(--nv-success); border-color: #C9F0DD; }
 .badge-depleted   { background: var(--nv-danger-soft);  color: var(--nv-danger);  border-color: #FAD4D4; }
-.badge-category-kedelai      { background: var(--nv-success-soft); color: #065F46; border-color: #C9F0DD; }
-.badge-category-kacang-tanah { background: var(--nv-warning-soft); color: #92400E; border-color: #FBE3BF; }
-.badge-category-kacang-hijau { background: #F0FDF4; color: #166534; border-color: #CDEFD8; }
+.badge-category-kedelai      { background: var(--seed-kedelai-soft); color: var(--seed-kedelai-ink); border-color: var(--seed-kedelai-border); }
+.badge-category-kedelai::before { background: var(--seed-kedelai); }
+.badge-category-kacang-hijau { background: var(--seed-kacang-hijau-soft); color: var(--seed-kacang-hijau-ink); border-color: var(--seed-kacang-hijau-border); }
+.badge-category-kacang-hijau::before { background: var(--seed-kacang-hijau); }
+.badge-category-kacang-tanah { background: var(--seed-kacang-tanah-soft); color: var(--seed-kacang-tanah-ink); border-color: var(--seed-kacang-tanah-border); }
+.badge-category-kacang-tanah::before { background: var(--seed-kacang-tanah); }
+
+/* Badge Kelas Benih (Global) */
+.badge-class-bs { background: var(--class-bs-soft); color: var(--class-bs-ink); border-color: var(--class-bs-border); }
+.badge-class-bs::before { background: var(--class-bs); }
+.badge-class-fs { background: var(--class-fs-soft); color: var(--class-fs-ink); border-color: var(--class-fs-border); }
+.badge-class-fs::before { background: var(--class-fs); border: 1px solid var(--class-fs-border); }
+.badge-class-ss { background: var(--class-ss-soft); color: var(--class-ss-ink); border-color: var(--class-ss-border); }
+.badge-class-ss::before { background: var(--class-ss); }
+
+.commodity-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  background: var(--nv-neutral);
+}
+.commodity-dot--kedelai      { background: var(--seed-kedelai); }
+.commodity-dot--kacang-hijau { background: var(--seed-kacang-hijau); }
+.commodity-dot--kacang-tanah { background: var(--seed-kacang-tanah); }
 
 /* Buttons (dipetakan ke Nuvio Button) */
 .btn {
@@ -338,7 +443,7 @@ svg.lucide { flex-shrink: 0; stroke-width: 1.75; }
 .btn:active { transform: translateY(1px); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: .5; cursor: not-allowed; }
 .btn-primary { background: var(--nv-surface-dark); border-color: var(--nv-surface-dark); color: var(--nv-text-inverse); }
-.btn-primary:hover { background: #000; border-color: #000; color: var(--nv-text-inverse); }
+.btn-primary:hover { background: #132418; border-color: #132418; color: var(--nv-text-inverse); }
 .btn-secondary { background: var(--nv-accent-soft); border-color: var(--nv-accent-line); color: var(--nv-accent-strong); }
 .btn-secondary:hover { background: #D9F7EA; color: var(--nv-accent-strong); }
 .btn-danger { background: var(--nv-surface); border-color: #F3C7C7; color: var(--nv-danger); }
@@ -416,7 +521,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 
 /* Stat card lama */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: var(--nv-gutter); margin-bottom: 20px; }
-.stat-card { background: var(--nv-surface); border: 1px solid var(--nv-border); border-radius: var(--nv-radius); padding: 14px 16px; }
+.stat-card { background: var(--nv-surface); border: 1px solid var(--nv-border); border-radius: var(--nv-radius); box-shadow: 0 0 0 4px var(--nv-surface), 0 0 0 5px var(--nv-hatch); margin: 5px; padding: 14px 16px; }
 .stat-card-label { font-size: var(--nv-text-xs); font-weight: 500; color: var(--nv-text-muted); margin-bottom: 6px; }
 .stat-card-value { font-size: 1.6rem; font-weight: 600; color: var(--nv-text); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .stat-card-unit { font-size: var(--nv-text-xs); color: var(--nv-text-muted); margin-top: 2px; }
@@ -535,7 +640,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
   --forest2: #1B3526;
   --fline: #2C4B39;
   --gold: #D9A536;
-  font-family: 'Hanken Grotesk', var(--nv-font), system-ui, sans-serif;
+  font-family: 'AppDigits', 'Hanken Grotesk', var(--nv-font), system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
   background: var(--paper);
@@ -547,7 +652,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 .bk a { color: inherit; }
 .bk .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 .bk .mono { font-variant-numeric: tabular-nums; }
-.bk .serif { font-family: 'Young Serif', Georgia, serif; }
+.bk .serif { font-family: 'AppDigits', 'Young Serif', Georgia, serif; }
 .bk .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
 .bk .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 6px; font-size: 15px; font-weight: 600; text-decoration: none; border: 1px solid var(--ink); transition: background-color .14s, color .14s; cursor: pointer; }
 .bk .btn-dark { background: var(--forest); border-color: var(--forest); color: #fff; }
@@ -558,7 +663,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 
 /* hero */
 .bk .hero { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 64px; align-items: center; padding-top: 72px; padding-bottom: 88px; }
-.bk .hero h1 { font-family: 'Young Serif', Georgia, serif; font-weight: 400; font-size: clamp(36px, 5vw, 62px); line-height: 1.03; letter-spacing: -.022em; margin-top: 18px; }
+.bk .hero h1 { font-family: 'AppDigits', 'Young Serif', Georgia, serif; font-weight: 400; font-size: clamp(36px, 5vw, 62px); line-height: 1.03; letter-spacing: -.022em; margin-top: 18px; }
 .bk .hero h1 em { font-style: normal; text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: .07em; text-underline-offset: .12em; }
 .bk .hero .lead { margin-top: 22px; font-size: 18px; line-height: 1.6; color: var(--ink2); max-width: 54ch; }
 .bk .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
@@ -581,7 +686,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 /* sections */
 .bk .sec { padding-top: 80px; padding-bottom: 88px; }
 .bk .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 24px 64px; align-items: end; margin-bottom: 40px; }
-.bk .sec-head h2 { font-family: 'Young Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.08; letter-spacing: -.018em; margin-top: 12px; }
+.bk .sec-head h2 { font-family: 'AppDigits', 'Young Serif', Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.08; letter-spacing: -.018em; margin-top: 12px; }
 .bk .sec-head h3 { font-size: 18px; font-weight: 600; line-height: 1.4; margin-top: 10px; color: var(--ink); }
 .bk .sec-head p { font-size: 16px; color: var(--ink2); line-height: 1.6; max-width: 56ch; }
 
@@ -609,7 +714,7 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 .bk .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .bk .pnl { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
 .bk .pnl-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--line); }
-.bk .pnl-head h3 { font-family: 'Young Serif', Georgia, serif; font-size: 24px; font-weight: 400; letter-spacing: 0; line-height: 1.15; }
+.bk .pnl-head h3 { font-family: 'AppDigits', 'Young Serif', Georgia, serif; font-size: 24px; font-weight: 400; letter-spacing: 0; line-height: 1.15; }
 .bk .pnl-head .sub { font-size: 13px; color: var(--mute); margin-top: 4px; }
 .bk .pnl-head .sub em { font-style: italic; }
 .bk .pnl-tot { text-align: right; flex-shrink: 0; }
@@ -697,12 +802,32 @@ textarea.form-control { min-height: 90px; resize: vertical; }
 }
 
 .vc-card__cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
   font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: .07em;
+  font-weight: 700;
+  letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--mute);
 }
+.vc-card__cat::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.vc-card__cat.badge-category-kedelai      { background: var(--seed-kedelai-soft); color: var(--seed-kedelai-ink); border-color: var(--seed-kedelai-border); }
+.vc-card__cat.badge-category-kedelai::before { background: var(--seed-kedelai); }
+.vc-card__cat.badge-category-kacang-hijau { background: var(--seed-kacang-hijau-soft); color: var(--seed-kacang-hijau-ink); border-color: var(--seed-kacang-hijau-border); }
+.vc-card__cat.badge-category-kacang-hijau::before { background: var(--seed-kacang-hijau); }
+.vc-card__cat.badge-category-kacang-tanah { background: var(--seed-kacang-tanah-soft); color: var(--seed-kacang-tanah-ink); border-color: var(--seed-kacang-tanah-border); }
+.vc-card__cat.badge-category-kacang-tanah::before { background: var(--seed-kacang-tanah); }
 
 .vc-card__badge {
   display: inline-flex;

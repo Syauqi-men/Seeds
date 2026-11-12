@@ -5,7 +5,11 @@
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-md)">
                 <div>
                     <div class="card-title">{{ $lot->lot_number }}</div>
-                    <div class="card-subtitle">{{ $lot->seed->var_name }} &bull; {{ $lot->seed->category?->name ?? '-' }} &bull; {{ $lot->seed->var_class->value }}</div>
+                    <div class="card-subtitle" style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
+                        <span style="font-weight:600;color:var(--color-text);">{{ $lot->seed->var_name }}</span>
+                        <span class="badge {{ $lot->seed->var_class?->badgeClass() }}" style="height:18px;font-size:0.65rem;padding:0 5px;">{{ $lot->seed->var_class->value }}</span>
+                        <span class="badge {{ \App\Models\SeedCategory::badgeClassFor($lot->seed->category?->name) }}" style="height:18px;font-size:0.65rem;padding:0 5px;">{{ $lot->seed->category?->name ?? '-' }}</span>
+                    </div>
                 </div>
             </div>
 

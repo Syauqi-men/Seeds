@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ProcessType;
 use App\Http\Controllers\Controller;
-use App\Models\Seed;
+use App\Models\ProductionProcess;
+use App\Models\SeedLot;
 use Illuminate\Support\Collection;
 use OpenSpout\Common\Entity\Cell;
 use OpenSpout\Common\Entity\Row;
@@ -14,11 +16,48 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
-    private const TITLE   = 'Laporan Ketersediaan Benih - BRMP Aneka Kacang';
-    private const HEADERS = ['Komoditas', 'Varietas', 'Kelas Benih', 'Sisa Stok Bersih (kg)', 'Status Ketersediaan'];
+    private const TITLE   = 'Laporan Export Benih - BRMP Aneka Kacang';
+    private const HEADERS = [
+        'Lot Benih',
+        'Varietas',
+        'Kelas Benih',
+        'Komoditas',
+        'Berat Awal (kg)',
+        'Stok (kg)',
+        'Sortir (kg)',
+        'Limbah (kg)',
+    ];
 
     /**
-     * Unduh Laporan Ketersediaan Benih (rekap per varietas dan kelas) dalam format CSV.
+     * Halaman menu Export Benih: menampilkan lot yang sudah melewati proses produksi.
+     */
+    public function index()
+    {
+        $lotsQuery = SeedLot::has('productionProcesses');
+
+        $summary = [
+            'total_lots'    => (clone $lotsQuery)->count(),
+            'total_arrival' => (float) (clone $lotsQuery)->sum('arrival_weight'),
+            'total_clean'   => (float) (clone $lotsQuery)->sum('clean_stock'),
+            'total_sortir'  => (float) ProductionProcess::where('process_type', ProcessType::Sorting)->sum('sortir_quantity'),
+            'total_waste'   => (float) ProductionProcess::where('process_type', ProcessType::Sorting)->sum('waste_quantity'),
+        ];
+        $summary['recovery_rate'] = $summary['total_arrival'] > 0
+            ? round(($summary['total_clean'] / $summary['total_arrival']) * 100, 1)
+            : 0;
+
+        $lots = SeedLot::with('seed.category')
+            ->has('productionProcesses')
+            ->withSum(['productionProcesses as sortir_total' => fn ($q) => $q->where('process_type', ProcessType::Sorting)], 'sortir_quantity')
+            ->withSum(['productionProcesses as waste_total' => fn ($q) => $q->where('process_type', ProcessType::Sorting)], 'waste_quantity')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.reports.index', compact('lots', 'summary'));
+    }
+
+    /**
+     * Unduh Laporan Export Benih dalam format CSV.
      * Pemisah titik koma dan BOM UTF-8 agar langsung rapi saat dibuka di Excel (locale Indonesia).
      */
     public function stockAvailability(): StreamedResponse
@@ -38,11 +77,14 @@ class ReportController extends Controller
 
             foreach ($rows as $r) {
                 fputcsv($out, [
-                    $r['category'],
+                    $r['lot_number'],
                     $r['variety'],
                     $r['class'],
-                    number_format($r['stock'], 2, ',', ''),
-                    $r['status'],
+                    $r['category'],
+                    number_format($r['arrival_weight'], 2, ',', ''),
+                    number_format($r['clean_stock'], 2, ',', ''),
+                    number_format($r['sortir'], 2, ',', ''),
+                    number_format($r['limbah'], 2, ',', ''),
                 ], ';');
             }
 
@@ -51,8 +93,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Unduh Laporan Ketersediaan Benih dalam format Excel (.xlsx).
-     * Stok ditulis sebagai angka asli agar bisa langsung dijumlahkan / dibuat pivot di Excel.
+     * Unduh Laporan Export Benih dalam format Excel (.xlsx).
      */
     public function stockAvailabilityXlsx(): BinaryFileResponse
     {
@@ -62,7 +103,7 @@ class ReportController extends Controller
         $bold   = (new Style())->withFontBold(true);
         $writer = new XlsxWriter();
         $writer->openToFile($path);
-        $writer->getCurrentSheet()->setName('Ketersediaan Benih');
+        $writer->getCurrentSheet()->setName('Export Benih');
 
         $boldRow = fn (array $values) => new Row(
             array_map(fn ($v) => Cell::fromValue($v, $bold), $values)
@@ -75,11 +116,14 @@ class ReportController extends Controller
 
         foreach ($this->rows() as $r) {
             $writer->addRow(Row::fromValues([
-                $r['category'],
+                $r['lot_number'],
                 $r['variety'],
                 $r['class'],
-                round($r['stock'], 2),
-                $r['status'],
+                $r['category'],
+                round($r['arrival_weight'], 2),
+                round($r['clean_stock'], 2),
+                round($r['sortir'], 2),
+                round($r['limbah'], 2),
             ]));
         }
 
@@ -92,26 +136,25 @@ class ReportController extends Controller
             ->deleteFileAfterSend(true);
     }
 
-    /** Data rekap per varietas dan kelas, dipakai bersama oleh CSV dan Excel. */
+    /** Data lot benih yang sudah melalui proses produksi, dipakai bersama oleh CSV dan Excel. */
     private function rows(): Collection
     {
-        return Seed::with('category')
-            ->withSum('seedLots', 'clean_stock')
+        return SeedLot::with('seed.category')
+            ->has('productionProcesses')
+            ->withSum(['productionProcesses as sortir_total' => fn ($q) => $q->where('process_type', 'Sorting')], 'sortir_quantity')
+            ->withSum(['productionProcesses as waste_total' => fn ($q) => $q->where('process_type', 'Sorting')], 'waste_quantity')
+            ->orderBy('updated_at', 'desc')
             ->get()
-            ->sortBy([
-                fn ($a, $b) => strcmp($a->category?->name ?? '', $b->category?->name ?? ''),
-                fn ($a, $b) => strcmp($a->var_name, $b->var_name),
-                fn ($a, $b) => strcmp($a->var_class->value, $b->var_class->value),
-            ])
-            ->map(function ($seed) {
-                $stock = (float) ($seed->seed_lots_sum_clean_stock ?? 0);
-
+            ->map(function ($lot) {
                 return [
-                    'category' => $seed->category?->name ?? '-',
-                    'variety'  => $seed->var_name,
-                    'class'    => $seed->var_class->label(),
-                    'stock'    => $stock,
-                    'status'   => $stock > 0 ? 'Tersedia' : 'Habis',
+                    'lot_number'     => $lot->lot_number,
+                    'variety'        => $lot->seed->var_name ?? '-',
+                    'class'          => $lot->seed->var_class?->value ?? '-',
+                    'category'       => $lot->seed->category?->name ?? '-',
+                    'arrival_weight' => (float) ($lot->arrival_weight ?? 0),
+                    'clean_stock'    => (float) ($lot->clean_stock ?? 0),
+                    'sortir'         => (float) ($lot->sortir_total ?? 0),
+                    'limbah'         => (float) ($lot->waste_total ?? 0),
                 ];
             })
             ->values();
@@ -124,6 +167,6 @@ class ReportController extends Controller
 
     private function filename($now, string $ext): string
     {
-        return 'laporan-ketersediaan-benih-' . $now->format('Ymd-His') . '.' . $ext;
+        return 'laporan-export-benih-' . $now->format('Ymd-His') . '.' . $ext;
     }
 }

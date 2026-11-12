@@ -29,6 +29,17 @@ class LabTest extends Model
         'moisture_content' => 'decimal:2',
     ];
 
+    public const MIN_GERMINATION_RATE = 80.0;
+    public const MAX_MOISTURE_CONTENT = 12.0;
+
+    public static function determineResult(float $germinationRate, ?float $moistureContent = null): TestResult
+    {
+        $germPassed     = $germinationRate >= self::MIN_GERMINATION_RATE;
+        $moisturePassed = $moistureContent === null || $moistureContent <= self::MAX_MOISTURE_CONTENT;
+
+        return ($germPassed && $moisturePassed) ? TestResult::PASSED : TestResult::FAILED;
+    }
+
     // Relations 
     public function seedLot(): BelongsTo
     {

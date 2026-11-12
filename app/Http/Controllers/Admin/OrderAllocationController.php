@@ -86,7 +86,8 @@ class OrderAllocationController extends Controller
         foreach ($data['allocations'] as $alloc) {
             $lot = SeedLot::find($alloc['seed_lot_id']);
             $alreadyAllocatedElsewhere = OrderItemAllocation::where('seed_lot_id', $lot->id)
-                ->whereHas('orderItem', fn($q) => $q->where('id', '!=', $item->id))
+                ->whereHas('orderItem', fn($q) => $q->where('id', '!=', $item->id)
+                    ->whereHas('order', fn($o) => $o->whereNotIn('status', ['completed', 'cancelled'])))
                 ->sum('alloc_quantity');
 
             $available = $lot->clean_stock - $alreadyAllocatedElsewhere;

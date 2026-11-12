@@ -33,7 +33,6 @@ class LabTestController extends Controller
             'seed_lot_id'     => 'required|exists:seed_lots,id',
             'germination_rate'=> 'required|numeric|min:0|max:100',
             'moisture_content'=> 'nullable|numeric|min:0|max:100',
-            'test_result'     => 'required|in:PASSED,FAILED',
             'tested_at'       => 'nullable|date',
             'notes'           => 'nullable|string|max:500',
         ], [
@@ -46,11 +45,14 @@ class LabTestController extends Controller
             'moisture_content.numeric' => 'Kadar air harus berupa angka.',
             'moisture_content.min'     => 'Kadar air minimal 0%.',
             'moisture_content.max'     => 'Kadar air maksimal 100%.',
-            'test_result.required'     => 'Hasil uji wajib dipilih.',
-            'test_result.in'           => 'Hasil uji tidak valid, pilih PASSED atau FAILED.',
             'tested_at.date'           => 'Tanggal uji tidak valid.',
             'notes.max'                => 'Catatan maksimal 500 karakter.',
         ]);
+
+        $data['test_result'] = LabTest::determineResult(
+            (float) $data['germination_rate'],
+            isset($data['moisture_content']) && $data['moisture_content'] !== '' ? (float) $data['moisture_content'] : null
+        )->value;
 
         LabTest::create($data);
         return redirect()->route('admin.lab-tests.index')->with('success', 'Uji lab berhasil dicatat.');
@@ -78,7 +80,6 @@ class LabTestController extends Controller
             'seed_lot_id'     => 'required|exists:seed_lots,id',
             'germination_rate'=> 'required|numeric|min:0|max:100',
             'moisture_content'=> 'nullable|numeric|min:0|max:100',
-            'test_result'     => 'required|in:PASSED,FAILED',
             'tested_at'       => 'nullable|date',
             'notes'           => 'nullable|string|max:500',
         ], [
@@ -91,11 +92,14 @@ class LabTestController extends Controller
             'moisture_content.numeric' => 'Kadar air harus berupa angka.',
             'moisture_content.min'     => 'Kadar air minimal 0%.',
             'moisture_content.max'     => 'Kadar air maksimal 100%.',
-            'test_result.required'     => 'Hasil uji wajib dipilih.',
-            'test_result.in'           => 'Hasil uji tidak valid, pilih PASSED atau FAILED.',
             'tested_at.date'           => 'Tanggal uji tidak valid.',
             'notes.max'                => 'Catatan maksimal 500 karakter.',
         ]);
+
+        $data['test_result'] = LabTest::determineResult(
+            (float) $data['germination_rate'],
+            isset($data['moisture_content']) && $data['moisture_content'] !== '' ? (float) $data['moisture_content'] : null
+        )->value;
 
         $labTest->update($data);
         return redirect()->route('admin.lab-tests.index')->with('success', 'Uji lab berhasil diperbarui.');

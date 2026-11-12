@@ -69,10 +69,10 @@
             @else
                 <div class="vc-grid">
                     @foreach($cards as $card)
-                        <article class="vc-card" wire:key="vc-{{ $card['key'] }}" style="--vc-accent: {{ $card['color'] }}">
+                        <article class="vc-card" wire:key="vc-{{ $card['key'] }}" style="--vc-accent: {{ $card['category_color'] }}">
                             <div class="vc-card__top">
-                                <span class="vc-card__cat">{{ $card['category'] }}</span>
-                                <span class="vc-card__badge" style="background-color: {{ $card['color'] }}">
+                                <span class="vc-card__cat {{ $card['category_badge'] }}">{{ $card['category'] }}</span>
+                                <span class="vc-card__badge" style="background-color: {{ $card['color'] }}; color: {{ $card['text_color'] ?? '#fff' }}; {{ !empty($card['border']) ? 'border: 1px solid ' . $card['border'] . ';' : '' }}">
                                     {{ $card['class_code'] }}
                                 </span>
                             </div>

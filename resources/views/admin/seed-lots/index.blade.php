@@ -31,7 +31,10 @@
                 <td><span style="font-weight:600">{{ $lot->lot_number }}</span></td>
                 <td>
                     <div>{{ $lot->seed->var_name }}</div>
-                    <div class="text-small text-muted">{{ $lot->seed->category?->name ?? '-' }} &bull; {{ $lot->seed->var_class->value }}</div>
+                    <div class="text-small text-muted" style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+                        <span class="badge {{ \App\Models\SeedCategory::badgeClassFor($lot->seed->category?->name) }}" style="height:18px;font-size:0.65rem;padding:0 6px;">{{ $lot->seed->category?->name ?? '-' }}</span>
+                        <span class="badge {{ $lot->seed->var_class?->badgeClass() }}" style="height:18px;font-size:0.65rem;padding:0 6px;">{{ $lot->seed->var_class->value }}</span>
+                    </div>
                 </td>
                 <td>{{ number_format($lot->raw_stock, 2) }} kg</td>
                 <td>{{ number_format($lot->clean_stock, 2) }} kg</td>
@@ -41,10 +44,10 @@
                         <a href="{{ route('admin.seed-lots.show', $lot) }}" class="btn btn-ghost btn-sm" title="Detail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                         </a>
-                        <a href="{{ route('admin.seed-lots.edit', $lot) }}" class="btn btn-ghost btn-sm">
+                        <a href="{{ route('admin.seed-lots.edit', $lot) }}" class="btn btn-ghost btn-sm" title="Edit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </a>
-                        <button @click="showDelete = true" class="btn btn-danger btn-sm">
+                        <button @click="showDelete = true" class="btn btn-danger btn-sm" title="Hapus">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                         <div x-show="showDelete" class="modal-backdrop" @click.self="showDelete=false" x-transition style="display:none">

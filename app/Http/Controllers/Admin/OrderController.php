@@ -237,9 +237,8 @@ class OrderController extends Controller
                 foreach ($order->items as $item) {
                     foreach ($item->allocations as $alloc) {
                         $lot = $alloc->seedLot;
-                        $lot->clean_stock -= $alloc->alloc_quantity;
-                        $lot->save();
 
+                        // Stok bersih dihitung ulang oleh SeedLotObserver::recalculate() setelah status completed tersimpan
                         StockTransaction::create([
                             'seed_lot_id'      => $lot->id,
                             'transaction_type' => 'OUT',
@@ -253,6 +252,13 @@ class OrderController extends Controller
                 }
 
                 $order->update($data);
+
+                // Status sudah completed, hitung ulang stok bersih tiap lot terkait
+                foreach ($order->items as $item) {
+                    foreach ($item->allocations as $alloc) {
+                        \App\Observers\SeedLotObserver::recalculate($alloc->seedLot->fresh());
+                    }
+                }
             });
 
             return redirect()->route('admin.orders.index')

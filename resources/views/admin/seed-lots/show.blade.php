@@ -4,7 +4,11 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">{{ $seedLot->lot_number }}</h1>
-        <p class="page-subtitle">{{ $seedLot->seed->var_name }} &bull; {{ $seedLot->seed->category?->name ?? '-' }} &bull; {{ $seedLot->seed->var_class->value }}</p>
+        <div class="page-subtitle" style="display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;">
+            <span style="font-weight:600;color:var(--color-text);">{{ $seedLot->seed->var_name }}</span>
+            <span class="badge {{ $seedLot->seed->var_class?->badgeClass() }}" style="height:20px;font-size:0.68rem;padding:0 6px;">Kelas {{ $seedLot->seed->var_class->value }}</span>
+            <span class="badge {{ \App\Models\SeedCategory::badgeClassFor($seedLot->seed->category?->name) }}" style="height:20px;font-size:0.68rem;padding:0 6px;">{{ $seedLot->seed->category?->name ?? '-' }}</span>
+        </div>
     </div>
     <div style="display:flex;gap:var(--space-sm)">
         <a href="{{ route('admin.seed-lots.edit', $seedLot) }}" class="btn btn-secondary">Edit</a>
